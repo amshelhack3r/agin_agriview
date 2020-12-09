@@ -14,16 +14,16 @@ import 'package:AgriView/notfound.dart';
 List<PlaceToMarketListingInfo> listPlaceToMarketListing;
 List<PlaceToMarketListingInfo> dummySearchList;
 
-Future <List<PlaceToMarketListingInfo>> fetchPlaceToMarketListing(String aggregatorAginID) async {
-
-  final response =
-  await http.post(Uri.parse('${serverURL}market/list/by/aggregator'),
+Future<List<PlaceToMarketListingInfo>> fetchPlaceToMarketListing(
+    String aggregatorAginID) async {
+  final response = await http.post(
+    Uri.parse('${serverURL}market/list/by/aggregator'),
     headers: <String, String>{
       'X-AGIN-API-Key-Token': APIKEY,
       'Content-Type': 'application/json; charset=UTF-8',
     },
     body: jsonEncode(<String, String>{
-      'userAginID' : aggregatorAginID,
+      'userAginID': aggregatorAginID,
     }),
   );
   print(response.body);
@@ -57,8 +57,16 @@ class PlaceToMarketListingInfo {
   final String produceStatus;
   final String unitType;
 
-
-  PlaceToMarketListingInfo(this.cropName, this.pricePerUnitType, this.readyFromDate, this.quantityAvailable,this.producePhoto, this.farmerName, this.cultivationMode, this.produceStatus, this.unitType);
+  PlaceToMarketListingInfo(
+      this.cropName,
+      this.pricePerUnitType,
+      this.readyFromDate,
+      this.quantityAvailable,
+      this.producePhoto,
+      this.farmerName,
+      this.cultivationMode,
+      this.produceStatus,
+      this.unitType);
 
   factory PlaceToMarketListingInfo.fromJson(Map<String, dynamic> json) {
     return PlaceToMarketListingInfo(
@@ -73,18 +81,18 @@ class PlaceToMarketListingInfo {
       json['unitType'],
     );
   }
-
 }
 
 class PlaceToMarketList extends StatefulWidget {
   String aggregatorAginID;
 
-  PlaceToMarketList(String aggregatorAginID){
-    this.aggregatorAginID= aggregatorAginID;
+  PlaceToMarketList(String aggregatorAginID) {
+    this.aggregatorAginID = aggregatorAginID;
   }
 
   @override
-  _PlaceToMarketListState createState() => _PlaceToMarketListState(aggregatorAginID);
+  _PlaceToMarketListState createState() =>
+      _PlaceToMarketListState(aggregatorAginID);
 }
 
 class _PlaceToMarketListState extends State<PlaceToMarketList> {
@@ -93,21 +101,20 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
   int counter = 0;
   String aggregatorAginID = "";
   Map data = {};
-  GlobalKey dashboardBottomNavigationKey = new GlobalKey(debugLabel: 'btm_app_bar');
+  GlobalKey dashboardBottomNavigationKey =
+      new GlobalKey(debugLabel: 'btm_app_bar');
 
-  _PlaceToMarketListState(String aggregatorAginID){
+  _PlaceToMarketListState(String aggregatorAginID) {
     this.aggregatorAginID = aggregatorAginID;
   }
 
-
   void filterSearchResults(String query) {
-
     print('list${listPlaceToMarketListing.length}');
-    if(query.isNotEmpty) {
-      List<PlaceToMarketListingInfo> futureFarmers_2 = new List<PlaceToMarketListingInfo>();
+    if (query.isNotEmpty) {
+      List<PlaceToMarketListingInfo> futureFarmers_2 =
+          new List<PlaceToMarketListingInfo>();
       listPlaceToMarketListing.forEach((item) {
-        if(item.farmerName.contains(query) ||
-            item.cropName.contains(query)) {
+        if (item.farmerName.contains(query) || item.cropName.contains(query)) {
           futureFarmers_2.add(item);
         }
       });
@@ -122,9 +129,7 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
         listPlaceToMarketListing.addAll(dummySearchList);
       });
     }
-
   }
-
 
   @override
   void initState() {
@@ -136,30 +141,24 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
       futurePlaceToMarketListing = fetchPlaceToMarketListing(aggregatorAginID);
     });*/
     futurePlaceToMarketListing = fetchPlaceToMarketListing(aggregatorAginID);
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     Color colorCode = Theme.of(context).primaryColor;
     final itemHeight = 100.0;
     final Random random = Random();
-    generateRandomColor(){
-
+    generateRandomColor() {
       Color tmpColor = Color.fromARGB(
         random.nextInt(256),
         random.nextInt(256),
         random.nextInt(256),
         random.nextInt(256),
-      ) ;
+      );
 
       setState(() {
-
-        colorCode = tmpColor ;
-
+        colorCode = tmpColor;
       });
-
     }
 
     generateRandomColor();
@@ -176,7 +175,7 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
         child: Column(
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(10.0,20.0,10.0,10.0),
+              padding: const EdgeInsets.fromLTRB(10.0, 20.0, 10.0, 10.0),
               child: TextField(
                 onChanged: (value) {
                   filterSearchResults(value);
@@ -192,15 +191,13 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
                         color: Colors.grey[100],
                         width: 1,
                       ),
-                    )
-                ),
-
+                    )),
               ),
             ),
             Expanded(
               child: FutureBuilder(
-                builder: (context, snapshot){
-                  switch(snapshot.connectionState){
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
                     case ConnectionState.none:
                       return Center(child: CircularProgressIndicator());
                     case ConnectionState.active:
@@ -208,24 +205,28 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
                       return Center(child: CircularProgressIndicator());
                     case ConnectionState.done:
                       print('hasdata${snapshot.hasData}');
-                      if(!snapshot.hasData){
-                        return NotFound().pageMessage(context, Icons.info,"No market listing yet");
+                      if (!snapshot.hasData) {
+                        return NotFound().pageMessage(
+                            context, Icons.info, "No market listing yet");
                       }
                       return ListView.builder(
                           itemCount: snapshot.data.length,
-                          itemBuilder: (context,index){
-                            PlaceToMarketListingInfo listingdata = snapshot.data[index];
+                          itemBuilder: (context, index) {
+                            PlaceToMarketListingInfo listingdata =
+                                snapshot.data[index];
                             return Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 4.0),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 2.0, horizontal: 4.0),
                               child: Card(
                                 child: ListTile(
-                                  onTap: (){
+                                  onTap: () {
                                     //updateTime(index);
                                     //Map map = {'farmerAginID':listingdata.userAginID, 'name' : farmerdata.firstName, 'phone' : farmerdata.phoneNumber, 'aggregatorAginID' : aggregatorAginID};
                                     //Navigator.pushNamed(context, '/detailfarmer',arguments: map);
                                   },
                                   title: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
                                     children: <Widget>[
                                       Text(
                                         '${listingdata.cropName}',
@@ -240,8 +241,7 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
                                         style: TextStyle(
                                             color: Colors.grey,
                                             fontSize: 14.0,
-                                            letterSpacing: 0.5
-                                        ),
+                                            letterSpacing: 0.5),
                                       ),
 
                                       /*Padding(
@@ -318,14 +318,14 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
                                         ],
                                       ),
                                     ),*/
-
                                     ],
                                   ),
                                   leading: CircleAvatar(
                                     backgroundColor: colorCode,
-                                    child: Text(
-                                        listingdata.cropName.toString().substring(0,1).toUpperCase()
-                                    ),
+                                    child: Text(listingdata.cropName
+                                        .toString()
+                                        .substring(0, 1)
+                                        .toUpperCase()),
                                     //backgroundImage: AssetImage('assets/${locations[index].flag}'),
                                   ),
                                   trailing: Icon(
@@ -335,10 +335,8 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
                                 ),
                               ),
                             );
-                          }
-
-                      );
-                  /* return Padding(
+                          });
+                    /* return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 8.0),
                         child: IndexedListView(
                           itemHeight: itemHeight,
@@ -478,7 +476,6 @@ class _PlaceToMarketListState extends State<PlaceToMarketList> {
                     default:
                       return CircularProgressIndicator();
                   }
-
                 },
                 future: futurePlaceToMarketListing,
               ),

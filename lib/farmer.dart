@@ -7,14 +7,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:AgriView/models/County.dart';
 import 'package:AgriView/utils/constants.dart';
 
-
 int statusCode;
-Future <List<Album>> fetchAlbum() async {
-  final response =
-  await http.get(Uri.parse('${serverURL}county/list'),
-        headers: <String, String>{
-        'X-AGIN-API-Key-Token': APIKEY,
-        },);
+Future<List<Album>> fetchAlbum() async {
+  final response = await http.get(
+    Uri.parse('${serverURL}county/list'),
+    headers: <String, String>{
+      'X-AGIN-API-Key-Token': APIKEY,
+    },
+  );
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -31,8 +31,8 @@ Future <List<Album>> fetchAlbum() async {
   }
 }
 
-Future<Message> createFarmer(String firstName,String lastName,String email,String phone,String county,String accountManagerAginID) async {
-
+Future<Message> createFarmer(String firstName, String lastName, String email,
+    String phone, String county, String accountManagerAginID) async {
   final http.Response response = await http.post(
     Uri.parse('${serverURL}aggregator/register/farmer'),
     headers: <String, String>{
@@ -40,17 +40,18 @@ Future<Message> createFarmer(String firstName,String lastName,String email,Strin
       'X-AGIN-API-Key-Token': APIKEY,
     },
     body: jsonEncode(<String, String>{
-      'FirstName' : firstName,
-      'LastName' : lastName,
-      'PhoneNumber' : phone,
-      'EmailAddress' : email,
-      'AccountManagerAginID' : accountManagerAginID,
-      'CountyID' : county
+      'FirstName': firstName,
+      'LastName': lastName,
+      'PhoneNumber': phone,
+      'EmailAddress': email,
+      'AccountManagerAginID': accountManagerAginID,
+      'CountyID': county
     }),
   );
 
   statusCode = response.statusCode;
   if (response.statusCode == 201) {
+    print(response.body);
     return Message.fromJson(json.decode(response.body));
   } else {
     return Message.fromJson(json.decode(response.body));
@@ -70,7 +71,6 @@ class Message {
     );
   }
 }
-
 
 class Album {
   final int countyID;
@@ -118,7 +118,6 @@ class _FarmerState extends State<Farmer> {
   Album _currentUser;
   int _showbutton = 1;
 
-
   @override
   void initState() {
     super.initState();
@@ -137,17 +136,14 @@ class _FarmerState extends State<Farmer> {
   }
 
   //input widget
-  Widget _input(Icon icon, String hint, TextEditingController controller,
-      bool obsecure) {
+  Widget _input(
+      Icon icon, String hint, TextEditingController controller, bool obsecure) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
       child: TextField(
         controller: controller,
         obscureText: obsecure,
-        style: TextStyle(
-            fontSize: 15,
-            letterSpacing: 1.0
-        ),
+        style: TextStyle(fontSize: 15, letterSpacing: 1.0),
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             hintStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
@@ -187,8 +183,8 @@ class _FarmerState extends State<Farmer> {
       highlightColor: highlightColor,
       elevation: 0.0,
       color: fillColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(30.0)),
+      shape:
+          RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
       child: Text(
         text,
         style: TextStyle(
@@ -209,11 +205,13 @@ class _FarmerState extends State<Farmer> {
 
     setState(() {
       _showbutton = 0;
-      _futureMessage = createFarmer(_firstName,_lastName,_email,_phone,_county,_aggregatorAginID).then((value){
+      _futureMessage = createFarmer(
+              _firstName, _lastName, _email, _phone, _county, _aggregatorAginID)
+          .then((value) {
         Message message = value;
-        if(statusCode == 201){
-          _scaffoldKey.currentState.showSnackBar(
-              SnackBar(content: Text(message.message)));
+        if (statusCode == 201) {
+          _scaffoldKey.currentState
+              .showSnackBar(SnackBar(content: Text(message.message)));
           setState(() {
             _showbutton = 1;
             _firstnameController.text = "";
@@ -222,14 +220,13 @@ class _FarmerState extends State<Farmer> {
             _phoneController.text = "";
           });
           Navigator.pop(context);
-        }else{
-          _scaffoldKey.currentState.showSnackBar(
-              SnackBar(content: Text(message.message)));
+        } else {
+          _scaffoldKey.currentState
+              .showSnackBar(SnackBar(content: Text(message.message)));
         }
         return;
       });
     });
-
 
     /*_emailController.clear();
     _firstnameController.clear();
@@ -240,34 +237,35 @@ class _FarmerState extends State<Farmer> {
 
   List<County> parseCounties(String responseBody) {
     final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    List<County> lc = parsed.map<County>((json) =>County.fromJson(json)).toList();
-    print('parsed${parsed} ${lc.length}' );
+    List<County> lc =
+        parsed.map<County>((json) => County.fromJson(json)).toList();
+    print('parsed${parsed} ${lc.length}');
     return lc;
   }
 
-  Future<List<County>> _getCountiesList() async{
-      HttpClient client = new HttpClient();
-      List<County> conList;
-      await client.getUrl(Uri.parse('${serverURL}county/list'))
-          .then((HttpClientRequest request) {
-        request.headers.add("X-AGIN-API-Key-Token", APIKEY);
-        return request.close();
-      })
-          .then((HttpClientResponse response) {
-        // Process the response.
-         response.transform(utf8.decoder).listen((contents) {
-          // handle data
-          //List<dynamic> datalist = jsonDecode(contents);
-          //return County.fromMap(jsonDecode(contents));
+  Future<List<County>> _getCountiesList() async {
+    HttpClient client = new HttpClient();
+    List<County> conList;
+    await client
+        .getUrl(Uri.parse('${serverURL}county/list'))
+        .then((HttpClientRequest request) {
+      request.headers.add("X-AGIN-API-Key-Token", APIKEY);
+      return request.close();
+    }).then((HttpClientResponse response) {
+      // Process the response.
+      response.transform(utf8.decoder).listen((contents) {
+        // handle data
+        //List<dynamic> datalist = jsonDecode(contents);
+        //return County.fromMap(jsonDecode(contents));
 
-          conList = parseCounties(contents);
+        conList = parseCounties(contents);
 
-              print('connlist$conList');
+        print('connlist$conList');
 
-              return conList;
+        return conList;
 
-           //countyList = new List(datalist.length);
-          /*datalist.map((map) {
+        //countyList = new List(datalist.length);
+        /*datalist.map((map) {
             return getDropDownWidget(map);
           }).forEach((dropDownItem) {
             list.add(dropDownItem);
@@ -275,14 +273,9 @@ class _FarmerState extends State<Farmer> {
           setState((){
 
           });*/
-
-        });
-
-
       });
-
-    }
-
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -295,9 +288,9 @@ class _FarmerState extends State<Farmer> {
       key: _scaffoldKey,
       appBar: AppBar(
         title: Text('REGISTER FARMER',
-        style : TextStyle(
-          fontSize: 15.0,
-        )),
+            style: TextStyle(
+              fontSize: 15.0,
+            )),
         centerTitle: true,
         elevation: 0,
       ),
@@ -307,179 +300,195 @@ class _FarmerState extends State<Farmer> {
           /* borderRadius: BorderRadius.only(
               topLeft: Radius.circular(40.0),
               topRight: Radius.circular(40.0)),*/
-          child: (_futureMessage == null) ? Container(
-            child: ListView(
-              children: <Widget>[
-                SingleChildScrollView(
-                  child: Column(children: <Widget>[
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 20,
-                        top: 20,
-                      ),
-                      child: _input(Icon(Icons.account_circle),
-                          "FIRST NAME", _firstnameController, false),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 20,
-                      ),
-                      child: _input(Icon(Icons.account_circle), "LAST NAME",
-                          _lastnameController, false),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 20,
-                      ),
-                      child: _input(Icon(Icons.email), "EMAIL",
-                          _emailController, false),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(bottom: 20),
-                      child: _input(Icon(Icons.phone), "PHONE",
-                          _phoneController, false),
-                    ),
-                    FutureBuilder<List<Album>>(
-                    future: futureAlbum,
-                    builder: (context, snapshot) {
-                      switch(snapshot.connectionState){
-                        case ConnectionState.none:
-                          return CircularProgressIndicator();
-                        case ConnectionState.active:
-                        case ConnectionState.waiting:
-                          return CircularProgressIndicator();
-                        case ConnectionState.done:
-                          print('hasdata${snapshot.hasData}');
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-                              child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(30),
-                                  border: Border.all(
-                                    width: 1.0,
-                                    style: BorderStyle.solid,
-                                    color: Colors.grey[100],
-                                  ),
-                                ),
-                                child: DropdownButtonFormField(
-                                  decoration: InputDecoration(
-                                      fillColor: Colors.white,
-                                      floatingLabelBehavior: FloatingLabelBehavior.auto,
-                                      hintStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 16),
-                                      hintText: 'SELECT COUNTY',
-                                      //labelText: 'COUNTY',
-                                      enabledBorder: InputBorder.none,
-                                      icon: Padding(
-                                        padding: const EdgeInsets.fromLTRB(20,0,0,0),
-                                        child: Icon(
-                                          Icons.language,
-                                          color: Theme.of(context).primaryColor,
-                                        ),
-
-                                      )
-
-                                  ),
-                                  value: dropdownValue,
-                                  //hint: Text('SELECT COUNTY'),
-                                  icon: Padding(
-                                    padding: const EdgeInsets.fromLTRB(0,0,8,0),
-                                    child: Icon(
-                                      Icons.arrow_drop_down_circle,
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                                  ),
-                                  isExpanded: true,
-                                  iconSize: 30,
-                                  elevation: 16,
-                                  items: snapshot.data.map<DropdownMenuItem<Album>>((
-                                      Album county) {
-                                    return DropdownMenuItem<Album>(
-                                        value: county,
-                                        child: Text(county.countyName,
-                                        style: TextStyle(
-                                              fontWeight: FontWeight.normal,
-                                              fontSize: 16,
-                                              letterSpacing: 1.0,
-                                               backgroundColor: Colors.white10
-
-                                          ),
-                                        )
-                                    );
-                                  }).toList(),
-                                  onChanged: (Album newValue) {
-                                    setState(() => dropdownValue = newValue);
-                                    // selectedCountry = newValue;
-                                    print(newValue.countyID);
-                                    print(newValue.countyName);
-                                  },
-                                ),
-                              ),
-                            );
-
-                        default:
-                          return CircularProgressIndicator();
-                      }
-                    }),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: 20,
-                          left: 20,
-                          right: 20,
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: (_showbutton == 1) ?
-                      Container(
-                        child: _button("REGISTER", Colors.white, primary,
-                            primary, Colors.white, _registerUser),
-                        height: 50,
-                        width: MediaQuery.of(context).size.width,
-                      ): Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width,
-                          color: Colors.white,
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              strokeWidth: 3.0,
+          child: (_futureMessage == null)
+              ? Container(
+                  child: ListView(
+                    children: <Widget>[
+                      SingleChildScrollView(
+                        child: Column(children: <Widget>[
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 20,
+                              top: 20,
                             ),
-                          )
-                      )
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                  ]),
-                ),
-              ],
-            ),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-          )
-          :
-          Container(
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            color: Colors.white,
-            child: FutureBuilder<Message>(
-              future: _futureMessage,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Center(child: Text(snapshot.data.message));
-                } else if (snapshot.hasError) {
-                  return Center(child: Text("${snapshot.error}"));
-                }
+                            child: _input(Icon(Icons.account_circle),
+                                "FIRST NAME", _firstnameController, false),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 20,
+                            ),
+                            child: _input(Icon(Icons.account_circle),
+                                "LAST NAME", _lastnameController, false),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: 20,
+                            ),
+                            child: _input(Icon(Icons.email), "EMAIL",
+                                _emailController, false),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(bottom: 20),
+                            child: _input(Icon(Icons.phone), "PHONE",
+                                _phoneController, false),
+                          ),
+                          FutureBuilder<List<Album>>(
+                              future: futureAlbum,
+                              builder: (context, snapshot) {
+                                switch (snapshot.connectionState) {
+                                  case ConnectionState.none:
+                                    return CircularProgressIndicator();
+                                  case ConnectionState.active:
+                                  case ConnectionState.waiting:
+                                    return CircularProgressIndicator();
+                                  case ConnectionState.done:
+                                    print('hasdata${snapshot.hasData}');
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                          bottom: 20, left: 20, right: 20),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.of(context).size.width,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          border: Border.all(
+                                            width: 1.0,
+                                            style: BorderStyle.solid,
+                                            color: Colors.grey[100],
+                                          ),
+                                        ),
+                                        child: DropdownButtonFormField(
+                                          decoration: InputDecoration(
+                                              fillColor: Colors.white,
+                                              floatingLabelBehavior:
+                                                  FloatingLabelBehavior.auto,
+                                              hintStyle: TextStyle(
+                                                  fontWeight: FontWeight.normal,
+                                                  fontSize: 16),
+                                              hintText: 'SELECT COUNTY',
+                                              //labelText: 'COUNTY',
+                                              enabledBorder: InputBorder.none,
+                                              icon: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        20, 0, 0, 0),
+                                                child: Icon(
+                                                  Icons.language,
+                                                  color: Theme.of(context)
+                                                      .primaryColor,
+                                                ),
+                                              )),
+                                          value: dropdownValue,
+                                          //hint: Text('SELECT COUNTY'),
+                                          icon: Padding(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                0, 0, 8, 0),
+                                            child: Icon(
+                                              Icons.arrow_drop_down_circle,
+                                              color: Theme.of(context)
+                                                  .primaryColor,
+                                            ),
+                                          ),
+                                          isExpanded: true,
+                                          iconSize: 30,
+                                          elevation: 16,
+                                          items: snapshot.data
+                                              .map<DropdownMenuItem<Album>>(
+                                                  (Album county) {
+                                            return DropdownMenuItem<Album>(
+                                                value: county,
+                                                child: Text(
+                                                  county.countyName,
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.normal,
+                                                      fontSize: 16,
+                                                      letterSpacing: 1.0,
+                                                      backgroundColor:
+                                                          Colors.white10),
+                                                ));
+                                          }).toList(),
+                                          onChanged: (Album newValue) {
+                                            setState(
+                                                () => dropdownValue = newValue);
+                                            // selectedCountry = newValue;
+                                            print(newValue.countyID);
+                                            print(newValue.countyName);
+                                          },
+                                        ),
+                                      ),
+                                    );
 
-                return Center(
-                  child: CircularProgressIndicator(
-                    strokeWidth: 3.0,
+                                  default:
+                                    return CircularProgressIndicator();
+                                }
+                              }),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  top: 20,
+                                  left: 20,
+                                  right: 20,
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom),
+                              child: (_showbutton == 1)
+                                  ? Container(
+                                      child: _button(
+                                          "REGISTER",
+                                          Colors.white,
+                                          primary,
+                                          primary,
+                                          Colors.white,
+                                          _registerUser),
+                                      height: 50,
+                                      width: MediaQuery.of(context).size.width,
+                                    )
+                                  : Container(
+                                      height: 50,
+                                      width: MediaQuery.of(context).size.width,
+                                      color: Colors.white,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 3.0,
+                                        ),
+                                      ))),
+                          SizedBox(
+                            height: 20,
+                          ),
+                        ]),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
-          ),
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white,
+                )
+              : Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  color: Colors.white,
+                  child: FutureBuilder<Message>(
+                    future: _futureMessage,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Center(child: Text(snapshot.data.message));
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text("${snapshot.error}"));
+                      }
+
+                      return Center(
+                        child: CircularProgressIndicator(
+                          strokeWidth: 3.0,
+                        ),
+                      );
+                    },
+                  ),
+                ),
         ),
       ),
-    );;
+    );
+    ;
   }
 }
 
