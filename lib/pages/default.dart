@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../api/api_provider.dart';
 import '../models/statistic_info.dart';
-import '../notfound.dart';
 import 'dashboard_item.dart';
+import 'elements/notfound.dart';
 
 class Default extends StatefulWidget {
   String aggregatorAginID;

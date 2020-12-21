@@ -6,8 +6,8 @@ import 'package:flutter/widgets.dart';
 import '../api/api_provider.dart';
 import '../blocs/BlocProvider.dart';
 import '../models/market_listing_info.dart';
-import '../notfound.dart';
 import 'dashboard.dart';
+import 'elements/notfound.dart';
 
 class PlaceToMarketList extends StatefulWidget {
   String aggregatorAginID;
