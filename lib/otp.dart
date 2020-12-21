@@ -5,46 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 import 'package:AgriView/utils/constants.dart';
 
-
-int statusCode;
-Future<Message> verifyAccount (
-    String phoneNumber,
-    String verifyCode) async {
-
-  final http.Response response = await http.post(
-    Uri.parse('${serverURL}aggregator/account/verify'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'X-AGIN-API-Key-Token': APIKEY,
-    },
-    body: jsonEncode(<String, String>{
-      'verifyCode': verifyCode,
-      'phoneNumber': phoneNumber,
-    }),
-  );
-
-  statusCode = response.statusCode;
-  if (response.statusCode == 200) {
-    return Message.fromJson(json.decode(response.body));
-  } else {
-    return Message.fromJson(json.decode(response.body));
-  }
-}
-
-class Message {
-  final String message;
-  final String responsecode;
-
-  Message({this.message, this.responsecode});
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      message: json['message'],
-      responsecode: json['responsecode'],
-    );
-  }
-}
-
+import 'api/api_provider.dart';
+import 'models/message.dart';
 
 class Otp extends StatefulWidget {
   @override
@@ -52,6 +14,7 @@ class Otp extends StatefulWidget {
 }
 
 class _OtpState extends State<Otp> {
+  ApiProvider _apiProvider;
   int _otpCodeLength = 6;
   bool _isLoadingButton = false;
   bool _enableButton = false;
@@ -61,12 +24,11 @@ class _OtpState extends State<Otp> {
   Map data = {};
   Future<Message> _futureMessage;
 
-
   @override
   void initState() {
     super.initState();
+    _apiProvider = ApiProvider();
     //_getSignatureCode();
-
   }
 
   /// get signature code
@@ -107,28 +69,20 @@ class _OtpState extends State<Otp> {
       });
     });
 
-      //go online to verify
-      _futureMessage = verifyAccount(
-          _phoneNumber,
-          _otpCode).then((value){
-
-          setState(() {
-            _isLoadingButton = false;
-            _enableButton = true;
-          });
-
-        Message message = value;
-        if(statusCode == 200){
-
-            Navigator.of(context).popAndPushNamed('/');
-
-        }else{
-          _scaffoldKey.currentState.showSnackBar(
-              SnackBar(content: Text(message.message)));
-        }
-        return;
+    //go online to verify
+    _futureMessage =
+        _apiProvider.verifyAccount(_phoneNumber, _otpCode).then((value) {
+      setState(() {
+        _isLoadingButton = false;
+        _enableButton = true;
       });
 
+      Navigator.of(context).popAndPushNamed('/');
+      return;
+    }).catchError((error) {
+      _scaffoldKey.currentState
+          .showSnackBar(SnackBar(content: Text(error.toString())));
+    });
   }
 
   @override
@@ -149,9 +103,10 @@ class _OtpState extends State<Otp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 20.0, horizontal: 10.0),
                 child: Text(
-                "Waiting to automatically detect an SMS sent to $_phoneNumber",
+                  "Waiting to automatically detect an SMS sent to $_phoneNumber",
                   style: TextStyle(
                     color: Theme.of(context).primaryColor,
                     fontSize: 20.0,
@@ -196,7 +151,6 @@ class _OtpState extends State<Otp> {
     );
   }
 
-
   Widget _setUpButtonChild() {
     if (_isLoadingButton) {
       return Container(
@@ -213,5 +167,4 @@ class _OtpState extends State<Otp> {
       );
     }
   }
-
 }

@@ -7,66 +7,8 @@ import 'package:http/http.dart' as http;
 import 'package:AgriView/utils/constants.dart';
 import 'dart:convert';
 
-Future<Message> createFarmProduce(String landAginID, String productUUID) async {
-  final http.Response response = await http.post(
-    Uri.parse('${serverURL}production/farm/produce/register'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'X-AGIN-API-Key-Token': APIKEY,
-    },
-    body: jsonEncode(<String, String>{
-      'landAginID': landAginID,
-      'productUUID': productUUID,
-    }),
-  );
-
-  if (response.statusCode == 201) {
-    return Message.fromJson(json.decode(response.body));
-  } else {
-    return Message.fromJson(json.decode(response.body));
-  }
-}
-
-class Message {
-  final String message;
-  final String responsecode;
-
-  Message({this.message, this.responsecode});
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      message: json['message'],
-      responsecode: json['responsecode'],
-    );
-  }
-}
-
-Future<List<Product>> fetchProduce() async {
-  final response = await http.post(
-    Uri.parse('${serverURL}product/list'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'X-AGIN-API-Key-Token': APIKEY,
-    },
-    body: jsonEncode(<String, String>{
-      'CategoryID': "1",
-    }),
-  );
-print(response.body);
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    final items = json.decode(response.body).cast<Map<String, dynamic>>();
-    List<Product> listProduce = items.map<Product>((json) {
-      return Product.fromJson(json);
-    }).toList();
-    return listProduce;
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load farmers');
-  }
-}
+import 'api/api_provider.dart';
+import 'models/message.dart';
 
 class AllProduceList extends StatefulWidget {
   @override
@@ -76,6 +18,14 @@ class AllProduceList extends StatefulWidget {
 class _AllProduceListState extends State<AllProduceList> {
   Future<Message> _futureMessage;
   Map data = {};
+  ApiProvider _apiProvider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _apiProvider = ApiProvider();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,13 +90,13 @@ class _AllProduceListState extends State<AllProduceList> {
                                 ),
                                 itemBuilder: (context, index) => ItemCard(
                                       product: snapshot.data[index],
-                                      press: (){
+                                      press: () {
                                         Product product = snapshot.data[index];
-                                        print('UUID${product.UUID}');
                                         setState(() {
-                                          _futureMessage = createFarmProduce(landAginID, product.UUID);
+                                          _futureMessage =
+                                              _apiProvider.createFarmProduce(
+                                                  landAginID, product.UUID);
                                         });
-
                                       },
                                     )),
                           ),
@@ -157,7 +107,7 @@ class _AllProduceListState extends State<AllProduceList> {
                     return CircularProgressIndicator();
                 }
               },
-              future: fetchProduce(),
+              future: _apiProvider.fetchProduce(),
             )
           : Container(
               height: MediaQuery.of(context).size.height,

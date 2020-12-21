@@ -7,84 +7,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:AgriView/models/County.dart';
 import 'package:AgriView/utils/constants.dart';
 
-int statusCode;
-Future<List<Album>> fetchAlbum() async {
-  final response = await http.get(
-    Uri.parse('${serverURL}county/list'),
-    headers: <String, String>{
-      'X-AGIN-API-Key-Token': APIKEY,
-    },
-  );
-
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    final items = json.decode(response.body).cast<Map<String, dynamic>>();
-    List<Album> listAlbums = items.map<Album>((json) {
-      return Album.fromJson(json);
-    }).toList();
-    return listAlbums;
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
-  }
-}
-
-Future<Message> createFarmer(String firstName, String lastName, String email,
-    String phone, String county, String accountManagerAginID) async {
-  final http.Response response = await http.post(
-    Uri.parse('${serverURL}aggregator/register/farmer'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'X-AGIN-API-Key-Token': APIKEY,
-    },
-    body: jsonEncode(<String, String>{
-      'FirstName': firstName,
-      'LastName': lastName,
-      'PhoneNumber': phone,
-      'EmailAddress': email,
-      'AccountManagerAginID': accountManagerAginID,
-      'CountyID': county
-    }),
-  );
-
-  statusCode = response.statusCode;
-  if (response.statusCode == 201) {
-    print(response.body);
-    return Message.fromJson(json.decode(response.body));
-  } else {
-    return Message.fromJson(json.decode(response.body));
-  }
-}
-
-class Message {
-  final String message;
-  final String responsecode;
-
-  Message({this.message, this.responsecode});
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      message: json['message'],
-      responsecode: json['responsecode'],
-    );
-  }
-}
-
-class Album {
-  final int countyID;
-  final String countyName;
-
-  Album({this.countyID, this.countyName});
-
-  factory Album.fromJson(Map<String, dynamic> json) {
-    return Album(
-      countyID: json['countyID'],
-      countyName: json['countyName'],
-    );
-  }
-}
+import 'api/api_provider.dart';
+import 'models/album.dart';
+import 'models/message.dart';
 
 class Farmer extends StatefulWidget {
   @override
@@ -117,22 +42,13 @@ class _FarmerState extends State<Farmer> {
   Album dropdownValue;
   Album _currentUser;
   int _showbutton = 1;
+  ApiProvider _apiProvider;
 
   @override
   void initState() {
     super.initState();
-    futureAlbum = fetchAlbum();
-
-    /*getCountiesList().then((listMap){
-      listMap.map((map) {
-        return getDropDownWidget(map);
-      }).forEach((dropDownItem) {
-          list.add(dropDownItem);
-      });
-       setState((){
-
-       });
-    });*/
+    _apiProvider = ApiProvider();
+    futureAlbum = _apiProvider.fetchAlbum();
   }
 
   //input widget
@@ -205,26 +121,25 @@ class _FarmerState extends State<Farmer> {
 
     setState(() {
       _showbutton = 0;
-      _futureMessage = createFarmer(
+      _futureMessage = _apiProvider
+          .createFarmer(
               _firstName, _lastName, _email, _phone, _county, _aggregatorAginID)
           .then((value) {
-        Message message = value;
-        if (statusCode == 201) {
-          _scaffoldKey.currentState
-              .showSnackBar(SnackBar(content: Text(message.message)));
-          setState(() {
-            _showbutton = 1;
-            _firstnameController.text = "";
-            _lastnameController.text = "";
-            _emailController.text = "";
-            _phoneController.text = "";
-          });
-          Navigator.pop(context);
-        } else {
-          _scaffoldKey.currentState
-              .showSnackBar(SnackBar(content: Text(message.message)));
-        }
+        _scaffoldKey.currentState
+            .showSnackBar(SnackBar(content: Text(value.message)));
+        setState(() {
+          _showbutton = 1;
+          _firstnameController.text = "";
+          _lastnameController.text = "";
+          _emailController.text = "";
+          _phoneController.text = "";
+        });
+        Navigator.pop(context);
+
         return;
+      }).catchError((error) {
+        _scaffoldKey.currentState
+            .showSnackBar(SnackBar(content: Text(error.toString())));
       });
     });
 
@@ -233,48 +148,6 @@ class _FarmerState extends State<Farmer> {
     _lastnameController.clear();
     _phoneController.clear();
     _countryController.clear();*/
-  }
-
-  List<County> parseCounties(String responseBody) {
-    final parsed = json.decode(responseBody).cast<Map<String, dynamic>>();
-    List<County> lc =
-        parsed.map<County>((json) => County.fromJson(json)).toList();
-    print('parsed${parsed} ${lc.length}');
-    return lc;
-  }
-
-  Future<List<County>> _getCountiesList() async {
-    HttpClient client = new HttpClient();
-    List<County> conList;
-    await client
-        .getUrl(Uri.parse('${serverURL}county/list'))
-        .then((HttpClientRequest request) {
-      request.headers.add("X-AGIN-API-Key-Token", APIKEY);
-      return request.close();
-    }).then((HttpClientResponse response) {
-      // Process the response.
-      response.transform(utf8.decoder).listen((contents) {
-        // handle data
-        //List<dynamic> datalist = jsonDecode(contents);
-        //return County.fromMap(jsonDecode(contents));
-
-        conList = parseCounties(contents);
-
-        print('connlist$conList');
-
-        return conList;
-
-        //countyList = new List(datalist.length);
-        /*datalist.map((map) {
-            return getDropDownWidget(map);
-          }).forEach((dropDownItem) {
-            list.add(dropDownItem);
-          });
-          setState((){
-
-          });*/
-      });
-    });
   }
 
   @override
@@ -489,17 +362,5 @@ class _FarmerState extends State<Farmer> {
       ),
     );
     ;
-  }
-}
-
-class Post {
-  final List<dynamic> county;
-
-  Post({this.county});
-
-  factory Post.fromJson(Map<dynamic, dynamic> json) {
-    return Post(
-      county: json['county'],
-    );
   }
 }

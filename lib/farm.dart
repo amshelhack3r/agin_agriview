@@ -9,54 +9,8 @@ import 'package:google_map_location_picker/generated/i18n.dart'
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-
-Future<Message> createFarm(
-    String farmName,
-    String farmLocation,
-    String acreageMapped,
-    String acreageApproved,
-    String currentLandUse,
-    String farmerAginId,
-    double lat,
-    double lon) async {
-  final http.Response response = await http.post(
-    Uri.parse('${serverURL}production/farm/register'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'X-AGIN-API-Key-Token': APIKEY,
-    },
-    body: jsonEncode(<String, String>{
-      'farmName': farmName,
-      'farmLocation': farmLocation,
-      'acreageMapped': acreageMapped,
-      'acreageApproved': acreageApproved,
-      'currentLandUse': currentLandUse,
-      'producerAginId': farmerAginId,
-      'lat': lat.toString(),
-      'lon': lon.toString()
-    }),
-  );
-
-  if (response.statusCode == 201) {
-    return Message.fromJson(json.decode(response.body));
-  } else {
-    return Message.fromJson(json.decode(response.body));
-  }
-}
-
-class Message {
-  final String message;
-  final String responsecode;
-
-  Message({this.message, this.responsecode});
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      message: json['message'],
-      responsecode: json['responsecode'],
-    );
-  }
-}
+import 'api/api_provider.dart';
+import 'models/message.dart';
 
 class Farm extends StatefulWidget {
   @override
@@ -64,6 +18,7 @@ class Farm extends StatefulWidget {
 }
 
 class _FarmState extends State<Farm> {
+  ApiProvider _apiProvider;
   Future<Message> _futureMessage;
   Map data = {};
   LocationResult _pickedLocation;
@@ -180,14 +135,23 @@ class _FarmState extends State<Farm> {
     _currentLandUse = _currentLandUseController.text;
 
     setState(() {
-      _futureMessage = createFarm(_farmName, _farmLocation, _acreageMapped,
-          _acreageApproved, _currentLandUse, _farmerAginID, lat, lon);
+      _futureMessage = _apiProvider.createFarm(
+          _farmName,
+          _farmLocation,
+          _acreageMapped,
+          _acreageApproved,
+          _currentLandUse,
+          _farmerAginID,
+          lat,
+          lon);
     });
-    /* _farmLocationController.clear();
-    _farmNameController.clear();
-    _acreageMappedController.clear();
-    _acreageApprovedController.clear();
-    _currentLandUseController.clear();*/
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _apiProvider = ApiProvider();
   }
 
   @override
@@ -257,16 +221,18 @@ class _FarmState extends State<Farm> {
                                         "AIzaSyCFYy2HHSUUYRuhyusmKhKFQEASoAyq1WE",
                                         initialCenter:
                                             LatLng(31.1975844, 29.9598339),
-                                        automaticallyAnimateToCurrentLocation: true,
+                                        automaticallyAnimateToCurrentLocation:
+                                            true,
                                         //mapStylePath: 'assets/mapStyle.json',
                                         myLocationButtonEnabled: true,
                                         layersButtonEnabled: true,
                                         //resultCardAlignment: Alignment.bottomCenter,
                                       );
                                       print("result = $result");
-                                      setState((){
+                                      setState(() {
                                         _pickedLocation = result;
-                                        _farmLocationController.text = _pickedLocation.address;
+                                        _farmLocationController.text =
+                                            _pickedLocation.address;
                                         lat = _pickedLocation.latLng.latitude;
                                         lon = _pickedLocation.latLng.longitude;
                                       });

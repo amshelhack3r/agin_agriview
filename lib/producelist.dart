@@ -1,44 +1,11 @@
 import 'dart:math';
-import 'package:AgriView/farmer_produce_item_card.dart';
-import 'package:AgriView/models/FarmerProduceInfo.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
-import 'package:AgriView/utils/constants.dart';
-import 'dart:convert';
 
-Future<List<FarmerProduceInfo>> fetchProduce(String landAginID) async {
-  final response = await http.post(
-    Uri.parse('${serverURL}production/farm/produce/list/landaginid'),
-    headers: <String, String>{
-      'X-AGIN-API-Key-Token': APIKEY,
-      'Content-Type': 'application/json; charset=UTF-8',
-    },
-    body: jsonEncode(<String, String>{
-      'AginID': landAginID,
-    }),
-  );
-  print(response.body);
-  if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
-    List<FarmerProduceInfo> listFarmerProduce;
-    try {
-      final items = json.decode(response.body).cast<Map<String, dynamic>>();
-      listFarmerProduce = items.map<FarmerProduceInfo>((json) {
-        return FarmerProduceInfo.fromJson(json);
-      }).toList();
-    } catch (e) {
-      print(e.toString());
-    }
-
-    return listFarmerProduce;
-  } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load farmers');
-  }
-}
+import 'api/api_provider.dart';
+import 'farmer_produce_item_card.dart';
+import 'models/FarmerProduceInfo.dart';
 
 class ProduceList extends StatefulWidget {
   @override
@@ -46,6 +13,15 @@ class ProduceList extends StatefulWidget {
 }
 
 class _ProduceListState extends State<ProduceList> {
+  ApiProvider _apiProvider;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _apiProvider = ApiProvider();
+  }
+
   @override
   Widget build(BuildContext context) {
     Map data = {};
@@ -125,8 +101,8 @@ class _ProduceListState extends State<ProduceList> {
                                           'id':
                                               '${fProduceInfo.productUuid.productID}',
                                           'farmerAginID': farmerAginID,
-                                          'aggregatorAginID' : aggregatorAginID,
-                                          'landAginID' : landAginID,
+                                          'aggregatorAginID': aggregatorAginID,
+                                          'landAginID': landAginID,
                                           'farmerName': name,
                                         }
                                         /*MaterialPageRoute(
@@ -144,7 +120,7 @@ class _ProduceListState extends State<ProduceList> {
               return CircularProgressIndicator();
           }
         },
-        future: fetchProduce(landAginID),
+        future: _apiProvider.fetchProduceByLandAgin(landAginID),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

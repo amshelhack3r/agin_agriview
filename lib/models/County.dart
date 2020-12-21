@@ -1,20 +1,13 @@
 class County {
-
   int countyID;
   String countyName;
 
   County({this.countyID, this.countyName});
 
-  factory County.fromJson(Map<String, dynamic> json) {
+  factory County.fromMap(Map<String, dynamic> map) {
     return County(
-      countyID : json['countyID'],
-      countyName : json['countyName'],
+      countyID: map['countyID'],
+      countyName: map['countyName'],
     );
   }
-
-
-
-
-
-
 }

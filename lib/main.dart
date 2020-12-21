@@ -1,26 +1,24 @@
-import 'package:AgriView/aggregator.dart';
-import 'package:AgriView/allproducelist.dart';
-import 'package:AgriView/blocs/BlocProvider.dart';
-import 'package:AgriView/dashboard.dart';
-import 'package:AgriView/detailpage/farmdetail.dart';
-import 'package:AgriView/detailpage/farmerdetail.dart';
-import 'package:AgriView/detailpage/producedetail.dart';
-import 'package:AgriView/farm.dart';
-import 'package:AgriView/farmer.dart';
-import 'package:AgriView/farmergroup.dart';
-import 'package:AgriView/farmerlist.dart';
-import 'package:AgriView/farmproduce.dart';
-import 'package:AgriView/farmslist.dart';
-import 'package:AgriView/models/AggregatorLoginObject.dart';
-import 'package:AgriView/otp.dart';
-import 'package:AgriView/placetomarket.dart';
-import 'package:AgriView/producelist.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-import 'package:AgriView/utils/constants.dart';
+
+import 'aggregator.dart';
+import 'allproducelist.dart';
+import 'api/api_provider.dart';
+import 'blocs/BlocProvider.dart';
+import 'dashboard.dart';
+import 'farm.dart';
+import 'farmer.dart';
+import 'farmergroup.dart';
+import 'farmerlist.dart';
+import 'farmproduce.dart';
+import 'farmslist.dart';
+import 'models/message.dart';
+import 'otp.dart';
+import 'pages/farmdetail.dart';
+import 'pages/farmerdetail.dart';
+import 'pages/producedetail.dart';
+import 'placetomarket.dart';
+import 'producelist.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,7 +40,6 @@ class MyApp extends StatelessWidget {
           primaryColorLight: Color(0xff0ad7cb),
           fontFamily: "Montserrat",
           canvasColor: Colors.white),
-
       home: Login(),
       routes: {
         '/register': (context) => Aggregator(),
@@ -65,73 +62,13 @@ class MyApp extends StatelessWidget {
   }
 }
 
-Future<Message> loginAggregator(
-    String phoneNumber, String password, BuildContext context) async {
-  final http.Response response = await http.post(
-    Uri.parse('${serverURL}aggregator/login'),
-    headers: <String, String>{
-      'Content-Type': 'application/json; charset=UTF-8',
-      'X-AGIN-API-Key-Token': APIKEY,
-    },
-    body: jsonEncode(<String, String>{
-      'phoneNumber': phoneNumber,
-      'password': password,
-    }),
-  );
-
-  print(response.body);
-  statusCode = response.statusCode;
-  if (response.statusCode == 200) {
-    //Navigate to home
-    AggregatorLoginObject aggregatorLoginObject =
-        AggregatorLoginObject.fromJson(json.decode(response.body));
-  /*Navigator.popAndPushNamed(context, '/home', arguments: {
-      'aggregatorAginID': aggregatorLoginObject.youthAGINID,
-      'firstName': aggregatorLoginObject.firstName,
-      'lastName': aggregatorLoginObject.lastName
-    });*/
-
-    Navigator
-        .of(context)
-        .push(MaterialPageRoute(builder: (BuildContext context) {
-      return BlocProvider<IncrementBloc>(
-        bloc: IncrementBloc(),
-        child: new Dashboard(aggregatorAginID : aggregatorLoginObject.youthAGINID, firstName: aggregatorLoginObject.firstName, lastName: aggregatorLoginObject.lastName),
-      );
-    })
-    );
-
-
-
-
-  } else {
-    return Message.fromJson(json.decode(response.body));
-  }
-}
-
-
-
-
-class Message {
-  final String message;
-  final String responsecode;
-
-  Message({this.message, this.responsecode});
-
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      message: json['message'],
-      responsecode: json['responsecode'],
-    );
-  }
-}
-
 class Login extends StatefulWidget {
   @override
   _loginState createState() => _loginState();
 }
 
 class _loginState extends State<Login> {
+  ApiProvider _apiProvider;
   Future<Message> _futureMessage;
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
@@ -143,6 +80,12 @@ class _loginState extends State<Login> {
   String _displayName;
   bool _obsecure = false;
   int _showbutton = 1;
+
+  @override
+  void initState() {
+    super.initState();
+    _apiProvider = ApiProvider();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -161,24 +104,7 @@ class _loginState extends State<Login> {
               children: <Widget>[
                 Container(
                   child: Stack(
-                    children: <Widget>[
-                      /*Positioned(
-                        left: 10,
-                        top: 10,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).dispose();
-                            _emailController.clear();
-                            _passwordController.clear();
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            size: 30.0,
-                            color: Theme.of(context).primaryColor,
-                          ),
-                        ),
-                      )*/
-                    ],
+                    children: <Widget>[],
                   ),
                   height: 50,
                   width: 50,
@@ -193,8 +119,8 @@ class _loginState extends State<Login> {
                           children: <Widget>[
                             Positioned(
                               child: Center(
-                                child: Image.asset('assets/images/agriview_logo.jpg')
-                              ),
+                                  child: Image.asset(
+                                      'assets/images/agriview_logo.jpg')),
                             ),
                           ],
                         ),
@@ -352,24 +278,21 @@ class _loginState extends State<Login> {
             ));
   }
 
-  void _loginUser() {
+  void _loginUser() async {
     _email = _emailController.text;
     _password = _passwordController.text;
-    setState(() {
-      _showbutton = 0;
-      _futureMessage = loginAggregator(_email, _password, context);
-      if (statusCode != 200) {
-        _futureMessage.then((value) {
-          if(value == null) return;
-          Message message = value;
-          if (message.responsecode == '200') return;
-          _scaffoldKey.currentState
-              .showSnackBar(SnackBar(content: Text(message.message)));
-          setState(() {
-            _showbutton = 1;
-          });
-        });
-      }
-    });
+    var aggregatorLoginObject =
+        await _apiProvider.loginAggregator(_email, _password);
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return BlocProvider<IncrementBloc>(
+        bloc: IncrementBloc(),
+        child: new Dashboard(
+            aggregatorAginID: aggregatorLoginObject.youthAGINID,
+            firstName: aggregatorLoginObject.firstName,
+            lastName: aggregatorLoginObject.lastName),
+      );
+    }));
   }
 }
