@@ -151,6 +151,22 @@ class _PlaceToMarketState extends State<PlaceToMarket> {
     _quantity = _quantityController.text;
     var newExtension;
 
+    Map params = {
+      "farmerAginID": "string",
+      "landAginID": "string",
+      "cultivationMode": 0,
+      "produceStatus": 0,
+      "unitType": 0,
+      "pricePerUnitType": 0,
+      "readyFromDate": "string",
+      "agronomyAginID": "string",
+      "quantityAvailable": 0,
+      "phototext": "string",
+      "photo": ["string"],
+      "fileExtension": "string",
+      "productID": 0
+    };
+
     await AppUtil.getFileExtension(_image).then((result) {
       newExtension = result;
       setState(() {
@@ -170,21 +186,7 @@ class _PlaceToMarketState extends State<PlaceToMarket> {
       _enableButton = false;
       _isLoadingButton = true;
 
-      _futureMessage = _apiProvider
-          .createPlacetoMarket(
-              _farmerAginID,
-              _landAginID,
-              selectedCultivationMode.id.toString(),
-              selectedProduceStatus.id.toString(),
-              selectedUnitType.unitTypeID.toString(),
-              _price,
-              _readyFromDate,
-              _aggregatorAginID,
-              _quantity,
-              _photoText,
-              _fileExtension,
-              _productID)
-          .then((value) {
+      _futureMessage = _apiProvider.createPlacetoMarket(params).then((value) {
         FocusScope.of(context).requestFocus(new FocusNode());
         Timer(Duration(milliseconds: 4000), () {
           setState(() {

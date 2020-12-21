@@ -114,12 +114,19 @@ class _FarmerState extends State<Farmer> {
     _phone = _phoneController.text;
     _county = dropdownValue.countyID.toString();
 
+    Map params = {
+      "phoneNumber": "string",
+      "emailAddress": "string",
+      "firstName": "string",
+      "lastName": "string",
+      "countyID": "string",
+      "producerTypeID": 0,
+      "accountManagerAginID": "string"
+    };
+
     setState(() {
       _showbutton = 0;
-      _futureMessage = _apiProvider
-          .createFarmer(
-              _firstName, _lastName, _email, _phone, _county, _aggregatorAginID)
-          .then((value) {
+      _futureMessage = _apiProvider.createFarmer(params).then((value) {
         _scaffoldKey.currentState
             .showSnackBar(SnackBar(content: Text(value.message)));
         setState(() {

@@ -225,8 +225,8 @@ class _loginState extends State<Login> {
   void _loginUser() async {
     _email = _emailController.text;
     _password = _passwordController.text;
-    var aggregatorLoginObject =
-        await _apiProvider.loginAggregator(_email, _password);
+    Map params = {'phoneNumber': '', 'password': ''};
+    var aggregatorLoginObject = await _apiProvider.loginAggregator(params);
 
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) {

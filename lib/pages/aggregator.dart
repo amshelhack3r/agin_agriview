@@ -173,12 +173,22 @@ class _AggregatorState extends State<Aggregator> {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('The passwords do not match. Please reenter')));
     } else {
+      Map params = {
+        "status": 0,
+        "password": "string",
+        "countryID": 0,
+        "phoneNumber": "string",
+        "emailAddress": "string",
+        "firstName": "string",
+        "lastName": "string",
+        "countyID": 0,
+        "organizationCode": "string",
+        "dateBirth": "string",
+        "teamID": 0
+      };
       setState(() {
         _showbutton = 0;
-        _futureMessage = _apiProvider
-            .createAggregator(_firstName, _lastName, _email, _phone, _county,
-                _password, _organizationcode)
-            .then((value) {
+        _futureMessage = _apiProvider.createAggregator(params).then((value) {
           if (value.responsecode == 201) {
             _scaffoldKey.currentState
                 .showSnackBar(SnackBar(content: Text(value.message)));

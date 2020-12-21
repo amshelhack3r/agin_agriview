@@ -132,15 +132,16 @@ class _FarmState extends State<Farm> {
     _currentLandUse = _currentLandUseController.text;
 
     setState(() {
-      _futureMessage = _apiProvider.createFarm(
-          _farmName,
-          _farmLocation,
-          _acreageMapped,
-          _acreageApproved,
-          _currentLandUse,
-          _farmerAginID,
-          lat,
-          lon);
+      _futureMessage = _apiProvider.createFarm({
+        'farmName': _farmName,
+        'farmLocation': _farmLocation,
+        'acreageMapped': _acreageMapped,
+        'acreageApproved': _acreageApproved,
+        'currentLandUse': _currentLandUse,
+        'producerAginId': _farmerAginID,
+        'lat': lat,
+        'lon': lon
+      });
     });
   }
 
