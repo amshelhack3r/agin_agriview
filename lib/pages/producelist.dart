@@ -3,9 +3,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'api/api_provider.dart';
+import '../api/api_provider.dart';
+import '../models/FarmerProduceInfo.dart';
 import 'farmer_produce_item_card.dart';
-import 'models/FarmerProduceInfo.dart';
 
 class ProduceList extends StatefulWidget {
   @override

@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:http/http.dart' as http;
-import 'package:AgriView/utils/constants.dart';
-import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_map_location_picker/generated/i18n.dart'
     as location_picker;
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'api/api_provider.dart';
-import 'models/message.dart';
+import '../api/api_provider.dart';
+import '../models/message.dart';
 
 class Farm extends StatefulWidget {
   @override

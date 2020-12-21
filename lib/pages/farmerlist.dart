@@ -1,11 +1,12 @@
 import 'dart:math';
-import 'package:flutter/material.dart';
-import 'package:AgriView/world_time.dart';
-import 'package:flutter/widgets.dart';
-import 'package:AgriView/notfound.dart';
 
-import 'api/api_provider.dart';
-import 'models/farmer_info.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+
+import '../api/api_provider.dart';
+import '../models/farmer_info.dart';
+import '../notfound.dart';
+import '../utils/world_time.dart';
 
 List<FarmerInfo> listFarmers;
 List<FarmerInfo> dummySearchList;

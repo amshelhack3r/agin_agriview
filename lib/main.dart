@@ -1,24 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'aggregator.dart';
-import 'allproducelist.dart';
 import 'api/api_provider.dart';
 import 'blocs/BlocProvider.dart';
-import 'dashboard.dart';
-import 'farm.dart';
-import 'farmer.dart';
-import 'farmergroup.dart';
-import 'farmerlist.dart';
-import 'farmproduce.dart';
-import 'farmslist.dart';
 import 'models/message.dart';
-import 'otp.dart';
+import 'pages/otp.dart';
+import 'pages/aggregator.dart';
+import 'pages/allproducelist.dart';
+import 'pages/dashboard.dart';
+import 'pages/farm.dart';
 import 'pages/farmdetail.dart';
+import 'pages/farmer.dart';
 import 'pages/farmerdetail.dart';
+import 'pages/farmergroup.dart';
+import 'pages/farmerlist.dart';
+import 'pages/farmproduce.dart';
+import 'pages/farmslist.dart';
 import 'pages/producedetail.dart';
-import 'placetomarket.dart';
-import 'producelist.dart';
+import 'pages/placetomarket.dart';
+import 'pages/producelist.dart';
 
 void main() {
   runApp(MyApp());

@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
-import 'package:AgriView/utils/constants.dart';
 
-import 'api/api_provider.dart';
-import 'models/message.dart';
+import '../api/api_provider.dart';
+import '../models/message.dart';
 
 class Otp extends StatefulWidget {
   @override

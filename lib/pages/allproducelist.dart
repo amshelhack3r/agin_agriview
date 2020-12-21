@@ -1,14 +1,12 @@
 import 'dart:math';
-import 'package:AgriView/models/Product.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:AgriView/item_card.dart';
-import 'package:http/http.dart' as http;
-import 'package:AgriView/utils/constants.dart';
-import 'dart:convert';
 
-import 'api/api_provider.dart';
-import 'models/message.dart';
+import '../api/api_provider.dart';
+import '../models/Product.dart';
+import '../models/message.dart';
+import 'item_card.dart';
 
 class AllProduceList extends StatefulWidget {
   @override

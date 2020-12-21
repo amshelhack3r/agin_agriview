@@ -1,15 +1,10 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
-
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:AgriView/models/County.dart';
-import 'package:AgriView/utils/constants.dart';
+import 'package:flutter/material.dart';
 
-import 'api/api_provider.dart';
-import 'models/album.dart';
-import 'models/message.dart';
+import '../api/api_provider.dart';
+import '../models/County.dart';
+import '../models/album.dart';
+import '../models/message.dart';
 
 class Farmer extends StatefulWidget {
   @override

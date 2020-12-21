@@ -1,12 +1,9 @@
-import 'dart:convert';
-import 'package:AgriView/dashboard_item.dart';
-import 'package:AgriView/notfound.dart';
-import 'package:AgriView/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
-import 'api/api_provider.dart';
-import 'models/statistic_info.dart';
+import '../api/api_provider.dart';
+import '../models/statistic_info.dart';
+import '../notfound.dart';
+import 'dashboard_item.dart';
 
 class Default extends StatefulWidget {
   String aggregatorAginID;

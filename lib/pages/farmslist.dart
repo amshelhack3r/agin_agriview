@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'api/api_provider.dart';
+import '../api/api_provider.dart';
 
 class FarmsList extends StatefulWidget {
   @override

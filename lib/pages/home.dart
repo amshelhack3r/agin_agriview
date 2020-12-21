@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'clipper.dart';
+
+import '../utils/clipper.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -26,7 +27,8 @@ class _HomeState extends State<Home> {
     //GO logo widget
     Widget logo() {
       return Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
+        padding:
+            EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.15),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 220,

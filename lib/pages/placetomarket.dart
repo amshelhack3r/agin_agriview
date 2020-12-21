@@ -1,24 +1,21 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
-import 'package:AgriView/dialog/dialogs.dart';
-import 'package:AgriView/utils/AppUtil.dart';
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:AgriView/models/County.dart';
-import 'package:AgriView/utils/constants.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path/path.dart' as path;
 
-import 'api/api_provider.dart';
-import 'models/cultivation_mode.dart';
-import 'models/message.dart';
-import 'models/produce_status.dart';
-import 'models/status_description.dart';
-import 'models/unit_type.dart';
+import '../api/api_provider.dart';
+import '../dialog/dialogs.dart';
+import '../models/County.dart';
+import '../models/cultivation_mode.dart';
+import '../models/message.dart';
+import '../models/produce_status.dart';
+import '../models/status_description.dart';
+import '../models/unit_type.dart';
+import '../utils/AppUtil.dart';
 
 class PlaceToMarket extends StatefulWidget {
   @override

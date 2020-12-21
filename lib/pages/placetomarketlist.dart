@@ -3,11 +3,11 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'api/api_provider.dart';
-import 'blocs/BlocProvider.dart';
+import '../api/api_provider.dart';
+import '../blocs/BlocProvider.dart';
+import '../models/market_listing_info.dart';
+import '../notfound.dart';
 import 'dashboard.dart';
-import 'models/market_listing_info.dart';
-import 'notfound.dart';
 
 class PlaceToMarketList extends StatefulWidget {
   String aggregatorAginID;

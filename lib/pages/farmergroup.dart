@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_map_location_picker/generated/i18n.dart' as location_picker;
+import 'package:google_map_location_picker/generated/i18n.dart'
+    as location_picker;
+import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Farmergroup extends StatefulWidget {
@@ -19,9 +20,8 @@ class _FarmergroupState extends State<Farmergroup> {
   TextEditingController _farmLocationController = new TextEditingController();
 
   //input widget
-  Widget _input(Icon icon, String hint, TextEditingController controller,
-      bool obsecure) {
-
+  Widget _input(
+      Icon icon, String hint, TextEditingController controller, bool obsecure) {
     return Container(
       padding: EdgeInsets.only(left: 20, right: 20),
       child: TextField(
@@ -29,10 +29,7 @@ class _FarmergroupState extends State<Farmergroup> {
         //maxLength: 100,
         controller: controller,
         obscureText: obsecure,
-        style: TextStyle(
-            fontSize: 15,
-            letterSpacing: 1.0
-        ),
+        style: TextStyle(fontSize: 15, letterSpacing: 1.0),
         decoration: InputDecoration(
             floatingLabelBehavior: FloatingLabelBehavior.auto,
             hintStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
@@ -72,8 +69,8 @@ class _FarmergroupState extends State<Farmergroup> {
       highlightColor: highlightColor,
       elevation: 0.0,
       color: fillColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(30.0)),
+      shape:
+          RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
       child: Text(
         text,
         style: TextStyle(
@@ -89,7 +86,6 @@ class _FarmergroupState extends State<Farmergroup> {
     _groupName = _farmergroupController.text;
     _farmergroupController.clear();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -131,8 +127,8 @@ class _FarmergroupState extends State<Farmergroup> {
                           bottom: 10,
                           top: 20,
                         ),
-                        child: _input(Icon(Icons.account_circle),
-                            "GROUP NAME", _farmergroupController, false),
+                        child: _input(Icon(Icons.account_circle), "GROUP NAME",
+                            _farmergroupController, false),
                       ),
                       Padding(
                         padding: EdgeInsets.only(
@@ -149,11 +145,10 @@ class _FarmergroupState extends State<Farmergroup> {
                               padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
                               onPressed: () async {
                                 LocationResult result =
-                                await showLocationPicker(
+                                    await showLocationPicker(
                                   context,
                                   "AIzaSyCFYy2HHSUUYRuhyusmKhKFQEASoAyq1WE",
-                                  initialCenter:
-                                  LatLng(31.1975844, 29.9598339),
+                                  initialCenter: LatLng(31.1975844, 29.9598339),
                                   automaticallyAnimateToCurrentLocation: true,
                                   //mapStylePath: 'assets/mapStyle.json',
                                   myLocationButtonEnabled: true,
@@ -161,9 +156,10 @@ class _FarmergroupState extends State<Farmergroup> {
                                   //resultCardAlignment: Alignment.bottomCenter,
                                 );
                                 print("result = $result");
-                                setState((){
+                                setState(() {
                                   _pickedLocation = result;
-                                  _farmLocationController.text = _pickedLocation.address;
+                                  _farmLocationController.text =
+                                      _pickedLocation.address;
                                   lat = _pickedLocation.latLng.latitude;
                                   lon = _pickedLocation.latLng.longitude;
                                 });
@@ -198,6 +194,7 @@ class _FarmergroupState extends State<Farmergroup> {
           ),
         ),
       ),
-    );;
+    );
+    ;
   }
 }
