@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -17,7 +15,6 @@ class _ProduceListState extends State<ProduceList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _apiProvider = ApiProvider();
   }
@@ -30,23 +27,6 @@ class _ProduceListState extends State<ProduceList> {
     String landAginID = data['landAginID'].toString();
     String farmerAginID = data['farmerAginID'].toString();
     String aggregatorAginID = data['aggregatorAginID'].toString();
-
-    Color colorCode = Theme.of(context).primaryColor;
-    final Random random = Random();
-    generateRandomColor() {
-      Color tmpColor = Color.fromARGB(
-        random.nextInt(256),
-        random.nextInt(256),
-        random.nextInt(256),
-        random.nextInt(256),
-      );
-
-      setState(() {
-        colorCode = tmpColor;
-      });
-    }
-
-    const kDefaultPaddin = 20.0;
 
     return Scaffold(
       backgroundColor: Colors.white,

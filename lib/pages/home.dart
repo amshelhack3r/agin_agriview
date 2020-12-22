@@ -12,17 +12,10 @@ class _HomeState extends State<Home> {
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _nameController = new TextEditingController();
-  String _email;
-  String _password;
-  String _displayName;
-  bool _obsecure = false;
 
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).primaryColor;
-    void initState() {
-      super.initState();
-    }
 
     //GO logo widget
     Widget logo() {
@@ -150,16 +143,11 @@ class _HomeState extends State<Home> {
     //login and register fuctions
 
     void _loginUser() {
-      _email = _emailController.text;
-      _password = _passwordController.text;
       _emailController.clear();
       _passwordController.clear();
     }
 
     void _registerUser() {
-      _email = _emailController.text;
-      _password = _passwordController.text;
-      _displayName = _nameController.text;
       _emailController.clear();
       _passwordController.clear();
       _nameController.clear();

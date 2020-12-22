@@ -20,22 +20,11 @@ class _FarmerState extends State<Farmer> {
   List<DropdownMenuItem<County>> list;
   Future<List<County>> fCountyList;
   TextEditingController _emailController = new TextEditingController();
-  TextEditingController _passwordController = new TextEditingController();
   TextEditingController _firstnameController = new TextEditingController();
   TextEditingController _lastnameController = new TextEditingController();
   TextEditingController _phoneController = new TextEditingController();
-  TextEditingController _countryController = new TextEditingController();
-  String _email;
-  String _password;
-  String _firstName;
-  String _lastName;
-  String _phone;
-  String _county;
-  String _aggregatorAginID;
-  bool _obsecure = false;
 
   Album dropdownValue;
-  Album _currentUser;
   int _showbutton = 1;
   ApiProvider _apiProvider;
 
@@ -108,12 +97,6 @@ class _FarmerState extends State<Farmer> {
   }
 
   void _registerUser() {
-    _email = _emailController.text;
-    _firstName = _firstnameController.text;
-    _lastName = _lastnameController.text;
-    _phone = _phoneController.text;
-    _county = dropdownValue.countyID.toString();
-
     Map params = {
       "phoneNumber": "string",
       "emailAddress": "string",
@@ -157,7 +140,6 @@ class _FarmerState extends State<Farmer> {
     Color primary = Theme.of(context).primaryColor;
     //get the variables
     data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
-    _aggregatorAginID = data['aggregatorAginID'];
 
     return Scaffold(
       key: _scaffoldKey,
@@ -363,6 +345,5 @@ class _FarmerState extends State<Farmer> {
         ),
       ),
     );
-    ;
   }
 }

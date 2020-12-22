@@ -29,11 +29,6 @@ class _FarmState extends State<Farm> {
       new TextEditingController();
   TextEditingController _currentLandUseController = new TextEditingController();
 
-  String _farmLocation;
-  String _farmName;
-  String _acreageMapped;
-  String _acreageApproved;
-  String _currentLandUse;
   String _farmerAginID;
 
   String dropdownValue = 'One';
@@ -41,15 +36,10 @@ class _FarmState extends State<Farm> {
   //input widget
   Widget _input(
       Icon icon, String hint, TextEditingController controller, bool obsecure) {
-    int maxlength = 200;
-    int minLine = 1;
     TextInputType textInputType = TextInputType.text;
     if (hint.compareTo("CURRENT LAND USE") == 0) {
-      maxlength = 300;
-      minLine = 4;
     } else if (hint.compareTo("ACREAGE MAPPED") == 0 ||
         hint.compareTo("ACREAGE APPROVED") == 0) {
-      maxlength = 10;
       textInputType = TextInputType.number;
     }
 
@@ -147,7 +137,6 @@ class _FarmState extends State<Farm> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _apiProvider = ApiProvider();
   }

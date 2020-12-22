@@ -38,9 +38,6 @@ class _DashboardState extends State<Dashboard> {
   _DashboardState(this.aggregatorAginID, this.firstName, this.lastName);
 
   @override
-  void initState() {}
-
-  @override
   Widget build(BuildContext context) {
     /*Map data = {};
     data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
@@ -276,48 +273,28 @@ class _DashboardState extends State<Dashboard> {
               Icons.home,
               size: 30,
             ),
-            title: Text(
-              "Home",
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            ),
+            label: "Home",
           ),
           new BottomNavigationBarItem(
             icon: Icon(
               Icons.shopping_basket,
               size: 30,
             ),
-            title: Text(
-              "Market Listing",
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            ),
+            label: "Market Listing",
           ),
           new BottomNavigationBarItem(
             icon: Icon(
               Icons.view_list,
               size: 30,
             ),
-            title: Text(
-              "Farmers List",
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            ),
+            label: "Farmers List",
           ),
           new BottomNavigationBarItem(
             icon: Icon(
               Icons.account_balance_wallet,
               size: 30,
             ),
-            title: Text(
-              "Wallet",
-              style: TextStyle(
-                fontSize: 12,
-              ),
-            ),
+            label: "Wallet",
           )
         ],
       ),

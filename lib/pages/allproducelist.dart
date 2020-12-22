@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
@@ -20,7 +18,6 @@ class _AllProduceListState extends State<AllProduceList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _apiProvider = ApiProvider();
   }
@@ -29,25 +26,6 @@ class _AllProduceListState extends State<AllProduceList> {
   Widget build(BuildContext context) {
     data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
     String landAginID = data['landAginID'].toString();
-
-    Color colorCode = Theme.of(context).primaryColor;
-
-    final Random random = Random();
-
-    generateRandomColor() {
-      Color tmpColor = Color.fromARGB(
-        random.nextInt(256),
-        random.nextInt(256),
-        random.nextInt(256),
-        random.nextInt(256),
-      );
-
-      setState(() {
-        colorCode = tmpColor;
-      });
-    }
-
-    const kDefaultPaddin = 20.0;
 
     return Scaffold(
       backgroundColor: Colors.white,

@@ -15,7 +15,6 @@ class _FarmsListState extends State<FarmsList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _apiProvider = ApiProvider();
   }

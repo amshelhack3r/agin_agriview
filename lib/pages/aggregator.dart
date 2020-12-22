@@ -5,7 +5,6 @@ import '../api/api_provider.dart';
 import '../models/County.dart';
 import '../models/album.dart';
 import '../models/country.dart';
-import '../models/message.dart';
 
 class Aggregator extends StatefulWidget {
   @override
@@ -15,7 +14,6 @@ class Aggregator extends StatefulWidget {
 class _AggregatorState extends State<Aggregator> {
   Future<List<Album>> futureAlbum;
   Future<List<Country>> futureCountry;
-  Future<Message> _futureMessage;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   List<DropdownMenuItem<County>> list;
@@ -29,19 +27,10 @@ class _AggregatorState extends State<Aggregator> {
   TextEditingController _firstnameController = new TextEditingController();
   TextEditingController _lastnameController = new TextEditingController();
   TextEditingController _phoneController = new TextEditingController();
-  TextEditingController _countryController = new TextEditingController();
-  String _email;
   String _password;
   String _confirmpassword;
-  String _firstName;
-  String _lastName;
-  String _phone;
-  String _county;
-  String _organizationcode;
-  bool _obsecure = false;
 
   Album dropdownValue;
-  Album _currentUser;
   int _showbutton = 1;
   final _apiProvider = ApiProvider();
 
@@ -160,49 +149,15 @@ class _AggregatorState extends State<Aggregator> {
   }
 
   void _registerUser() {
-    _email = _emailController.text;
-    _firstName = _firstnameController.text;
-    _lastName = _lastnameController.text;
-    _phone = _phoneController.text;
-    _county = _countryController.text;
     _password = _passwordController.text;
     _confirmpassword = _passwordConfirmController.text;
-    _organizationcode = _organizationCodeController.text;
 
     if (_password != _confirmpassword) {
       _scaffoldKey.currentState.showSnackBar(SnackBar(
           content: Text('The passwords do not match. Please reenter')));
     } else {
-      Map params = {
-        "status": 0,
-        "password": "string",
-        "countryID": 0,
-        "phoneNumber": "string",
-        "emailAddress": "string",
-        "firstName": "string",
-        "lastName": "string",
-        "countyID": 0,
-        "organizationCode": "string",
-        "dateBirth": "string",
-        "teamID": 0
-      };
       setState(() {
         _showbutton = 0;
-        _futureMessage = _apiProvider.createAggregator(params).then((value) {
-          if (value.responsecode == 201) {
-            _scaffoldKey.currentState
-                .showSnackBar(SnackBar(content: Text(value.message)));
-            setState(() {
-              _showbutton = 1;
-            });
-            Navigator.popAndPushNamed(context, '/otp',
-                arguments: {'phoneNumber': _phone});
-          } else {
-            _scaffoldKey.currentState
-                .showSnackBar(SnackBar(content: Text(value.message)));
-          }
-          return;
-        });
       });
     }
   }
@@ -398,6 +353,5 @@ class _AggregatorState extends State<Aggregator> {
         )),
       ),
     );
-    ;
   }
 }

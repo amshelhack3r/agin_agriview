@@ -3,36 +3,23 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:sms_otp_auto_verify/sms_otp_auto_verify.dart';
 
-import '../api/api_provider.dart';
-import '../models/message.dart';
-
 class Otp extends StatefulWidget {
   @override
   _OtpState createState() => _OtpState();
 }
 
 class _OtpState extends State<Otp> {
-  ApiProvider _apiProvider;
   int _otpCodeLength = 6;
   bool _isLoadingButton = false;
   bool _enableButton = false;
-  String _otpCode = "";
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   String _phoneNumber = "";
   Map data = {};
-  Future<Message> _futureMessage;
 
   @override
   void initState() {
     super.initState();
-    _apiProvider = ApiProvider();
     //_getSignatureCode();
-  }
-
-  /// get signature code
-  _getSignatureCode() async {
-    String signature = await SmsRetrieved.getAppSignature();
-    print("signature $signature"); //tTM/NO6iyM5
   }
 
   _onSubmitOtp() {
@@ -44,7 +31,6 @@ class _OtpState extends State<Otp> {
 
   _onOtpCallBack(String otpCode, bool isAutofill) {
     setState(() {
-      this._otpCode = otpCode;
       if (otpCode.length == _otpCodeLength && isAutofill) {
         _enableButton = false;
         _isLoadingButton = true;
@@ -68,19 +54,6 @@ class _OtpState extends State<Otp> {
     });
 
     //go online to verify
-    _futureMessage =
-        _apiProvider.verifyAccount(_phoneNumber, _otpCode).then((value) {
-      setState(() {
-        _isLoadingButton = false;
-        _enableButton = true;
-      });
-
-      Navigator.of(context).popAndPushNamed('/');
-      return;
-    }).catchError((error) {
-      _scaffoldKey.currentState
-          .showSnackBar(SnackBar(content: Text(error.toString())));
-    });
   }
 
   @override

@@ -13,7 +13,6 @@ class Farmergroup extends StatefulWidget {
 
 class _FarmergroupState extends State<Farmergroup> {
   TextEditingController _farmergroupController = new TextEditingController();
-  String _groupName;
   LocationResult _pickedLocation;
   double lon = 0.0;
   double lat = 0.0;
@@ -83,7 +82,6 @@ class _FarmergroupState extends State<Farmergroup> {
   }
 
   void _registerUser() {
-    _groupName = _farmergroupController.text;
     _farmergroupController.clear();
   }
 
@@ -195,6 +193,5 @@ class _FarmergroupState extends State<Farmergroup> {
         ),
       ),
     );
-    ;
   }
 }

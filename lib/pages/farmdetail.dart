@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FarmDetail extends StatelessWidget {
-    Color color;
+  Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -11,11 +11,10 @@ class FarmDetail extends StatelessWidget {
     String farmerAginID = data['farmerAginID'].toString();
     String aggregatorAginID = data['aggregatorAginID'].toString();
     String landAginID = data['landAginID'].toString();
-    String farm_name = data['farm_name'].toString();
-    String farm_location = data['farm_location'].toString();
-    String acreage_mapped = data['acreage_mapped'].toString();
-    String acreage_approved = data['acreage_approved'].toString();
-
+    String farmName = data['farm_name'].toString();
+    String farmLocation = data['farm_location'].toString();
+    String acreageMapped = data['acreage_mapped'].toString();
+    String acreageApproved = data['acreage_approved'].toString();
 
     final height = MediaQuery.of(context).size.height / 2.3;
     final width = MediaQuery.of(context).size.width;
@@ -37,7 +36,8 @@ class FarmDetail extends StatelessWidget {
         color: Colors.white,
         child: Column(
           children: <Widget>[
-            buildTop(height, width, farm_name, farm_location, acreage_mapped, acreage_approved),
+            buildTop(height, width, farmName, farmLocation, acreageMapped,
+                acreageApproved),
             Expanded(
               child: Container(
                 padding: EdgeInsets.all(15),
@@ -48,8 +48,16 @@ class FarmDetail extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
-                        buildOption('assets/images/produce_grey.png', 'Produce', false, context, farm_name, landAginID,farmerAginID,aggregatorAginID, '/producelist'),
-
+                        buildOption(
+                            'assets/images/produce_grey.png',
+                            'Produce',
+                            false,
+                            context,
+                            farmName,
+                            landAginID,
+                            farmerAginID,
+                            aggregatorAginID,
+                            '/producelist'),
                       ],
                     ),
                     Row(
@@ -73,7 +81,8 @@ class FarmDetail extends StatelessWidget {
     );
   }
 
-  Widget buildTop(double height, double width, String farm_name, String farm_location, String acreage_mapped, String acreage_approved) {
+  Widget buildTop(double height, double width, String farmName,
+      String farmLocation, String acreageMapped, String acreageApproved) {
     return Container(
       height: height,
       width: width,
@@ -124,13 +133,14 @@ class FarmDetail extends StatelessWidget {
                           color: Colors.white,
                           image: DecorationImage(
                             fit: BoxFit.fill,
-                            image: new AssetImage('assets/images/farm_grey.png'),
+                            image:
+                                new AssetImage('assets/images/farm_grey.png'),
                           ),
                         ),
                       ),
                       SizedBox(height: 15.0),
                       Text(
-                        '$farm_location',
+                        '$farmLocation',
                         style: TextStyle(color: Colors.white70),
                       )
                     ],
@@ -164,7 +174,7 @@ class FarmDetail extends StatelessWidget {
             alignment: Alignment.center,
             padding: EdgeInsets.all(0.0),
             child: Text(
-              farm_name,
+              farmName,
               style: TextStyle(
                 fontSize: 25.0,
                 color: Colors.white,
@@ -190,18 +200,30 @@ class FarmDetail extends StatelessWidget {
     );
   }
 
-  Widget buildOption(String image, String text, bool top,BuildContext context,String farm_name, String landAginID,String farmerAginID,String aggregatorAginID,String nextLink) {
+  Widget buildOption(
+      String image,
+      String text,
+      bool top,
+      BuildContext context,
+      String farmName,
+      String landAginID,
+      String farmerAginID,
+      String aggregatorAginID,
+      String nextLink) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-          onTap: (){
-
-            if(nextLink == '/producelist'){
-              Map map = {'landAginID':landAginID, 'name' : farm_name, 'farmerAginID':farmerAginID, 'aggregatorAginID':aggregatorAginID};
-              Navigator.pushNamed(context, nextLink,arguments: map);
+          onTap: () {
+            if (nextLink == '/producelist') {
+              Map map = {
+                'landAginID': landAginID,
+                'name': farmName,
+                'farmerAginID': farmerAginID,
+                'aggregatorAginID': aggregatorAginID
+              };
+              Navigator.pushNamed(context, nextLink, arguments: map);
             }
-
           },
           child: Container(
             padding: EdgeInsets.all(15.0),
@@ -210,8 +232,7 @@ class FarmDetail extends StatelessWidget {
                 BoxShadow(
                     color: Colors.grey,
                     blurRadius: 10.0,
-                    offset: Offset(0.0, 0.75)
-                )
+                    offset: Offset(0.0, 0.75))
               ],
               color: Colors.white,
               border: Border.all(
@@ -220,7 +241,7 @@ class FarmDetail extends StatelessWidget {
               ),
               borderRadius: BorderRadius.all(Radius.circular(20.0)),
             ),
-            child:  Image.asset(
+            child: Image.asset(
               image,
               scale: 12,
             ),
@@ -232,7 +253,7 @@ class FarmDetail extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),
+          padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
           child: Text(
             text,
             style: TextStyle(

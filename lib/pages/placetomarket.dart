@@ -10,12 +10,10 @@ import 'package:image_picker/image_picker.dart';
 import '../api/api_provider.dart';
 import '../models/County.dart';
 import '../models/cultivation_mode.dart';
-import '../models/message.dart';
 import '../models/produce_status.dart';
 import '../models/status_description.dart';
 import '../models/unit_type.dart';
 import '../utils/AppUtil.dart';
-import 'elements/dialogs.dart';
 
 class PlaceToMarket extends StatefulWidget {
   @override
@@ -26,7 +24,6 @@ class _PlaceToMarketState extends State<PlaceToMarket> {
   Future<List<CultivationMode>> futureCultivationModeDropDowns;
   Future<List<UnitType>> futureUnitTypeDropDowns;
   Future<List<ProduceStatus>> futureProduceStatusDropDowns;
-  Future<Message> _futureMessage;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   bool _isLoadingButton = false;
   bool _enableButton = false;
@@ -39,18 +36,6 @@ class _PlaceToMarketState extends State<PlaceToMarket> {
   TextEditingController _readyFromDateController = new TextEditingController();
   TextEditingController _quantityController = new TextEditingController();
 
-  String _price;
-  String _readyFromDate;
-  String _quantity;
-  String _photoText = "";
-  String _fileExtension = "";
-  String _productID;
-  String _uuid;
-  String _farmerAginID;
-  String _aggregatorAginID;
-  String _landAginID;
-  String _name;
-  bool _obsecure = false;
   File _image;
 
   UnitType selectedUnitType;
@@ -146,38 +131,13 @@ class _PlaceToMarketState extends State<PlaceToMarket> {
   }
 
   void _registerProduceToMarket() async {
-    _price = _priceController.text;
-    _readyFromDate = _readyFromDateController.text;
-    _quantity = _quantityController.text;
-    var newExtension;
-
-    Map params = {
-      "farmerAginID": "string",
-      "landAginID": "string",
-      "cultivationMode": 0,
-      "produceStatus": 0,
-      "unitType": 0,
-      "pricePerUnitType": 0,
-      "readyFromDate": "string",
-      "agronomyAginID": "string",
-      "quantityAvailable": 0,
-      "phototext": "string",
-      "photo": ["string"],
-      "fileExtension": "string",
-      "productID": 0
-    };
-
     await AppUtil.getFileExtension(_image).then((result) {
-      newExtension = result;
       setState(() {
-        _fileExtension = result;
         _isLoadingButton = !_isLoadingButton;
       });
     }).catchError((error) {}, test: (err) {});
     await AppUtil.getImageAsBase64(_image).then((result) {
-      setState(() {
-        _photoText = result;
-      });
+      setState(() {});
     }).catchError((error) {
       print(error);
     }, test: (err) {});
@@ -185,36 +145,6 @@ class _PlaceToMarketState extends State<PlaceToMarket> {
     setState(() {
       _enableButton = false;
       _isLoadingButton = true;
-
-      _futureMessage = _apiProvider.createPlacetoMarket(params).then((value) {
-        FocusScope.of(context).requestFocus(new FocusNode());
-        Timer(Duration(milliseconds: 4000), () {
-          setState(() {
-            _isLoadingButton = false;
-            _enableButton = true;
-          });
-        });
-
-        //_scaffoldKey.currentState.showSnackBar(
-        //  SnackBar(content: Text(message.message)));
-        Future<DialogAction> action =
-            Dialogs.messageDialog(context, "info", value.message);
-        action.then((value) {
-          if (value == DialogAction.yes) {
-            Map map = {
-              'landAginID': _landAginID,
-              'name': _name,
-              'farmerAginID': _farmerAginID,
-              'aggregatorAginID': _aggregatorAginID
-            };
-            Navigator.popAndPushNamed(context, '/producelist', arguments: map);
-          }
-        });
-        return;
-      }).catchError((error) {
-        _scaffoldKey.currentState
-            .showSnackBar(SnackBar(content: Text(error.toString())));
-      });
     });
   }
 
@@ -223,13 +153,6 @@ class _PlaceToMarketState extends State<PlaceToMarket> {
     Color primary = Theme.of(context).primaryColor;
     //get the variables
     data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
-    _aggregatorAginID = data['aggregatorAginID'];
-    _productID = data['id'];
-    _uuid = data['uuid'];
-    _farmerAginID = data['farmerAginID'];
-    _aggregatorAginID = data['aggregatorAginID'];
-    _landAginID = data['landAginID'];
-    _name = data['name'];
 
     return Scaffold(
       key: _scaffoldKey,
@@ -690,6 +613,5 @@ class _PlaceToMarketState extends State<PlaceToMarket> {
         )),
       ),
     );
-    ;
   }
 }

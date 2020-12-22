@@ -3,26 +3,19 @@ import 'package:flutter/material.dart';
 
 import '../../api/api_provider.dart';
 import '../../blocs/BlocProvider.dart';
-import '../../models/message.dart';
 import '../dashboard.dart';
 
 class Login extends StatefulWidget {
   @override
-  _loginState createState() => _loginState();
+  _LoginState createState() => _LoginState();
 }
 
-class _loginState extends State<Login> {
+class _LoginState extends State<Login> {
   ApiProvider _apiProvider;
-  Future<Message> _futureMessage;
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
-  TextEditingController _nameController = new TextEditingController();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  String _email;
-  String _password;
-  String _displayName;
-  bool _obsecure = false;
   int _showbutton = 1;
 
   @override
@@ -146,7 +139,6 @@ class _loginState extends State<Login> {
         ),
       ),
     );
-    ;
   }
 
   //input widget
@@ -223,8 +215,6 @@ class _loginState extends State<Login> {
   }
 
   void _loginUser() async {
-    _email = _emailController.text;
-    _password = _passwordController.text;
     Map params = {'phoneNumber': '', 'password': ''};
     var aggregatorLoginObject = await _apiProvider.loginAggregator(params);
 

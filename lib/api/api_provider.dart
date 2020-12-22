@@ -311,7 +311,6 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        List<CultivationMode> listDropDowns;
         final items = json.decode(response.body).cast<Map<String, dynamic>>();
         return items
             .map<CultivationMode>((json) => CultivationMode.fromJson(json))

@@ -15,20 +15,16 @@ class BottomNavigationState extends State<BottomNavigation> {
     return new Scaffold(
       bottomNavigationBar: new BottomNavigationBar(
         currentIndex: _currentIndex,
-        onTap: (newIndex) => setState((){_currentIndex = newIndex;}),
+        onTap: (newIndex) => setState(() {
+          _currentIndex = newIndex;
+        }),
         items: [
           new BottomNavigationBarItem(
-              icon: new Icon(Icons.add),
-              title: new Text("trends")
-          ),
+              icon: new Icon(Icons.add), label: "trends"),
           new BottomNavigationBarItem(
-              icon: new Icon(Icons.location_on),
-              title: new Text("feed")
-          ),
+              icon: new Icon(Icons.location_on), label: "feed"),
           new BottomNavigationBarItem(
-              icon: new Icon(Icons.people),
-              title: new Text("community")
-          ),
+              icon: new Icon(Icons.people), label: "community"),
         ],
       ),
       body: new IndexedStack(

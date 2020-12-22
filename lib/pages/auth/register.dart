@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -7,32 +7,20 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-
   TextEditingController _emailController = new TextEditingController();
   TextEditingController _passwordController = new TextEditingController();
   TextEditingController _firstnameController = new TextEditingController();
   TextEditingController _lastnameController = new TextEditingController();
   TextEditingController _phoneController = new TextEditingController();
 
-  String _email;
-  String _password;
-  String _firstName;
-  String _lastName;
-  String _phone;
-  String _county;
-  bool _obsecure = false;
-
   String dropdownValue = 'One';
   //input widget
-  Widget _input(Icon icon, String hint, TextEditingController controller,
-      bool obsecure) {
-    int maxlength = 30;
+  Widget _input(
+      Icon icon, String hint, TextEditingController controller, bool obsecure) {
     TextInputType textInputType = TextInputType.text;
-    if(hint.compareTo("PHONE") == 0){
-      maxlength = 13;
+    if (hint.compareTo("PHONE") == 0) {
       textInputType = TextInputType.number;
-    }else if(hint.compareTo("PIN") == 0){
-      maxlength = 4;
+    } else if (hint.compareTo("PIN") == 0) {
       textInputType = TextInputType.number;
     }
 
@@ -43,10 +31,7 @@ class _RegisterState extends State<Register> {
         //maxLength: maxlength,
         controller: controller,
         obscureText: obsecure,
-        style: TextStyle(
-          fontSize: 12,
-          letterSpacing: 1.0
-        ),
+        style: TextStyle(fontSize: 12, letterSpacing: 1.0),
         decoration: InputDecoration(
             hintStyle: TextStyle(fontWeight: FontWeight.normal, fontSize: 12),
             hintText: hint,
@@ -85,8 +70,8 @@ class _RegisterState extends State<Register> {
       highlightColor: highlightColor,
       elevation: 0.0,
       color: fillColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: new BorderRadius.circular(30.0)),
+      shape:
+          RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0)),
       child: Text(
         text,
         style: TextStyle(
@@ -99,12 +84,6 @@ class _RegisterState extends State<Register> {
   }
 
   void _registerUser() {
-    _email = _emailController.text;
-    _password = _passwordController.text;
-    _firstName = _firstnameController.text;
-    _lastName = _lastnameController.text;
-    _phone = _phoneController.text;
-
     _emailController.clear();
     _passwordController.clear();
     _firstnameController.clear();
@@ -112,14 +91,13 @@ class _RegisterState extends State<Register> {
     _phoneController.clear();
   }
 
-
   @override
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
         title: Text('REGISTER AGGREGATOR',
-            style : TextStyle(
+            style: TextStyle(
               fontSize: 15.0,
             )),
         centerTitle: true,
@@ -134,7 +112,6 @@ class _RegisterState extends State<Register> {
           child: Container(
             child: ListView(
               children: <Widget>[
-
                 SingleChildScrollView(
                   child: Column(children: <Widget>[
                     Padding(
@@ -142,8 +119,8 @@ class _RegisterState extends State<Register> {
                         bottom: 20,
                         top: 50,
                       ),
-                      child: _input(Icon(Icons.account_circle),
-                          "FIRST NAME", _firstnameController, false),
+                      child: _input(Icon(Icons.account_circle), "FIRST NAME",
+                          _firstnameController, false),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -156,22 +133,18 @@ class _RegisterState extends State<Register> {
                       padding: EdgeInsets.only(
                         bottom: 20,
                       ),
-                      child: _input(Icon(Icons.email), "EMAIL",
-                          _emailController, false),
+                      child: _input(
+                          Icon(Icons.email), "EMAIL", _emailController, false),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          bottom: 20
-                      ),
-                      child: _input(Icon(Icons.phone), "PHONE",
-                          _phoneController, false),
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: _input(
+                          Icon(Icons.phone), "PHONE", _phoneController, false),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(
-                          bottom: 20
-                      ),
-                      child: _input(Icon(Icons.lock), "PIN",
-                          _passwordController, true),
+                      padding: EdgeInsets.only(bottom: 20),
+                      child: _input(
+                          Icon(Icons.lock), "PIN", _passwordController, true),
                     ),
                     Padding(
                       padding: EdgeInsets.only(
@@ -199,6 +172,6 @@ class _RegisterState extends State<Register> {
           ),
         ),
       ),
-    );;
+    );
   }
 }

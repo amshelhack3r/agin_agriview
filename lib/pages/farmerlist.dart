@@ -86,13 +86,7 @@ class _FarmerListState extends State<FarmerList> {
 
   @override
   void initState() {
-    /*Future.delayed(Duration.zero, () {
-      setState(() {
-        data = data.isNotEmpty ? data : ModalRoute.of(context).settings.arguments;
-        aggregatorAginID = data['aggregatorAginID'].toString();
-      });
-      futureFarmers = fetchFarmers(aggregatorAginID);
-    });*/
+    super.initState();
     _apiProvider = ApiProvider();
     futureFarmers = _apiProvider.fetchFarmers(aggregatorAginID);
   }
@@ -100,7 +94,6 @@ class _FarmerListState extends State<FarmerList> {
   @override
   Widget build(BuildContext context) {
     Color colorCode = Theme.of(context).primaryColor;
-    final itemHeight = 100.0;
     final Random random = Random();
     generateRandomColor() {
       Color tmpColor = Color.fromARGB(

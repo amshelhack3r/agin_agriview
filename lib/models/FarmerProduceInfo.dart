@@ -1,6 +1,4 @@
-
-import 'package:AgriView/models/FarmerProduceProduct.dart';
-import 'package:AgriView/models/Product.dart';
+import 'Product.dart';
 
 class FarmerProduceInfo {
   final Product productUuid;
@@ -12,5 +10,4 @@ class FarmerProduceInfo {
       Product.fromJson(json['productUuid']),
     );
   }
-
 }

@@ -24,7 +24,6 @@ class FarmerDetail extends StatelessWidget {
         backgroundColor: color,
         title: Text('Farmer Info'),
         centerTitle: true,
-
       ),
       body: Container(
         color: Colors.white,
@@ -45,11 +44,26 @@ class FarmerDetail extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: <Widget>[
-
-                                buildOption('assets/images/farm_grey.png', 'Farms', false, context, farmerAginID,landAginID, farmerName,aggregatorAginID, '/farmslist' ),
-                                buildOption('assets/images/produce_grey.png', 'Produce', false, context, farmerAginID, landAginID, farmerName,aggregatorAginID, '/producelist'),
-
-
+                              buildOption(
+                                  'assets/images/farm_grey.png',
+                                  'Farms',
+                                  false,
+                                  context,
+                                  farmerAginID,
+                                  landAginID,
+                                  farmerName,
+                                  aggregatorAginID,
+                                  '/farmslist'),
+                              buildOption(
+                                  'assets/images/produce_grey.png',
+                                  'Produce',
+                                  false,
+                                  context,
+                                  farmerAginID,
+                                  landAginID,
+                                  farmerName,
+                                  aggregatorAginID,
+                                  '/producelist'),
                             ],
                           ),
                         ),
@@ -76,7 +90,8 @@ class FarmerDetail extends StatelessWidget {
     );
   }
 
-  Widget buildTop(double height, double width, String farmer_name, String farmer_phone) {
+  Widget buildTop(
+      double height, double width, String farmerName, String farmerPhone) {
     return Container(
       height: height,
       width: width,
@@ -132,9 +147,12 @@ class FarmerDetail extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 10.0),
-                      Icon(Icons.call_end, color: Colors.white,),
+                      Icon(
+                        Icons.call_end,
+                        color: Colors.white,
+                      ),
                       Text(
-                        '$farmer_phone',
+                        '$farmerPhone',
                         style: TextStyle(color: Colors.white70),
                       )
                     ],
@@ -168,7 +186,7 @@ class FarmerDetail extends StatelessWidget {
             alignment: Alignment.center,
             padding: EdgeInsets.all(0.0),
             child: Text(
-              farmer_name,
+              farmerName,
               style: TextStyle(
                 fontSize: 25.0,
                 color: Colors.white,
@@ -194,46 +212,60 @@ class FarmerDetail extends StatelessWidget {
     );
   }
 
-  Widget buildOption(String image, String text, bool top,BuildContext context,String farmerAginID,String landAginID,String farmerName,String aggregatorAginID,String nextLink) {
+  Widget buildOption(
+      String image,
+      String text,
+      bool top,
+      BuildContext context,
+      String farmerAginID,
+      String landAginID,
+      String farmerName,
+      String aggregatorAginID,
+      String nextLink) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-          onTap: (){
-            if(nextLink == '/farmslist'){
-              Map map = {'farmerAginID':farmerAginID, 'name' : farmerName, 'aggregatorAginID' : aggregatorAginID};
-              Navigator.pushNamed(context, nextLink,arguments: map);
+          onTap: () {
+            if (nextLink == '/farmslist') {
+              Map map = {
+                'farmerAginID': farmerAginID,
+                'name': farmerName,
+                'aggregatorAginID': aggregatorAginID
+              };
+              Navigator.pushNamed(context, nextLink, arguments: map);
             }
 
-            if(nextLink == '/producelist'){
-              Map map = {'farmerAginID':farmerAginID, 'name' : farmerName, 'aggregatorAginID' : aggregatorAginID};
-              Navigator.pushNamed(context, '/farmslist',arguments: map);
+            if (nextLink == '/producelist') {
+              Map map = {
+                'farmerAginID': farmerAginID,
+                'name': farmerName,
+                'aggregatorAginID': aggregatorAginID
+              };
+              Navigator.pushNamed(context, '/farmslist', arguments: map);
             }
-
           },
           child: Container(
             padding: EdgeInsets.all(15.0),
             decoration: BoxDecoration(
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 10.0,
-                                offset: Offset(0.0, 0.75)
-                            )
-                          ],
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.grey[200],
-                            width: 2,
-                          ),
-                          borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                        ),
-
-            child:  Image.asset(
+              boxShadow: <BoxShadow>[
+                BoxShadow(
+                    color: Colors.grey,
+                    blurRadius: 10.0,
+                    offset: Offset(0.0, 0.75))
+              ],
+              color: Colors.white,
+              border: Border.all(
+                color: Colors.grey[200],
+                width: 2,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(20.0)),
+            ),
+            child: Image.asset(
               image,
               scale: 12,
             ),
-           /* child: Icon(
+            /* child: Icon(
               new IconData(),
               size: 37.0,
               color: top ? Colors.white : Colors.grey,
@@ -241,7 +273,7 @@ class FarmerDetail extends StatelessWidget {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.fromLTRB(0.0,10.0,0.0,10.0),
+          padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
           child: Text(
             text,
             style: TextStyle(
