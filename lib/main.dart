@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
           fontFamily: "Montserrat",
           canvasColor: Colors.white),
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: '/LoginPage',
+      initialRoute: '/SplashPage',
     );
   }
 }

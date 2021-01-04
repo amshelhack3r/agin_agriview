@@ -16,12 +16,17 @@ import 'pages/otp.dart';
 import 'pages/placetomarket.dart';
 import 'pages/producedetail.dart';
 import 'pages/producelist.dart';
+import 'pages/revamp/splash.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     final args = settings.arguments;
 
     switch (settings.name) {
+      case 'SplashPage':
+        return MaterialPageRoute(
+          builder: (context) => SplashWidget(),
+        );
       case 'LoginPage':
         return MaterialPageRoute(
           builder: (context) => Login(),
