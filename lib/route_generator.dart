@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'pages/aggregator.dart';
 import 'pages/allproducelist.dart';
-import 'pages/auth/login.dart';
 import 'pages/dashboard.dart';
 import 'pages/farm.dart';
 import 'pages/farmdetail.dart';
@@ -18,6 +16,7 @@ import 'pages/producedetail.dart';
 import 'pages/producelist.dart';
 import 'pages/revamp/authstate.dart';
 import 'pages/revamp/dashboard.dart';
+import 'pages/revamp/home.dart';
 import 'pages/revamp/splash.dart';
 
 class RouteGenerator {
@@ -34,14 +33,10 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (context) => Auth(),
         );
-      case '/LoginPage':
-        return MaterialPageRoute(
-          builder: (context) => Login(),
-        );
 
-      case '/RegisterPage':
+      case '/HomePage':
         return MaterialPageRoute(
-          builder: (context) => Aggregator(),
+          builder: (context) => HomePage(),
         );
 
       case '/DashboardPage':

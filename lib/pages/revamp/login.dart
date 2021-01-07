@@ -46,7 +46,7 @@ class _LoginFormState extends State<LoginForm> {
             padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            onPressed: () => Navigator.pushNamed(context, "/DashboardPage"),
+            onPressed: () => Navigator.pushNamed(context, "/HomePage"),
             child: Text(
               'Log In',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),

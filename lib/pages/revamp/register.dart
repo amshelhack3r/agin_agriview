@@ -101,7 +101,7 @@ class _RegisterFormState extends State<RegisterForm> {
             padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
-            onPressed: () => Navigator.pushNamed(context, "/DashboardPage"),
+            onPressed: () => Navigator.pushNamed(context, "/HomePage"),
             child: Text(
               'Sign Up',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
