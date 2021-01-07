@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../utils/hex_color.dart';
+
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key key}) : super(key: key);
 
@@ -20,125 +22,148 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [_buildLeftContainer(), _buildRightContainer()],
+          ),
+          SizedBox(
+            height: 30,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Container(
-                width: 200,
-                height: 300,
-                decoration: BoxDecoration(
+              buildCard("assets/images/register_group.png", "Register \n Group",
+                  () {}),
+              buildCard("assets/images/register_farmer.png",
+                  "Register \n Farmer", () {}),
+            ],
+          )
+        ],
+      ),
+    ));
+  }
+
+  _buildLeftContainer() {
+    return Container(
+      width: 200,
+      height: 300,
+      decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).primaryColor,
+              blurRadius: 2.0,
+              spreadRadius: 0.0,
+              offset: Offset(2.0, 2.0), // shadow direction: bottom right
+            )
+          ],
+          borderRadius: BorderRadius.circular(10.0),
+          border: Border.all(color: Theme.of(context).primaryColor)),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Image.asset("assets/images/income.png"),
+                    Text("Total \n Income")
+                  ],
+                ),
+                Container(
+                  height: 50,
+                  width: 100,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
                     color: Colors.white,
                     boxShadow: [
                       BoxShadow(
-                        color: Theme.of(context).primaryColor,
+                        color: Colors.black,
                         blurRadius: 2.0,
                         spreadRadius: 0.0,
                         offset:
                             Offset(2.0, 2.0), // shadow direction: bottom right
                       )
                     ],
-                    borderRadius: BorderRadius.circular(10.0),
-                    border: Border.all(color: Theme.of(context).primaryColor)),
-                child: Column(
+                  ),
+                  child: Text("Ksh 100.00"),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.asset("assets/images/income.png"),
-                              Text("Total \n Income")
-                            ],
-                          ),
-                          Container(
-                            height: 50,
-                            width: 100,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  blurRadius: 2.0,
-                                  spreadRadius: 0.0,
-                                  offset: Offset(2.0,
-                                      2.0), // shadow direction: bottom right
-                                )
-                              ],
-                            ),
-                            child: Text("Ksh 100.00"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 15),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Image.asset("assets/images/income.png"),
-                              Text("Total \n Income")
-                            ],
-                          ),
-                          Container(
-                            height: 50,
-                            width: 100,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0),
-                              color: Colors.white,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black,
-                                  blurRadius: 2.0,
-                                  spreadRadius: 0.0,
-                                  offset: Offset(2.0,
-                                      2.0), // shadow direction: bottom right
-                                )
-                              ],
-                            ),
-                            child: Text("Ksh 100.00"),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Expanded(
-                        child: Container(
-                      alignment: Alignment.center,
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                          border:
-                              Border.all(color: Theme.of(context).primaryColor),
-                          borderRadius: BorderRadius.circular(10.0)),
-                      child: Row(
-                        children: [
-                          Image.asset("assets/images/sell_input.png"),
-                          Text("Sell Inputs"),
-                        ],
-                      ),
-                    ))
+                    Image.asset("assets/images/income.png"),
+                    Text("Total \n Income")
                   ],
                 ),
-              ),
-              Container(
-                width: 200,
-                height: 300,
-              )
-            ],
-          )
+                Container(
+                  height: 50,
+                  width: 100,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black,
+                        blurRadius: 2.0,
+                        spreadRadius: 0.0,
+                        offset:
+                            Offset(2.0, 2.0), // shadow direction: bottom right
+                      )
+                    ],
+                  ),
+                  child: Text("Ksh 100.00"),
+                ),
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Expanded(
+              child: Container(
+            alignment: Alignment.center,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                border: Border.all(color: Theme.of(context).primaryColor),
+                borderRadius: BorderRadius.circular(10.0)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset("assets/images/sell_input.png"),
+                Text("Sell Inputs"),
+              ],
+            ),
+          ))
         ],
       ),
-    ));
+    );
+  }
+
+  _buildRightContainer() {
+    return Container(
+      width: 200,
+      height: 300,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          buildCard("assets/images/place_market.png",
+              "Place to \n Market Place", () {}),
+          buildCard("assets/images/register_produce.png", "Register \n Produce",
+              () {}),
+        ],
+      ),
+    );
   }
 
   _buildHeader() {
@@ -206,6 +231,47 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
           )
         ],
+      ),
+    );
+  }
+
+  buildCard(String imageString, String title, Function onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+        // width: double.maxFinite,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Theme.of(context).primaryColor,
+              blurRadius: 2.0,
+              spreadRadius: 0.0,
+              offset: Offset(2.0, 2.0), // shadow direction: bottom right
+            )
+          ],
+          border: Border.all(color: Theme.of(context).primaryColor),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              imageString,
+              width: 81,
+              height: 48,
+            ),
+            Text(
+              title,
+              style: TextStyle(
+                  color: HexColor("#707070"),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500),
+            )
+          ],
+        ),
       ),
     );
   }
