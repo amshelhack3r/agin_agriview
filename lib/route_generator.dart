@@ -16,6 +16,8 @@ import 'pages/otp.dart';
 import 'pages/placetomarket.dart';
 import 'pages/producedetail.dart';
 import 'pages/producelist.dart';
+import 'pages/revamp/authstate.dart';
+import 'pages/revamp/dashboard.dart';
 import 'pages/revamp/splash.dart';
 
 class RouteGenerator {
@@ -23,11 +25,16 @@ class RouteGenerator {
     final args = settings.arguments;
 
     switch (settings.name) {
-      case 'SplashPage':
+      case '/SplashPage':
         return MaterialPageRoute(
           builder: (context) => SplashWidget(),
         );
-      case 'LoginPage':
+
+      case '/AuthPage':
+        return MaterialPageRoute(
+          builder: (context) => Auth(),
+        );
+      case '/LoginPage':
         return MaterialPageRoute(
           builder: (context) => Login(),
         );
@@ -35,6 +42,11 @@ class RouteGenerator {
       case '/RegisterPage':
         return MaterialPageRoute(
           builder: (context) => Aggregator(),
+        );
+
+      case '/DashboardPage':
+        return MaterialPageRoute(
+          builder: (context) => DashboardPage(),
         );
 
       case '/FarmerListPage':
@@ -104,7 +116,7 @@ class RouteGenerator {
         );
       default:
         return MaterialPageRoute(
-          builder: (context) => Login(),
+          builder: (context) => SplashWidget(),
         );
     }
   }

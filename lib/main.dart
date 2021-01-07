@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'app_theme.dart';
 
 import 'route_generator.dart';
 
@@ -14,15 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Agin Farmer',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          hintColor: new Color(0xff0ad7cb),
-          primaryColor: new Color(0xff12a89f),
-          primaryColorDark: Color(0xff1d8a84),
-          primaryColorLight: Color(0xff0ad7cb),
-          fontFamily: "Montserrat",
-          canvasColor: Colors.white),
+      theme: getThemeData(),
       onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: '/SplashPage',
+      initialRoute: '/AuthPage',
     );
   }
 }

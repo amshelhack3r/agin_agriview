@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:google_map_location_picker/generated/i18n.dart'
-    as location_picker;
-import 'package:google_map_location_picker/google_map_location_picker.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+// import 'package:flutter_localizations/flutter_localizations.dart';
+// import 'package:google_map_location_picker/generated/i18n.dart'
+//     as location_picker;
+// import 'package:google_map_location_picker/google_map_location_picker.dart';
+// import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class Farmergroup extends StatefulWidget {
   @override
@@ -13,7 +13,7 @@ class Farmergroup extends StatefulWidget {
 
 class _FarmergroupState extends State<Farmergroup> {
   TextEditingController _farmergroupController = new TextEditingController();
-  LocationResult _pickedLocation;
+  // LocationResult _pickedLocation;
   double lon = 0.0;
   double lat = 0.0;
   TextEditingController _farmLocationController = new TextEditingController();
@@ -89,16 +89,16 @@ class _FarmergroupState extends State<Farmergroup> {
   Widget build(BuildContext context) {
     Color primary = Theme.of(context).primaryColor;
     return MaterialApp(
-      localizationsDelegates: const [
-        location_picker.S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: const <Locale>[
-        Locale('en', ''),
-        Locale('ar', ''),
-      ],
+      // localizationsDelegates: const [
+      //   location_picker.S.delegate,
+      //   GlobalMaterialLocalizations.delegate,
+      //   GlobalWidgetsLocalizations.delegate,
+      //   GlobalCupertinoLocalizations.delegate,
+      // ],
+      // supportedLocales: const <Locale>[
+      //   Locale('en', ''),
+      //   Locale('ar', ''),
+      // ],
       home: Scaffold(
         appBar: AppBar(
           title: Text('REGISTER FARMER GROUP',
@@ -142,25 +142,25 @@ class _FarmergroupState extends State<Farmergroup> {
                               color: Theme.of(context).primaryColor,
                               padding: EdgeInsets.fromLTRB(0, 0, 30, 0),
                               onPressed: () async {
-                                LocationResult result =
-                                    await showLocationPicker(
-                                  context,
-                                  "AIzaSyCFYy2HHSUUYRuhyusmKhKFQEASoAyq1WE",
-                                  initialCenter: LatLng(31.1975844, 29.9598339),
-                                  automaticallyAnimateToCurrentLocation: true,
-                                  //mapStylePath: 'assets/mapStyle.json',
-                                  myLocationButtonEnabled: true,
-                                  layersButtonEnabled: true,
-                                  //resultCardAlignment: Alignment.bottomCenter,
-                                );
-                                print("result = $result");
-                                setState(() {
-                                  _pickedLocation = result;
-                                  _farmLocationController.text =
-                                      _pickedLocation.address;
-                                  lat = _pickedLocation.latLng.latitude;
-                                  lon = _pickedLocation.latLng.longitude;
-                                });
+                                // LocationResult result =
+                                //     await showLocationPicker(
+                                //   context,
+                                //   "AIzaSyCFYy2HHSUUYRuhyusmKhKFQEASoAyq1WE",
+                                //   initialCenter: LatLng(31.1975844, 29.9598339),
+                                //   automaticallyAnimateToCurrentLocation: true,
+                                //   //mapStylePath: 'assets/mapStyle.json',
+                                //   myLocationButtonEnabled: true,
+                                //   layersButtonEnabled: true,
+                                //   //resultCardAlignment: Alignment.bottomCenter,
+                                // );
+                                // print("result = $result");
+                                // setState(() {
+                                //   _pickedLocation = result;
+                                //   _farmLocationController.text =
+                                //       _pickedLocation.address;
+                                //   lat = _pickedLocation.latLng.latitude;
+                                //   lon = _pickedLocation.latLng.longitude;
+                                // });
                               },
                             ),
                           ],
