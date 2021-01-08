@@ -1,8 +1,8 @@
-import 'package:AgriView/pages/revamp/register.dart';
 import 'package:flutter/material.dart';
 
 import '../elements/rounded_container.dart';
 import 'login.dart';
+import 'register.dart';
 
 class Auth extends StatefulWidget {
   Auth({Key key}) : super(key: key);
@@ -21,7 +21,7 @@ class _AuthState extends State<Auth> {
       key: _scaffoldKey,
       body: SafeArea(
         child: Container(
-          width: double.infinity,
+          width: MediaQuery.of(context).size.width,
           height: double.infinity,
           child: Stack(
             children: [

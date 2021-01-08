@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../utils/hex_color.dart';
 import 'dashboard.dart';
 import 'farmers_list.dart';
-import 'market_listing.dart';
+import 'market_place.dart';
+import 'wallet.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key}) : super(key: key);
@@ -36,14 +37,14 @@ class _HomePageState extends State<HomePage> {
         physics: NeverScrollableScrollPhysics(),
         children: <Widget>[
           DashboardPage(),
-          MarketListingPage(),
+          MarketPlaceList(),
           FarmersListPage(),
-          DashboardPage()
+          WalletPage()
         ],
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
-        onPressed: () {},
+        onPressed: () => Navigator.pushNamed(context, "/RegisterFarmerPage"),
         child: Icon(
           Icons.eco,
           color: Colors.green[600],

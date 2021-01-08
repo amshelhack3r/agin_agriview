@@ -16,7 +16,10 @@ import 'pages/producedetail.dart';
 import 'pages/producelist.dart';
 import 'pages/revamp/authstate.dart';
 import 'pages/revamp/dashboard.dart';
+import 'pages/revamp/farmer_info.dart';
 import 'pages/revamp/home.dart';
+import 'pages/revamp/market_listing.dart';
+import 'pages/revamp/register_farmer.dart';
 import 'pages/revamp/splash.dart';
 
 class RouteGenerator {
@@ -44,14 +47,27 @@ class RouteGenerator {
           builder: (context) => DashboardPage(),
         );
 
+      case '/MarketListingPage':
+        return MaterialPageRoute(
+          builder: (context) => MarketListingPage(args),
+        );
       case '/FarmerListPage':
         return MaterialPageRoute(
           builder: (context) => FarmerList(args),
+        );
+      case '/FarmerInfo':
+        return MaterialPageRoute(
+          builder: (context) => FarmerInfo(),
         );
 
       case '/ProduceListPage':
         return MaterialPageRoute(
           builder: (context) => ProduceList(),
+        );
+
+      case '/RegisterFarmerPage':
+        return MaterialPageRoute(
+          builder: (context) => RegisterFarmerPage(),
         );
 
       case '/AllProducePage':
