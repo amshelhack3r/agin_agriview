@@ -1,26 +1,48 @@
 import 'dart:convert';
 
+import 'unit_type.dart';
+
 class Product {
-  String image;
+  String fileName;
+  String UUID;
+  String productName;
+  int quantity;
+  UnitType type;
   String name;
   Product({
-    this.image,
+    this.fileName,
+    this.UUID,
+    this.productName,
+    this.quantity,
+    this.type,
     this.name,
   });
 
   Product copyWith({
-    String image,
+    String fileName,
+    String UUID,
+    String productName,
+    int quantity,
+    UnitType type,
     String name,
   }) {
     return Product(
-      image: image ?? this.image,
+      fileName: fileName ?? this.fileName,
+      UUID: UUID ?? this.UUID,
+      productName: productName ?? this.productName,
+      quantity: quantity ?? this.quantity,
+      type: type ?? this.type,
       name: name ?? this.name,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'image': image,
+      'fileName': fileName,
+      'UUID': UUID,
+      'productName': productName,
+      'quantity': quantity,
+      'type': type?.toMap(),
       'name': name,
     };
   }
@@ -29,7 +51,11 @@ class Product {
     if (map == null) return null;
 
     return Product(
-      image: map['image'],
+      fileName: map['fileName'],
+      UUID: map['UUID'],
+      productName: map['productName'],
+      quantity: map['quantity'],
+      type: UnitType.fromMap(map['type']),
       name: map['name'],
     );
   }
@@ -40,15 +66,30 @@ class Product {
       Product.fromMap(json.decode(source));
 
   @override
-  String toString() => 'Product(image: $image, name: $name)';
+  String toString() {
+    return 'Product(fileName: $fileName, UUID: $UUID, productName: $productName, quantity: $quantity, type: $type, name: $name)';
+  }
 
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;
 
-    return o is Product && o.image == image && o.name == name;
+    return o is Product &&
+        o.fileName == fileName &&
+        o.UUID == UUID &&
+        o.productName == productName &&
+        o.quantity == quantity &&
+        o.type == type &&
+        o.name == name;
   }
 
   @override
-  int get hashCode => image.hashCode ^ name.hashCode;
+  int get hashCode {
+    return fileName.hashCode ^
+        UUID.hashCode ^
+        productName.hashCode ^
+        quantity.hashCode ^
+        type.hashCode ^
+        name.hashCode;
+  }
 }

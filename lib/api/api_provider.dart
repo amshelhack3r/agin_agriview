@@ -1,13 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:AgriView/models/product.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/AggregatorLoginObject.dart';
-import '../models/County.dart';
-import '../models/FarmerProduceInfo.dart';
-import '../models/Product.dart';
-import '../models/album.dart';
+import '../models/login_object.dart';
+import '../models/county.dart';
 import '../models/country.dart';
 import '../models/cultivation_mode.dart';
 import '../models/farmer_info.dart';
@@ -355,8 +353,7 @@ class ApiProvider {
     }
   }
 
-  Future<List<FarmerProduceInfo>> fetchProduceByLandAgin(
-      String landAginID) async {
+  Future<List<Map>> fetchProduceByLandAgin(String landAginID) async {
     try {
       final response = await client.post(
         buildUrl(GET_PRODUCE),
@@ -369,9 +366,7 @@ class ApiProvider {
         // If the server did return a 200 OK response,
         // then parse the JSON.
         final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        return items
-            .map<FarmerProduceInfo>((json) => FarmerProduceInfo.fromJson(json))
-            .toList();
+        return items;
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
