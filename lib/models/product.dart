@@ -7,14 +7,12 @@ class Product {
   String UUID;
   String productName;
   int quantity;
-  UnitType type;
   String name;
   Product({
     this.fileName,
     this.UUID,
     this.productName,
     this.quantity,
-    this.type,
     this.name,
   });
 
@@ -23,7 +21,6 @@ class Product {
     String UUID,
     String productName,
     int quantity,
-    UnitType type,
     String name,
   }) {
     return Product(
@@ -31,7 +28,6 @@ class Product {
       UUID: UUID ?? this.UUID,
       productName: productName ?? this.productName,
       quantity: quantity ?? this.quantity,
-      type: type ?? this.type,
       name: name ?? this.name,
     );
   }
@@ -42,7 +38,6 @@ class Product {
       'UUID': UUID,
       'productName': productName,
       'quantity': quantity,
-      'type': type?.toMap(),
       'name': name,
     };
   }
@@ -55,7 +50,6 @@ class Product {
       UUID: map['UUID'],
       productName: map['productName'],
       quantity: map['quantity'],
-      type: UnitType.fromMap(map['type']),
       name: map['name'],
     );
   }
@@ -67,7 +61,7 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(fileName: $fileName, UUID: $UUID, productName: $productName, quantity: $quantity, type: $type, name: $name)';
+    return 'Product(fileName: $fileName, UUID: $UUID, productName: $productName, quantity: $quantity, name: $name)';
   }
 
   @override
@@ -79,7 +73,6 @@ class Product {
         o.UUID == UUID &&
         o.productName == productName &&
         o.quantity == quantity &&
-        o.type == type &&
         o.name == name;
   }
 
@@ -89,7 +82,6 @@ class Product {
         UUID.hashCode ^
         productName.hashCode ^
         quantity.hashCode ^
-        type.hashCode ^
         name.hashCode;
   }
 }
