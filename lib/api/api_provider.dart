@@ -29,53 +29,7 @@ class ApiProvider {
 
   static buildUrl(String endpoint) => Uri.parse(BASEURL + endpoint);
 
-  Future<List<Country>> fetchCountries() async {
-    try {
-      final response =
-          await client.get(buildUrl(FETCH_COUNTRIES), headers: headers);
-
-      if (response.statusCode == 200) {
-        // If the server did return a 200 OK response,
-        // then parse the JSON.
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        List<Country> listCountries = items.map<Country>((json) {
-          return Country.fromJson(json);
-        }).toList();
-        return listCountries;
-      } else {
-        throw ApiException({
-          'status': response.statusCode,
-          'message': jsonDecode(response.body)
-        });
-      }
-    } on SocketException {
-      throw MySocketException();
-    }
-  }
-
-  Future<List<Album>> fetchAlbum() async {
-    try {
-      final response =
-          await client.get(buildUrl(FETCH_ALBUM), headers: headers);
-
-      if (response.statusCode == 200) {
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        List<Album> listAlbums = items.map<Album>((json) {
-          return Album.fromJson(json);
-        }).toList();
-        return listAlbums;
-      } else {
-        final Map errorParams = {
-          'status': response.statusCode,
-          'message': jsonDecode(response.body)
-        };
-        throw ApiException(errorParams);
-      }
-    } on SocketException {
-      throw MySocketException();
-    }
-  }
-
+  //auth apis
   Future<Message> createAggregator(Map params) async {
     headers['Content-Type'] = 'application/json';
     try {
@@ -93,6 +47,49 @@ class ApiProvider {
         };
         throw ApiException(errorParams);
       }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
+
+  Future<AggregatorLoginObject> loginAggregator(Map params) async {
+    try {
+      var response = await client.post(
+        buildUrl(AGGREGATOR_LOGIN),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'X-AGIN-API-Key-Token': APIKEY,
+        },
+        body: jsonEncode(params),
+      );
+      if (response.statusCode == 200) {
+        AggregatorLoginObject aggregatorLoginObject =
+            AggregatorLoginObject.fromJson(json.decode(response.body));
+
+        return aggregatorLoginObject;
+      } else {
+        Map<String, dynamic> errorMap = {
+          'status': response.statusCode,
+          'message': json.decode(response.body)
+        };
+        throw ApiException(errorMap);
+      }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
+
+  Future<Message> verifyAccount(String phoneNumber, String verifyCode) async {
+    try {
+      var response = await client.post(
+        buildUrl(AGGREGATOR_LOGIN),
+        headers: jsonHeaders,
+        body: jsonEncode(<String, String>{
+          'verifyCode': verifyCode,
+          'phoneNumber': phoneNumber,
+        }),
+      );
+      return Message.fromJson(json.decode(response.body));
     } on SocketException {
       throw MySocketException();
     }
@@ -233,70 +230,6 @@ class ApiProvider {
           'status': response.statusCode
         });
       }
-    } on SocketException {
-      throw MySocketException();
-    }
-  }
-
-  // Future<List<FarmInfo>> fetchFarms(String farmerAginID) async {
-  //   final response = await client.post(
-  //     buildUrl(FARM_INFO),
-  //     headers: jsonHeaders,
-  //     body: jsonEncode(<String, String>{
-  //       'AginID': farmerAginID,
-  //     }),
-  //   );
-
-  //   if (response.statusCode == 200) {
-  //     // If the server did return a 200 OK response,
-  //     // then parse the JSON.
-  //     final items = json.decode(response.body).cast<Map<String, dynamic>>();
-  //     return items.map<FarmInfo>((json) => FarmInfo.fromJson(json)).toList();
-  //   } else {
-  //     // If the server did not return a 200 OK response,
-  //     // then throw an exception.
-  //     throw Exception('Failed to load farmers');
-  //   }
-  // }
-
-  Future<AggregatorLoginObject> loginAggregator(Map params) async {
-    try {
-      var response = await client.post(
-        buildUrl(AGGREGATOR_LOGIN),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'X-AGIN-API-Key-Token': APIKEY,
-        },
-        body: jsonEncode(params),
-      );
-      if (response.statusCode == 200) {
-        AggregatorLoginObject aggregatorLoginObject =
-            AggregatorLoginObject.fromJson(json.decode(response.body));
-
-        return aggregatorLoginObject;
-      } else {
-        Map<String, dynamic> errorMap = {
-          'status': response.statusCode,
-          'message': json.decode(response.body)
-        };
-        throw ApiException(errorMap);
-      }
-    } on SocketException {
-      throw MySocketException();
-    }
-  }
-
-  Future<Message> verifyAccount(String phoneNumber, String verifyCode) async {
-    try {
-      var response = await client.post(
-        buildUrl(AGGREGATOR_LOGIN),
-        headers: jsonHeaders,
-        body: jsonEncode(<String, String>{
-          'verifyCode': verifyCode,
-          'phoneNumber': phoneNumber,
-        }),
-      );
-      return Message.fromJson(json.decode(response.body));
     } on SocketException {
       throw MySocketException();
     }
@@ -463,6 +396,30 @@ class ApiProvider {
         throw ApiException({
           'status': response.statusCode,
           'message': 'Failed to fetch produce status'
+        });
+      }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
+
+  Future<List<Country>> fetchCountries() async {
+    try {
+      final response =
+          await client.get(buildUrl(FETCH_COUNTRIES), headers: headers);
+
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        // then parse the JSON.
+        final items = json.decode(response.body).cast<Map<String, dynamic>>();
+        List<Country> listCountries = items.map<Country>((json) {
+          return Country.fromJson(json);
+        }).toList();
+        return listCountries;
+      } else {
+        throw ApiException({
+          'status': response.statusCode,
+          'message': jsonDecode(response.body)
         });
       }
     } on SocketException {

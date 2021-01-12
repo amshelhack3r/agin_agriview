@@ -6,7 +6,6 @@ const kDefaultPaddin = 20.0;
 
 const BASEURL = "https://api.agin.co/AginMainPortal-war/rest";
 const FETCH_COUNTRIES = '/country/list';
-const FETCH_ALBUM = 'county/list';
 
 const REGISTER_AGGREGATOR = '/aggregator/register';
 const REGISTER_FARMER = 'aggregator/register/farmer';
