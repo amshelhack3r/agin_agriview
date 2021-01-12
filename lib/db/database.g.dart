@@ -161,9 +161,8 @@ class _$CountiesDao extends CountiesDao {
   }
 
   @override
-  Future<void> insertCounty(CountyEntity county) async {
-    await _countyEntityInsertionAdapter.insert(
-        county, OnConflictStrategy.abort);
+  Future<void> insertItem(CountyEntity item) async {
+    await _countyEntityInsertionAdapter.insert(item, OnConflictStrategy.abort);
   }
 }
 
@@ -194,9 +193,8 @@ class _$CountryDao extends CountryDao {
   }
 
   @override
-  Future<void> insertCountry(CountryEntity country) async {
-    await _countryEntityInsertionAdapter.insert(
-        country, OnConflictStrategy.abort);
+  Future<void> insertItem(CountryEntity item) async {
+    await _countryEntityInsertionAdapter.insert(item, OnConflictStrategy.abort);
   }
 }
 
@@ -233,8 +231,8 @@ class _$FarmDao extends FarmDao {
   }
 
   @override
-  Future<void> insertFarm(FarmEntity farm) async {
-    await _farmEntityInsertionAdapter.insert(farm, OnConflictStrategy.abort);
+  Future<void> insertItem(FarmEntity item) async {
+    await _farmEntityInsertionAdapter.insert(item, OnConflictStrategy.abort);
   }
 }
 
@@ -267,9 +265,8 @@ class _$FarmerDao extends FarmerDao {
   }
 
   @override
-  Future<void> insertFarmer(FarmerEntity farmInfo) async {
-    await _farmerEntityInsertionAdapter.insert(
-        farmInfo, OnConflictStrategy.abort);
+  Future<void> insertItem(FarmerEntity item) async {
+    await _farmerEntityInsertionAdapter.insert(item, OnConflictStrategy.abort);
   }
 }
 
@@ -303,8 +300,7 @@ class _$ProductDao extends ProductDao {
   }
 
   @override
-  Future<void> insertProduct(ProduceEntity product) async {
-    await _produceEntityInsertionAdapter.insert(
-        product, OnConflictStrategy.abort);
+  Future<void> insertItem(ProduceEntity item) async {
+    await _produceEntityInsertionAdapter.insert(item, OnConflictStrategy.abort);
   }
 }
