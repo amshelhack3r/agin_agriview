@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../elements/rounded_container.dart';
+import 'elements/rounded_container.dart';
 import 'login.dart';
 import 'register.dart';
 

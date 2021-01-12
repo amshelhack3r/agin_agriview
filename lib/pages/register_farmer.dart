@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../elements/rounded_container.dart';
+import 'elements/rounded_container.dart';
 
 class RegisterFarmerPage extends StatelessWidget {
   const RegisterFarmerPage({Key key}) : super(key: key);

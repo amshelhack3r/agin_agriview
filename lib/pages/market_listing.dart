@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/hex_color.dart';
-import 'model/product.dart';
+import '../utils/hex_color.dart';
+import '../models/product.dart';
 
 class MarketListingPage extends StatelessWidget {
   Product product;
@@ -34,7 +34,7 @@ class MarketListingPage extends StatelessWidget {
                   itemBuilder: (context, index) {
                     return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: _buildListItem());
+                        child: _buildListItem(context));
                   }),
             )
           ],
@@ -113,67 +113,70 @@ class MarketListingPage extends StatelessWidget {
     );
   }
 
-  _buildListItem() {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      padding: const EdgeInsets.only(right: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: HexColor("#8E8E8E"),
-            blurRadius: 1.0,
-            spreadRadius: 0.0,
-            offset: Offset(2.0, 2.0), // shadow direction: bottom right
-          )
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Container(
-            width: 80,
-            height: 80,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: primaryColor,
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Text("PM",
-                style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w900,
-                    color: Colors.white)),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Heirloom Tomatoes",
+  _buildListItem(BuildContext context) {
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(context, '/ProductInfoPage'),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.only(right: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: HexColor("#8E8E8E"),
+              blurRadius: 1.0,
+              spreadRadius: 0.0,
+              offset: Offset(2.0, 2.0), // shadow direction: bottom right
+            )
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 80,
+              height: 80,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: primaryColor,
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Text("PM",
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
-                      color: HexColor("#8E8E8E"))),
-              Text("Harvest 15 March 2020"),
-            ],
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("PRICE",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                      color: HexColor("#8E8E8E"))),
-              Text("Ksh 50/KG",
-                  style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.black54)),
-            ],
-          ),
-          // Column()
-        ],
+                      color: Colors.white)),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Heirloom Tomatoes",
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: HexColor("#8E8E8E"))),
+                Text("Harvest 15 March 2020"),
+              ],
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("PRICE",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: HexColor("#8E8E8E"))),
+                Text("Ksh 50/KG",
+                    style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.black54)),
+              ],
+            ),
+            // Column()
+          ],
+        ),
       ),
     );
   }

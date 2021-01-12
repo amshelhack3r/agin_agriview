@@ -1,28 +1,19 @@
 import 'package:flutter/material.dart';
 
-import '../../utils/hex_color.dart';
-import 'model/product.dart';
+import '../utils/hex_color.dart';
 
-class MarketPlaceList extends StatelessWidget {
-  MarketPlaceList({Key key}) : super(key: key);
+class FarmersListPage extends StatelessWidget {
+  FarmersListPage({Key key}) : super(key: key);
   var width;
   var primaryColor;
-  final List products = [
-    Product(name: "strawberry"),
-    Product(name: "watermelon"),
-    Product(name: "pineapples"),
-    Product(name: "oranges"),
-    Product(name: "bananas"),
-    Product(name: "lemons"),
-    Product(name: "pawpaw"),
-  ];
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
     primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Market Place"),
+        title: Text("Farmers List"),
       ),
       body: SafeArea(
         child: Column(
@@ -37,14 +28,13 @@ class MarketPlaceList extends StatelessWidget {
             Expanded(
               child: GridView.builder(
                 shrinkWrap: true,
-                itemCount: products.length,
+                itemCount: 10,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
+                    crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10),
                 itemBuilder: (context, index) {
-                  Product p = products[index];
-                  return _buildListItem(p, context);
+                  return _buildListItem(context);
                 },
               ),
             ),
@@ -97,10 +87,13 @@ class MarketPlaceList extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(
-            "Categories",
-            style: TextStyle(color: Colors.white),
-          ),
+          ActionChip(
+              backgroundColor: primaryColor,
+              label: Text(
+                "256 Farmers",
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {}),
           Row(
             children: [Icon(Icons.edit_location), Text("Filter")],
           )
@@ -109,12 +102,11 @@ class MarketPlaceList extends StatelessWidget {
     );
   }
 
-  _buildListItem(Product product, BuildContext context) {
+  _buildListItem(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/MarketListingPage',
-          arguments: product),
+      onTap: () => Navigator.pushNamed(context, "/FarmerInfo"),
       child: Container(
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
@@ -129,11 +121,9 @@ class MarketPlaceList extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Image.asset(
-                "assets/images/${product.name}.png",
-                width: 100,
-              ),
-              Text(product.name),
+              Image.asset("assets/images/my_avatar.png"),
+              Text("James Makau"),
+              Text("Machakos County")
             ],
           )),
     );
