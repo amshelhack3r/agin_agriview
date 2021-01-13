@@ -4,5 +4,5 @@ import 'package:floor/floor.dart';
 @Entity(tableName: 'cultivation_mode')
 class CultivationEntity extends CultivationMode {
   @PrimaryKey(autoGenerate: true)
-  int id;
+  int uid;
 }

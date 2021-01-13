@@ -60,7 +60,7 @@ class _$AgriviewDatabase extends AgriviewDatabase {
     changeListener = listener ?? StreamController<String>.broadcast();
   }
 
-  CountiesDao _countyDaoInstance;
+  CountyDao _countyDaoInstance;
 
   CountryDao _countryDaoInstance;
 
@@ -88,7 +88,7 @@ class _$AgriviewDatabase extends AgriviewDatabase {
       },
       onCreate: (database, version) async {
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `country` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `id` INTEGER, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `country` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT, `id` INTEGER, `name` TEXT)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `county` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `countyID` INTEGER, `countyName` TEXT)');
         await database.execute(
@@ -100,7 +100,7 @@ class _$AgriviewDatabase extends AgriviewDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `unit_types` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `unitTypeID` INTEGER, `unitTypeName` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `cultivation_mode` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `id` INTEGER, `modeDescription` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `cultivation_mode` (`uid` INTEGER PRIMARY KEY AUTOINCREMENT, `id` INTEGER, `modeDescription` TEXT)');
 
         await callback?.onCreate?.call(database, version);
       },
@@ -109,8 +109,8 @@ class _$AgriviewDatabase extends AgriviewDatabase {
   }
 
   @override
-  CountiesDao get countyDao {
-    return _countyDaoInstance ??= _$CountiesDao(database, changeListener);
+  CountyDao get countyDao {
+    return _countyDaoInstance ??= _$CountyDao(database, changeListener);
   }
 
   @override
@@ -134,8 +134,8 @@ class _$AgriviewDatabase extends AgriviewDatabase {
   }
 }
 
-class _$CountiesDao extends CountiesDao {
-  _$CountiesDao(this.database, this.changeListener)
+class _$CountyDao extends CountyDao {
+  _$CountyDao(this.database, this.changeListener)
       : _queryAdapter = QueryAdapter(database),
         _countyEntityInsertionAdapter = InsertionAdapter(
             database,
@@ -173,7 +173,7 @@ class _$CountryDao extends CountryDao {
             database,
             'country',
             (CountryEntity item) => <String, dynamic>{
-                  'id': item.id,
+                  'uid': item.uid,
                   'id': item.id,
                   'name': item.name
                 });

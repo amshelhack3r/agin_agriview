@@ -1,21 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:AgriView/models/product.dart';
+import 'package:either_dart/either.dart';
 import 'package:http/http.dart' as http;
 
-import '../models/login_object.dart';
-import '../models/county.dart';
-import '../models/country.dart';
-import '../models/cultivation_mode.dart';
-import '../models/farmer_info.dart';
-import '../models/market_listing_info.dart';
-import '../models/message.dart';
-import '../models/produce_status.dart';
-import '../models/statistic_info.dart';
-import '../models/unit_type.dart';
-import '../utils/constants.dart';
-import '../utils/failure.dart';
+import '../../models/message.dart';
+import '../../utils/constants.dart';
+import '../../utils/failure.dart';
 
 class ApiProvider {
   final client = http.Client();
@@ -28,7 +19,7 @@ class ApiProvider {
   static buildUrl(String endpoint) => Uri.parse(BASEURL + endpoint);
 
   //auth apis
-  Future<Message> createAggregator(Map params) async {
+  Future<Either<Failure, Message>> createAggregator(Map params) async {
     headers['Content-Type'] = 'application/json';
     try {
       var response = await client.post(
@@ -37,20 +28,20 @@ class ApiProvider {
         body: jsonEncode(params),
       );
       if (response.statusCode == 201) {
-        return Message.fromJson(json.decode(response.body));
+        return Right(Message.fromJson(json.decode(response.body)));
       } else {
         final Map errorParams = {
           'status': response.statusCode,
           'message': jsonDecode(response.body)
         };
-        throw ApiException(errorParams);
+        return Left(ApiException(errorParams));
       }
     } on SocketException {
       throw MySocketException();
     }
   }
 
-  Future<AggregatorLoginObject> loginAggregator(Map params) async {
+  Future<Either<Failure, Map>> loginAggregator(Map params) async {
     try {
       var response = await client.post(
         buildUrl(AGGREGATOR_LOGIN),
@@ -60,17 +51,12 @@ class ApiProvider {
         },
         body: jsonEncode(params),
       );
+      var body = response.body;
+      print(body);
       if (response.statusCode == 200) {
-        AggregatorLoginObject aggregatorLoginObject =
-            AggregatorLoginObject.fromJson(json.decode(response.body));
-
-        return aggregatorLoginObject;
+        return Right(json.decode(response.body));
       } else {
-        Map<String, dynamic> errorMap = {
-          'status': response.statusCode,
-          'message': json.decode(response.body)
-        };
-        throw ApiException(errorMap);
+        return Left(ApiException(json.decode(response.body)));
       }
     } on SocketException {
       throw MySocketException();
@@ -111,7 +97,7 @@ class ApiProvider {
     }
   }
 
-  Future<List<Product>> fetchProduce() async {
+  Future<Either<Failure, Map>> fetchProduce() async {
     headers['Content-Type'] = 'application/json';
     try {
       final response = await client.post(
@@ -125,24 +111,20 @@ class ApiProvider {
         }),
       );
       if (response.statusCode == 200) {
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        List<Product> listProduce = items.map<Product>((json) {
-          return Product.fromJson(json);
-        }).toList();
-        return listProduce;
+        return Right(json.decode(response.body));
       } else {
         final Map errorParams = {
           'status': response.statusCode,
           'message': 'Failed to fetch produce'
         };
-        throw ApiException(errorParams);
+        return Left(ApiException(errorParams));
       }
     } on SocketException {
       throw MySocketException();
     }
   }
 
-  Future<StatisticsInfo> fetchStatistics(String aggregatorAginID) async {
+  Future<Either<Failure, Map>> fetchStatistics(String aggregatorAginID) async {
     try {
       final response = await client.post(
         buildUrl(AGGREGATOR_STATISTICS),
@@ -154,12 +136,12 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return StatisticsInfo.fromJson(jsonDecode(response.body));
+        return Right(jsonDecode(response.body));
       } else {
-        throw ApiException({
+        Left(ApiException({
           'status': response.statusCode,
           'message': 'Failed to fetch Statistics'
-        });
+        }));
       }
     } on SocketException {
       throw MySocketException();
@@ -203,7 +185,7 @@ class ApiProvider {
     }
   }
 
-  Future<List<FarmerInfo>> fetchFarmers(String aggregatorAginID) async {
+  Future<Either<Failure, Map>> fetchFarmers(String aggregatorAginID) async {
     try {
       final response = await client.post(
         buildUrl(FARMERS_LIST),
@@ -216,24 +198,21 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        return items
-            .map<FarmerInfo>((json) => FarmerInfo.fromJson(json))
-            .toList();
+        return Right(json.decode(response.body));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException({
+        return Left(ApiException({
           'message': 'Failed to load farmers',
           'status': response.statusCode
-        });
+        }));
       }
     } on SocketException {
       throw MySocketException();
     }
   }
 
-  Future<List<CultivationMode>> fetchCultivationModeOptions() async {
+  Future<Either<Failure, Map>> fetchCultivationModeOptions() async {
     try {
       var response = await client.get(
         buildUrl(CULTIVATION_MODES_OPTIONS),
@@ -242,48 +221,42 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        return items
-            .map<CultivationMode>((json) => CultivationMode.fromJson(json))
-            .toList();
+        return Right(json.decode(response.body));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException({
+        return Left(ApiException({
           'status': response.statusCode,
           'message': 'Failed to fetch cultivation modes options'
-        });
+        }));
       }
     } on SocketException {
       throw MySocketException();
     }
   }
 
-  Future<List<ProduceStatus>> fetchProduceStatusOptions() async {
+  Future<Either<Failure, List<Map>>> fetchProduceStatusOptions() async {
     try {
       final response = await client.get(
         buildUrl(PRODUCT_STATUS),
         headers: headers,
       );
       if (response.statusCode == 200) {
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        return items
-            .map<ProduceStatus>((json) => ProduceStatus.fromJson(json))
-            .toList();
+        return Right(json.decode(response.body));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException({
+        return Left(ApiException({
           'status': response.statusCode,
           'message': 'Failed to fetch produce status'
-        });
+        }));
       }
     } on SocketException {
       throw MySocketException();
     }
   }
 
-  Future<List<UnitType>> fetchUnitTypeOptions() async {
+  Future<Either<Failure, List<Map>>> fetchUnitTypeOptions() async {
     try {
       final response = await client.get(
         buildUrl(UNIT_TYPES),
@@ -293,15 +266,14 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        return items.map<UnitType>((json) => UnitType.fromJson(json)).toList();
+        return Right(json.decode(response.body));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException({
+        return Left(ApiException({
           'status': response.statusCode,
           'message': 'Failed to fetch produce status'
-        });
+        }));
       }
     } on SocketException {
       throw MySocketException();
@@ -321,7 +293,7 @@ class ApiProvider {
     }
   }
 
-  Future<List<PlaceToMarketListingInfo>> fetchPlaceToMarketListing(
+  Future<Either<Failure, List<Map>>> fetchPlaceToMarketListing(
       String aggregatorAginID) async {
     try {
       final response = await client.post(
@@ -335,18 +307,14 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        return items
-            .map<PlaceToMarketListingInfo>(
-                (json) => PlaceToMarketListingInfo.fromJson(json))
-            .toList();
+        return Right(json.decode(response.body));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException({
+        return Left(ApiException({
           'status': response.statusCode,
           'message': 'Failed to fetch produce status'
-        });
+        }));
       }
     } on SocketException {
       throw MySocketException();
@@ -380,25 +348,24 @@ class ApiProvider {
     }
   }
 
-  Future<List<County>> _getCountiesList() async {
+  Future<Either<Failure, List<dynamic>>> fetchCounty() async {
     try {
       var response = await client.get(buildUrl(COUNTY_LIST), headers: headers);
 
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.body);
-        return data.map((county) => County.fromMap(county)).toList();
+        return Right(jsonDecode(response.body));
       } else {
-        throw ApiException({
+        return Left(ApiException({
           'status': response.statusCode,
-          'message': 'Failed to fetch produce status'
-        });
+          'message': 'Failed to fetch county status'
+        }));
       }
     } on SocketException {
       throw MySocketException();
     }
   }
 
-  Future<List<Country>> fetchCountries() async {
+  Future<Either<Failure, List<Map>>> fetchCountries() async {
     try {
       final response =
           await client.get(buildUrl(FETCH_COUNTRIES), headers: headers);
@@ -406,16 +373,12 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
-        List<Country> listCountries = items.map<Country>((json) {
-          return Country.fromJson(json);
-        }).toList();
-        return listCountries;
+        return Right(json.decode(response.body));
       } else {
-        throw ApiException({
+        return Left(ApiException({
           'status': response.statusCode,
           'message': jsonDecode(response.body)
-        });
+        }));
       }
     } on SocketException {
       throw MySocketException();

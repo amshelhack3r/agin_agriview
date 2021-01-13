@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../state/user_provider.dart';
 import '../utils/hex_color.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -18,7 +20,7 @@ class _DashboardPageState extends State<DashboardPage> {
         children: [
           _buildHeader(),
           SizedBox(
-            height: 100,
+            height: 70,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -42,8 +44,9 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _buildLeftContainer() {
+    var width = MediaQuery.of(context).size.width;
     return Container(
-      width: 200,
+      width: (width / 2) - 20,
       height: 300,
       decoration: BoxDecoration(
           color: Colors.white,
@@ -151,14 +154,15 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _buildRightContainer() {
+    var width = MediaQuery.of(context).size.width;
     return Container(
-      width: 200,
+      width: (width / 2) - 20,
       height: 300,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          buildCard("assets/images/place_market.png",
-              "Place to \n Market Place", () {}),
+          buildCard(
+              "assets/images/place_market.png", "Place to \n Market", () {}),
           buildCard("assets/images/register_produce.png", "Register \n Produce",
               () {}),
         ],
@@ -170,7 +174,7 @@ class _DashboardPageState extends State<DashboardPage> {
     var oneThird = MediaQuery.of(context).size.width / 3;
     return Container(
       width: double.infinity,
-      height: MediaQuery.of(context).size.width / 2,
+      height: MediaQuery.of(context).size.width / 3,
       child: Stack(
         clipBehavior: Clip.none,
         children: [
@@ -185,7 +189,7 @@ class _DashboardPageState extends State<DashboardPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Farmer Sam",
+                  context.watch<UserProvider>().fullname,
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
@@ -213,8 +217,8 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           Positioned(
             bottom: -40,
-            left: oneThird / 2,
-            right: oneThird / 2,
+            left: oneThird / 3,
+            right: oneThird / 3,
             child: SizedBox(
               width: oneThird * 2,
               child: TextField(
@@ -254,9 +258,8 @@ class _DashboardPageState extends State<DashboardPage> {
           border: Border.all(color: Theme.of(context).primaryColor),
           borderRadius: BorderRadius.circular(10),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             Image.asset(
               imageString,
@@ -265,6 +268,7 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             Text(
               title,
+              textAlign: TextAlign.center,
               style: TextStyle(
                   color: HexColor("#707070"),
                   fontSize: 16,

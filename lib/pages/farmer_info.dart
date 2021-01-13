@@ -53,7 +53,7 @@ class FarmerInfo extends StatelessWidget {
             height: 30,
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Row(
               children: [
                 _buildCard("farms.png", "Total \nFarms", "2", context: context),
@@ -127,8 +127,10 @@ class FarmerInfo extends StatelessWidget {
 
   _buildCard(String image, String title, String subtitle,
       {BuildContext context}) {
+    var width = MediaQuery.of(context).size.width;
     return Expanded(
       child: Container(
+        width: (width / 2) - 20,
         height: MediaQuery.of(context).size.width / 3,
         decoration: BoxDecoration(
           color: Colors.white,
@@ -150,7 +152,10 @@ class FarmerInfo extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Image.asset("assets/images/${image}"),
+                Image.asset(
+                  "assets/images/${image}",
+                  width: 50,
+                ),
                 Text(
                   title,
                   style: TextStyle(

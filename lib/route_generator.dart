@@ -44,6 +44,16 @@ class RouteGenerator {
           builder: (context) => ProductInfo(),
         );
 
+      case '/RegisterFarmerPage':
+        return MaterialPageRoute(
+          builder: (context) => RegisterFarmerPage(),
+        );
+
+      case '/FarmerInfo':
+        return MaterialPageRoute(
+          builder: (context) => FarmerInfo(),
+        );
+
       default:
         return MaterialPageRoute(
           builder: (context) => SplashWidget(),

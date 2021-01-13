@@ -1,5 +1,5 @@
 import 'dart:async';
-
+import 'package:sqflite/sqflite.dart' as sqflite;
 import 'package:floor/floor.dart';
 
 import 'dao/counties_dao.dart';
@@ -27,7 +27,7 @@ part 'database.g.dart';
   CultivationEntity
 ])
 abstract class AgriviewDatabase extends FloorDatabase {
-  CountiesDao get countyDao;
+  CountyDao get countyDao;
   CountryDao get countryDao;
   FarmDao get farmDao;
   FarmerDao get farmerDao;
