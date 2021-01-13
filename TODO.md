@@ -1,0 +1,3 @@
+- remove splash route from backstack
+- add animation transition to routes
+- Show splash screen loading before app launch
