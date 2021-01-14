@@ -8,6 +8,7 @@ import 'pages/market_listing.dart';
 import 'pages/product_single.dart';
 import 'pages/register_farmer.dart';
 import 'pages/splash.dart';
+import 'utils/transition.dart';
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -20,39 +21,26 @@ class RouteGenerator {
         );
 
       case '/AuthPage':
-        return MaterialPageRoute(
-          builder: (context) => Auth(),
-        );
-
+        return slideAnimation(Auth());
+// animation =
+      //     CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
       case '/HomePage':
-        return MaterialPageRoute(
-          builder: (context) => HomePage(),
-        );
+        return fadeAnimation(HomePage());
 
       case '/DashboardPage':
-        return MaterialPageRoute(
-          builder: (context) => DashboardPage(),
-        );
+        return slideAnimation(DashboardPage());
 
       case '/MarketListingPage':
-        return MaterialPageRoute(
-          builder: (context) => MarketListingPage(args),
-        );
+        return fadeAnimation(MarketListingPage(args));
 
       case '/ProductInfoPage':
-        return MaterialPageRoute(
-          builder: (context) => ProductInfo(),
-        );
+        return fadeAnimation(ProductInfo());
 
       case '/RegisterFarmerPage':
-        return MaterialPageRoute(
-          builder: (context) => RegisterFarmerPage(),
-        );
+        return fadeAnimation(RegisterFarmerPage());
 
       case '/FarmerInfo':
-        return MaterialPageRoute(
-          builder: (context) => FarmerInfo(),
-        );
+        return fadeAnimation(FarmerInfo());
 
       default:
         return MaterialPageRoute(
