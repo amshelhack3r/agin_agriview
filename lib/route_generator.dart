@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'pages/authstate.dart';
-import 'pages/dashboard.dart';
 import 'pages/farmer_info.dart';
 import 'pages/home.dart';
 import 'pages/market_listing.dart';
@@ -26,9 +25,6 @@ class RouteGenerator {
       //     CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
       case '/HomePage':
         return fadeAnimation(HomePage());
-
-      case '/DashboardPage':
-        return slideAnimation(DashboardPage());
 
       case '/MarketListingPage':
         return fadeAnimation(MarketListingPage(args));

@@ -44,7 +44,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.white,
-        onPressed: () => Navigator.pushNamed(context, "/RegisterFarmerPage"),
+        onPressed: () => Navigator.pushNamed(context, "/HomePage"),
         child: Icon(
           Icons.eco,
           color: Colors.green[600],

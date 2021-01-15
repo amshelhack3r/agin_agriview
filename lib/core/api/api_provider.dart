@@ -185,7 +185,8 @@ class ApiProvider {
     }
   }
 
-  Future<Either<Failure, Map>> fetchFarmers(String aggregatorAginID) async {
+  Future<Either<Failure, List<dynamic>>> fetchFarmers(
+      String aggregatorAginID) async {
     try {
       final response = await client.post(
         buildUrl(FARMERS_LIST),

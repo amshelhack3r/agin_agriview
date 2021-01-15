@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+// import 'package:url_launcher/url_launcher.dart';
 
+import '../core/repository/api_repository.dart';
+import '../models/farmer_info.dart';
+import '../state/user_provider.dart';
 import '../utils/hex_color.dart';
+import 'elements/dialogs.dart';
 
 class FarmersListPage extends StatelessWidget {
   FarmersListPage({Key key}) : super(key: key);
   var width;
   var primaryColor;
+  final _apiRepository = ApiRepository();
 
   @override
   Widget build(BuildContext context) {
+    var aginId = context.watch<UserProvider>().aginId;
     width = MediaQuery.of(context).size.width;
     primaryColor = Theme.of(context).primaryColor;
     return Scaffold(
@@ -25,19 +33,27 @@ class FarmersListPage extends StatelessWidget {
               child: _buildSelector(),
             ),
             SizedBox(height: 30),
-            Expanded(
-              child: GridView.builder(
-                shrinkWrap: true,
-                itemCount: 10,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10),
-                itemBuilder: (context, index) {
-                  return _buildListItem(context);
-                },
-              ),
-            ),
+            FutureBuilder(
+                future: _apiRepository.fetchFarmers(aginId),
+                builder: (context, AsyncSnapshot<List<FarmerInfo>> snapshot) {
+                  if (snapshot.hasData) {
+                    var farmers = snapshot.data;
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: farmers.length,
+                      itemBuilder: (context, index) {
+                        FarmerInfo farmer = farmers[index];
+                        return _buildListItem(context, farmer);
+                      },
+                    );
+                  } else if (snapshot.hasError) {
+                    Dialogs.messageDialog(
+                        context, true, snapshot.error.toString());
+                    return Container();
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                }),
           ],
         ),
       ),
@@ -102,11 +118,14 @@ class FarmersListPage extends StatelessWidget {
     );
   }
 
-  _buildListItem(BuildContext context) {
+  _buildListItem(BuildContext context, FarmerInfo farmer) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, "/FarmerInfo"),
-      child: Container(
-          padding: const EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 18.0),
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 10),
+          padding: const EdgeInsets.only(right: 10),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
@@ -119,13 +138,50 @@ class FarmersListPage extends StatelessWidget {
               )
             ],
           ),
-          child: Column(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Image.asset("assets/images/my_avatar.png"),
-              Text("James Makau"),
-              Text("Machakos County")
+              Container(
+                width: 80,
+                height: 80,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Text(farmer.initials,
+                    style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w900,
+                        color: Colors.white)),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(farmer.fullname,
+                      style: TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w900,
+                          color: HexColor("#8E8E8E"))),
+                  Text(farmer.phoneNumber),
+                ],
+              ),
+              IconButton(icon: Icon(Icons.call), onPressed: () => {})
+              // Column()
             ],
-          )),
+          ),
+        ),
+      ),
     );
   }
+
+  // _makeCall(String mobile) async {
+  //   const url = "tel:mobile";
+
+  //   if (await canLaunch(url)) {
+  //     await launch(url);
+  //   } else {
+  //     throw 'Could not laounch $url';
+  //   }
+  // }
 }

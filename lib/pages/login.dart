@@ -53,6 +53,7 @@ class _LoginFormState extends State<LoginForm> {
           ),
           isLoggingIn
               ? RaisedButton(
+                  onPressed: null,
                   disabledColor: Colors.grey,
                   elevation: 10,
                   padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),

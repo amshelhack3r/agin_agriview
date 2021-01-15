@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/county.dart';
+import '../../models/farmer_info.dart';
 import '../../models/login_object.dart';
 import '../../utils/constants.dart';
 import '../api/api_provider.dart';
@@ -60,6 +61,15 @@ class ApiRepository extends Repository {
         CountyEntity cty = County.fromMap(county);
         database.countyDao.insertItem(cty);
       });
+    } else {
+      throw result.left;
+    }
+  }
+
+  Future<List<FarmerInfo>> fetchFarmers(String aginId) async {
+    var result = await _apiProvider.fetchFarmers(aginId);
+    if (result.isRight) {
+      return result.right.map((farmer) => FarmerInfo.fromMap(farmer)).toList();
     } else {
       throw result.left;
     }

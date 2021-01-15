@@ -32,10 +32,11 @@ class _DashboardPageState extends State<DashboardPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              buildCard("assets/images/register_group.png", "Register \n Group",
-                  () {}),
-              buildCard("assets/images/register_farmer.png",
-                  "Register \n Farmer", () {}),
+              buildCard(
+                  "assets/images/register_group.png", "Register \n Group"),
+              buildCard(
+                  "assets/images/register_farmer.png", "Register \n Farmer",
+                  routeName: "/RegisterFarmerPage"),
             ],
           )
         ],
@@ -161,10 +162,9 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          buildCard("assets/images/place_market.png", "Place to \n Market"),
           buildCard(
-              "assets/images/place_market.png", "Place to \n Market", () {}),
-          buildCard("assets/images/register_produce.png", "Register \n Produce",
-              () {}),
+              "assets/images/register_produce.png", "Register \n Produce"),
         ],
       ),
     );
@@ -239,9 +239,9 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  buildCard(String imageString, String title, Function onTap) {
+  buildCard(String imageString, String title, {String routeName}) {
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => Navigator.pushNamed(context, routeName),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
         // width: double.maxFinite,
