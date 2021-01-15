@@ -165,7 +165,7 @@ class ApiProvider {
     }
   }
 
-  Future<Message> createFarmer(Map params) async {
+  Future<int> createFarmer(Map params) async {
     try {
       final http.Response response = await client.post(
         buildUrl(REGISTER_FARMER),
@@ -173,7 +173,7 @@ class ApiProvider {
         body: jsonEncode(params),
       );
       if (response.statusCode == 201) {
-        return Message.fromJson(json.decode(response.body));
+        return response.statusCode;
       } else {
         throw ApiException({
           'status': response.statusCode,
@@ -213,7 +213,7 @@ class ApiProvider {
     }
   }
 
-  Future<Either<Failure, Map>> fetchCultivationModeOptions() async {
+  Future<Either<Failure, List<dynamic>>> fetchCultivationModeOptions() async {
     try {
       var response = await client.get(
         buildUrl(CULTIVATION_MODES_OPTIONS),
@@ -257,7 +257,7 @@ class ApiProvider {
     }
   }
 
-  Future<Either<Failure, List<Map>>> fetchUnitTypeOptions() async {
+  Future<Either<Failure, List<dynamic>>> fetchUnitTypeOptions() async {
     try {
       final response = await client.get(
         buildUrl(UNIT_TYPES),
@@ -273,7 +273,7 @@ class ApiProvider {
         // then throw an exception.
         return Left(ApiException({
           'status': response.statusCode,
-          'message': 'Failed to fetch produce status'
+          'message': 'Failed to fetch unit types'
         }));
       }
     } on SocketException {
@@ -349,7 +349,7 @@ class ApiProvider {
     }
   }
 
-  Future<Either<Failure, List<dynamic>>> fetchCounty() async {
+  Future<Either<Failure, List>> fetchCounty() async {
     try {
       var response = await client.get(buildUrl(COUNTY_LIST), headers: headers);
 
@@ -380,6 +380,32 @@ class ApiProvider {
           'status': response.statusCode,
           'message': jsonDecode(response.body)
         }));
+      }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
+
+  Future<Either<Failure, List<dynamic>>> fetchFarms(String userAginID) async {
+    try {
+      final response = await client.post(
+        buildUrl(FARMS),
+        headers: jsonHeaders,
+        body: jsonEncode(<String, String>{
+          'aginID': userAginID,
+        }),
+      );
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        // then parse the JSON.
+        return json.decode(response.body);
+      } else {
+        // If the server did not return a 200 OK response,
+        // then throw an exception.
+        throw ApiException({
+          'status': response.statusCode,
+          'message': 'Failed to fetch farm info'
+        });
       }
     } on SocketException {
       throw MySocketException();

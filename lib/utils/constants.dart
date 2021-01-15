@@ -14,7 +14,7 @@ const PRODUCT_LIST = '/product/list';
 const FARMERS_LIST = '/aggregator/farmers';
 const AGGREGATOR_STATISTICS = '/aggregator/stats';
 const CREATE_FARM = '/production/farm/register';
-const FARM_INFO = '/producer/farms';
+const FARMS = '/producer/farms';
 const AGGREGATOR_LOGIN = '/aggregator/login';
 const VERIFY_AGGREGATOR = '/aggregator/account/verify';
 const CULTIVATION_MODES_OPTIONS = '/market/cultivationmodes/list';
@@ -29,5 +29,6 @@ const PREF_NAME = "name";
 const PREF_AGINID = "aginId";
 const PREF_MOBILE = "mobile";
 const PREF_HAS_LOGGED_IN = "has_logged_in";
+const PREF_DB_HAS_INITIALIZED = "db_initilized";
 
 const APIKEY = "e9567a76cc5f4da191a97945ba37b63a";

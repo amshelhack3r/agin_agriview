@@ -1,12 +1,13 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/county.dart';
+import '../../models/cultivation_mode.dart';
+import '../../models/farm.dart';
 import '../../models/farmer_info.dart';
 import '../../models/login_object.dart';
+import '../../models/unit_type.dart';
 import '../../utils/constants.dart';
 import '../api/api_provider.dart';
-import '../db/entities/county_entity.dart';
-import 'local_repository.dart';
 import 'repository.dart';
 
 class ApiRepository extends Repository {
@@ -52,15 +53,11 @@ class ApiRepository extends Repository {
     return result;
   }
 
-  Future fetchCounty() async {
+  Future<List<County>> fetchCounty() async {
     var result = await _apiProvider.fetchCounty();
 
     if (result.isRight) {
-      var database = await LocalRepository.getInstance();
-      result.right.map((county) {
-        CountyEntity cty = County.fromMap(county);
-        database.countyDao.insertItem(cty);
-      });
+      return result.right.map((county) => County.fromMap(county)).toList();
     } else {
       throw result.left;
     }
@@ -72,6 +69,42 @@ class ApiRepository extends Repository {
       return result.right.map((farmer) => FarmerInfo.fromMap(farmer)).toList();
     } else {
       throw result.left;
+    }
+  }
+
+  Future<bool> registerFarmer(Map params) async {
+    var result = await _apiProvider.createFarmer(params);
+    return (result == 201);
+  }
+
+  Future<List<CultivationMode>> fetchCultivationModes() async {
+    var result = await _apiProvider.fetchCultivationModeOptions();
+
+    if (result.isRight) {
+      return result.right.map((mode) => CultivationMode.fromMap(mode)).toList();
+    } else {
+      throw result.left;
+    }
+  }
+
+  Future<List<UnitType>> fetchUnitTypes() async {
+    var result = await _apiProvider.fetchUnitTypeOptions();
+    if (result.isRight) {
+      return result.right
+          .map((unitType) => UnitType.fromMap(unitType))
+          .toList();
+    } else {
+      throw result.left;
+    }
+  }
+
+  Future<List<Farm>> fetchFarm(String userAginID) async {
+    var results = await _apiProvider.fetchFarms(userAginID);
+
+    if (results.isRight) {
+      return results.right.map((farm) => Farm.fromMap(farm)).toList();
+    } else {
+      throw results.left;
     }
   }
 }

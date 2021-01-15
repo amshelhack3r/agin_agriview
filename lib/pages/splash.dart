@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/repository/api_repository.dart';
+import '../state/db_provider.dart';
 import '../state/user_provider.dart';
 import '../utils/constants.dart';
 
@@ -14,6 +15,15 @@ class SplashWidget extends StatefulWidget {
 class _SplashWidgetState extends State<SplashWidget> {
   Future setup() async {
     var prefs = await SharedPreferences.getInstance();
+    var _repository = ApiRepository();
+
+    var county = await _repository.fetchCounty();
+    var modes = await _repository.fetchCultivationModes();
+    var types = await _repository.fetchUnitTypes();
+
+    context.read<DatabaseProvider>().county = county;
+    context.read<DatabaseProvider>().modes = modes;
+    context.read<DatabaseProvider>().unitType = types;
 
     if (prefs.containsKey(PREF_HAS_LOGGED_IN)) {
       var aginID = prefs.get(PREF_AGINID);
@@ -25,13 +35,9 @@ class _SplashWidgetState extends State<SplashWidget> {
         "aginId": aginID,
         "mobile": mobile
       };
-
       Future.delayed(Duration(seconds: 3));
       return Navigator.pushNamed(context, '/HomePage');
     } else {
-      var _repository = ApiRepository();
-      await _repository.fetchCounty();
-
       return Navigator.pushNamed(context, '/AuthPage');
     }
   }

@@ -7,7 +7,8 @@ import 'market_place.dart';
 import 'wallet.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  final int index;
+  HomePage(this.index, {Key key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -15,12 +16,13 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   PageController _pageController;
-  int currentNavBarIndex = 0;
+  int currentNavBarIndex;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    currentNavBarIndex = (widget.index == null) ? 0 : widget.index;
     _pageController = PageController(initialPage: 0);
 
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {

@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import 'app_theme.dart';
 import 'route_generator.dart';
+import 'state/db_provider.dart';
 import 'state/user_provider.dart';
 
 void main() {
@@ -14,8 +15,11 @@ void main() {
     DeviceOrientation.portraitDown,
   ]);
 
-  runApp(ChangeNotifierProvider(
-    create: (_) => UserProvider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => UserProvider()),
+      ChangeNotifierProvider(create: (_) => DatabaseProvider()),
+    ],
     child: MyApp(),
   ));
 }

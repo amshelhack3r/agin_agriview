@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 // import 'package:url_launcher/url_launcher.dart';
 
 import '../core/repository/api_repository.dart';
@@ -28,23 +29,43 @@ class FarmersListPage extends StatelessWidget {
           children: [
             _buildHeader(),
             SizedBox(height: 50),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: _buildSelector(),
-            ),
-            SizedBox(height: 30),
             FutureBuilder(
                 future: _apiRepository.fetchFarmers(aginId),
                 builder: (context, AsyncSnapshot<List<FarmerInfo>> snapshot) {
                   if (snapshot.hasData) {
                     var farmers = snapshot.data;
-                    return ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: farmers.length,
-                      itemBuilder: (context, index) {
-                        FarmerInfo farmer = farmers[index];
-                        return _buildListItem(context, farmer);
-                      },
+                    return Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(20),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ActionChip(
+                                  backgroundColor: primaryColor,
+                                  label: Text(
+                                    "${snapshot.data.length.toString()} Farmers",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () {}),
+                              Row(
+                                children: [
+                                  Icon(Icons.edit_location),
+                                  Text("Filter")
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: farmers.length,
+                          itemBuilder: (context, index) {
+                            FarmerInfo farmer = farmers[index];
+                            return _buildListItem(context, farmer);
+                          },
+                        ),
+                      ],
                     );
                   } else if (snapshot.hasError) {
                     Dialogs.messageDialog(
@@ -97,30 +118,10 @@ class FarmersListPage extends StatelessWidget {
     );
   }
 
-  _buildSelector() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          ActionChip(
-              backgroundColor: primaryColor,
-              label: Text(
-                "256 Farmers",
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () {}),
-          Row(
-            children: [Icon(Icons.edit_location), Text("Filter")],
-          )
-        ],
-      ),
-    );
-  }
-
   _buildListItem(BuildContext context, FarmerInfo farmer) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, "/FarmerInfo"),
+      onTap: () =>
+          Navigator.pushNamed(context, "/FarmerInfo", arguments: farmer),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 18.0),
         child: Container(
@@ -138,37 +139,44 @@ class FarmersListPage extends StatelessWidget {
               )
             ],
           ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 80,
-                height: 80,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: primaryColor,
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Text(farmer.initials,
-                    style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w900,
-                        color: Colors.white)),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(farmer.fullname,
+          child: Padding(
+            padding: const EdgeInsets.only(right: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Container(
+                  width: 80,
+                  height: 80,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: primaryColor,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Text(farmer.initials,
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w900,
-                          color: HexColor("#8E8E8E"))),
-                  Text(farmer.phoneNumber),
-                ],
-              ),
-              IconButton(icon: Icon(Icons.call), onPressed: () => {})
-              // Column()
-            ],
+                          color: Colors.white)),
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(farmer.fullname,
+                        style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            color: HexColor("#8E8E8E"))),
+                    Text(farmer.phoneNumber),
+                  ],
+                ),
+                Spacer(),
+                IconButton(icon: Icon(Icons.call), onPressed: () => {})
+                // Column()
+              ],
+            ),
           ),
         ),
       ),
