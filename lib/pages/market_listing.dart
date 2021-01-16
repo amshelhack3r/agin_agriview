@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/hex_color.dart';
 import '../models/product.dart';
+import '../utils/hex_color.dart';
 
 class MarketListingPage extends StatelessWidget {
   Product product;
@@ -101,7 +101,7 @@ class MarketListingPage extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(product.name),
+              Text(product.productName),
               Text("Machakos County 10.5 Km"),
             ],
           ),
@@ -115,7 +115,8 @@ class MarketListingPage extends StatelessWidget {
 
   _buildListItem(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/ProductInfoPage'),
+      onTap: () =>
+          Navigator.pushNamed(context, '/ProductInfoPage', arguments: product),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.only(right: 10),
@@ -151,7 +152,7 @@ class MarketListingPage extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Heirloom Tomatoes",
+                Text(product.productName,
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w900,

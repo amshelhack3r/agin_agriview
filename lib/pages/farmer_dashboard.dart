@@ -96,15 +96,19 @@ class _FarmerInfoState extends State<FarmerDashboard> {
                 if (farms.length == 0) {
                   return _noFarms();
                 } else {
-                  return ListView.builder(
-                    itemCount: farms.length,
-                    itemBuilder: (context, index) {
-                      Farm info = farms[index];
-                      return _farmListItem(info);
-                    },
+                  return Expanded(
+                    child: ListView.separated(
+                      itemCount: farms.length,
+                      separatorBuilder: (context, int) => Divider(),
+                      itemBuilder: (context, index) {
+                        Farm info = farms[index];
+                        return _farmListItem(info);
+                      },
+                    ),
                   );
                 }
               } else if (snapshot.hasError) {
+                print(snapshot.error);
                 Dialogs.messageDialog(context, true, snapshot.error.toString());
                 return Container();
               } else {
@@ -244,7 +248,8 @@ class _FarmerInfoState extends State<FarmerDashboard> {
             RaisedButton(
               color: Theme.of(context).primaryColor,
               textColor: Colors.white,
-              onPressed: () {},
+              onPressed: () => Navigator.pushNamed(context, '/AddFarmPage',
+                  arguments: widget.farmer.firstName),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),

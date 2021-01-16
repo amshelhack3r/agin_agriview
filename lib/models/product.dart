@@ -1,44 +1,37 @@
 import 'dart:convert';
 
-import 'unit_type.dart';
-
 class Product {
   String fileName;
-  String UUID;
+  String uuid;
   String productName;
   int quantity;
-  String name;
   Product({
     this.fileName,
-    this.UUID,
+    this.uuid,
     this.productName,
     this.quantity,
-    this.name,
   });
 
   Product copyWith({
     String fileName,
-    String UUID,
+    String uuid,
     String productName,
     int quantity,
-    String name,
   }) {
     return Product(
       fileName: fileName ?? this.fileName,
-      UUID: UUID ?? this.UUID,
+      uuid: uuid ?? this.uuid,
       productName: productName ?? this.productName,
       quantity: quantity ?? this.quantity,
-      name: name ?? this.name,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'fileName': fileName,
-      'UUID': UUID,
+      'uuid': uuid,
       'productName': productName,
       'quantity': quantity,
-      'name': name,
     };
   }
 
@@ -47,10 +40,9 @@ class Product {
 
     return Product(
       fileName: map['fileName'],
-      UUID: map['UUID'],
+      uuid: map['UUID'],
       productName: map['productName'],
       quantity: map['quantity'],
-      name: map['name'],
     );
   }
 
@@ -61,7 +53,7 @@ class Product {
 
   @override
   String toString() {
-    return 'Product(fileName: $fileName, UUID: $UUID, productName: $productName, quantity: $quantity, name: $name)';
+    return 'Product(fileName: $fileName, uuid: $uuid, productName: $productName, quantity: $quantity)';
   }
 
   @override
@@ -70,18 +62,16 @@ class Product {
 
     return o is Product &&
         o.fileName == fileName &&
-        o.UUID == UUID &&
+        o.uuid == uuid &&
         o.productName == productName &&
-        o.quantity == quantity &&
-        o.name == name;
+        o.quantity == quantity;
   }
 
   @override
   int get hashCode {
     return fileName.hashCode ^
-        UUID.hashCode ^
+        uuid.hashCode ^
         productName.hashCode ^
-        quantity.hashCode ^
-        name.hashCode;
+        quantity.hashCode;
   }
 }

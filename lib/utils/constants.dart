@@ -32,3 +32,5 @@ const PREF_HAS_LOGGED_IN = "has_logged_in";
 const PREF_DB_HAS_INITIALIZED = "db_initilized";
 
 const APIKEY = "e9567a76cc5f4da191a97945ba37b63a";
+const MAPBOX_TOKEN =
+    "sk.eyJ1IjoiYW1zaGVsIiwiYSI6ImNranpreHhtZzA4bDgycHJydHF5bDM0ankifQ.iMqEwe2AcYjHrRD1lEsv7w";

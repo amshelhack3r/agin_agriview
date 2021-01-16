@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
 
-import '../utils/hex_color.dart';
+import '../core/repository/api_repository.dart';
 import '../models/product.dart';
+import '../utils/hex_color.dart';
+import 'elements/dialogs.dart';
 
 class MarketPlaceList extends StatelessWidget {
+  final _apiRepo = ApiRepository();
   MarketPlaceList({Key key}) : super(key: key);
   var width;
   var primaryColor;
-  final List products = [
-    Product(name: "strawberry"),
-    Product(name: "watermelon"),
-    Product(name: "pineapples"),
-    Product(name: "oranges"),
-    Product(name: "bananas"),
-    Product(name: "lemons"),
-    Product(name: "pawpaw"),
-  ];
+
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width;
@@ -34,19 +29,37 @@ class MarketPlaceList extends StatelessWidget {
               child: _buildSelector(),
             ),
             SizedBox(height: 30),
-            Expanded(
-              child: GridView.builder(
-                shrinkWrap: true,
-                itemCount: products.length,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10),
-                itemBuilder: (context, index) {
-                  Product p = products[index];
-                  return _buildListItem(p, context);
-                },
-              ),
+            FutureBuilder(
+              future: _apiRepo.fetchProduce(),
+              builder: (context, AsyncSnapshot<List<Product>> snapshot) {
+                print(snapshot.data);
+                if (snapshot.hasData) {
+                  return Expanded(
+                    child: GridView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data.length,
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3,
+                          crossAxisSpacing: 10,
+                          mainAxisSpacing: 10),
+                      itemBuilder: (context, index) {
+                        Product p = snapshot.data[index];
+                        return _buildListItem(p, context);
+                      },
+                    ),
+                  );
+                } else if (snapshot.hasError) {
+                  Dialogs.messageDialog(
+                      context, true, snapshot.error.toString());
+                  return Container();
+                } else {
+                  return Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+              },
             ),
           ],
         ),
@@ -129,11 +142,15 @@ class MarketPlaceList extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Image.asset(
-                "assets/images/${product.name}.png",
+              Image.network(
+                product.fileName,
                 width: 100,
               ),
-              Text(product.name),
+              Expanded(
+                  child: Text(
+                product.productName,
+                textAlign: TextAlign.center,
+              )),
             ],
           )),
     );

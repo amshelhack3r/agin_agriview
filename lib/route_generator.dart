@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'pages/add_farm.dart';
 import 'pages/authstate.dart';
 import 'pages/farmer_dashboard.dart';
 import 'pages/home.dart';
@@ -30,13 +31,20 @@ class RouteGenerator {
         return fadeAnimation(MarketListingPage(args));
 
       case '/ProductInfoPage':
-        return fadeAnimation(ProductInfo());
+        return fadeAnimation(ProductInfo(args));
 
       case '/RegisterFarmerPage':
         return fadeAnimation(RegisterFarmerPage());
 
       case '/FarmerInfo':
         return fadeAnimation(FarmerDashboard(args));
+
+      case '/AddFarmPage':
+        return fadeAnimation(
+          AddFarm(
+            name: args,
+          ),
+        );
 
       default:
         return MaterialPageRoute(

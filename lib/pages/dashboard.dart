@@ -1,8 +1,11 @@
+import 'package:AgriView/utils/transition.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../state/user_provider.dart';
 import '../utils/hex_color.dart';
+import 'authstate.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key key}) : super(key: key);
@@ -186,7 +189,7 @@ class _DashboardPageState extends State<DashboardPage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
                   context.watch<UserProvider>().fullname,
@@ -195,13 +198,23 @@ class _DashboardPageState extends State<DashboardPage> {
                       fontSize: 20,
                       fontWeight: FontWeight.w800),
                 ),
+                Spacer(),
                 IconButton(
-                    icon: Icon(
-                      Icons.notifications,
-                      color: Colors.white,
-                      size: 40,
-                    ),
-                    onPressed: () {})
+                  icon: Icon(
+                    Icons.notifications,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                    size: 30,
+                  ),
+                  onPressed: () => _logout(),
+                )
               ],
             ),
           ),
@@ -278,5 +291,12 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
     );
+  }
+
+  _logout() async {
+    var prefs = await SharedPreferences.getInstance();
+    if (await prefs.clear()) {
+      Navigator.pushNamed(context, '/AuthPage');
+    }
   }
 }

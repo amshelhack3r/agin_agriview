@@ -9,7 +9,7 @@ class DatabaseProvider with ChangeNotifier {
   List<CultivationMode> _mode;
   List<UnitType> _types;
 
-  get county => _county;
+  List<County> get county => _county;
   get modes => _mode;
   get unitType => _types;
 

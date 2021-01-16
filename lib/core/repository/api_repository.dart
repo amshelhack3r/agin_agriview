@@ -5,6 +5,7 @@ import '../../models/cultivation_mode.dart';
 import '../../models/farm.dart';
 import '../../models/farmer_info.dart';
 import '../../models/login_object.dart';
+import '../../models/product.dart';
 import '../../models/unit_type.dart';
 import '../../utils/constants.dart';
 import '../api/api_provider.dart';
@@ -105,6 +106,17 @@ class ApiRepository extends Repository {
       return results.right.map((farm) => Farm.fromMap(farm)).toList();
     } else {
       throw results.left;
+    }
+  }
+
+  Future<List<Product>> fetchProduce() async {
+    var result = await _apiProvider.fetchProduce();
+
+    if (result.isRight) {
+      print(result.right);
+      return result.right.map((product) => Product.fromMap(product)).toList();
+    } else {
+      throw result.left;
     }
   }
 }

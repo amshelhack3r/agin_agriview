@@ -92,9 +92,9 @@ class _$AgriviewDatabase extends AgriviewDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `county` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `countyID` INTEGER, `countyName` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `farm` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `farmName` TEXT, `farmLocation` TEXT, `currentLandUse` TEXT, `producerAginId` TEXT, `lat` TEXT, `lon` TEXT, `acreageMapped` INTEGER, `acreageApproved` INTEGER)');
+            'CREATE TABLE IF NOT EXISTS `farm` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `farmName` TEXT, `farmLocation` TEXT, `currentLandUse` TEXT, `landAginId` TEXT, `lat` TEXT, `lon` TEXT, `acreageMapped` INTEGER, `acreageApproved` INTEGER)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `farmer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `firstName` TEXT, `lastName` TEXT, `phoneNumber` TEXT, `userAginID` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `farmer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `firstName` TEXT, `lastName` TEXT, `phoneNumber` TEXT, `userAginID` TEXT, `createdat` TEXT)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `product` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fileName` TEXT, `UUID` TEXT, `productName` TEXT, `quantity` INTEGER, `name` TEXT)');
         await database.execute(
@@ -209,7 +209,7 @@ class _$FarmDao extends FarmDao {
                   'farmName': item.farmName,
                   'farmLocation': item.farmLocation,
                   'currentLandUse': item.currentLandUse,
-                  'producerAginId': item.producerAginId,
+                  'landAginId': item.landAginId,
                   'lat': item.lat,
                   'lon': item.lon,
                   'acreageMapped': item.acreageMapped,
@@ -247,7 +247,8 @@ class _$FarmerDao extends FarmerDao {
                   'firstName': item.firstName,
                   'lastName': item.lastName,
                   'phoneNumber': item.phoneNumber,
-                  'userAginID': item.userAginID
+                  'userAginID': item.userAginID,
+                  'createdat': item.createdat
                 });
 
   final sqflite.DatabaseExecutor database;

@@ -4,7 +4,7 @@ class Farm {
   String farmName;
   String farmLocation;
   String currentLandUse;
-  String producerAginId;
+  String landAginId;
   String lat;
   String lon;
   int acreageMapped;
@@ -13,7 +13,7 @@ class Farm {
     this.farmName,
     this.farmLocation,
     this.currentLandUse,
-    this.producerAginId,
+    this.landAginId,
     this.lat,
     this.lon,
     this.acreageMapped,
@@ -24,7 +24,7 @@ class Farm {
     String farmName,
     String farmLocation,
     String currentLandUse,
-    String producerAginId,
+    String landAginId,
     String lat,
     String lon,
     int acreageMapped,
@@ -34,7 +34,7 @@ class Farm {
       farmName: farmName ?? this.farmName,
       farmLocation: farmLocation ?? this.farmLocation,
       currentLandUse: currentLandUse ?? this.currentLandUse,
-      producerAginId: producerAginId ?? this.producerAginId,
+      landAginId: landAginId ?? this.landAginId,
       lat: lat ?? this.lat,
       lon: lon ?? this.lon,
       acreageMapped: acreageMapped ?? this.acreageMapped,
@@ -47,7 +47,7 @@ class Farm {
       'farmName': farmName,
       'farmLocation': farmLocation,
       'currentLandUse': currentLandUse,
-      'producerAginId': producerAginId,
+      'landAginId': landAginId,
       'lat': lat,
       'lon': lon,
       'acreageMapped': acreageMapped,
@@ -62,7 +62,7 @@ class Farm {
       farmName: map['farmName'],
       farmLocation: map['farmLocation'],
       currentLandUse: map['currentLandUse'],
-      producerAginId: map['producerAginId'],
+      landAginId: map['landAginId'],
       lat: map['lat'],
       lon: map['lon'],
       acreageMapped: map['acreageMapped'],
@@ -76,7 +76,7 @@ class Farm {
 
   @override
   String toString() {
-    return 'Farm(farmName: $farmName, farmLocation: $farmLocation, currentLandUse: $currentLandUse, producerAginId: $producerAginId, lat: $lat, lon: $lon, acreageMapped: $acreageMapped, acreageApproved: $acreageApproved)';
+    return 'Farm(farmName: $farmName, farmLocation: $farmLocation, currentLandUse: $currentLandUse, landAginId: $landAginId, lat: $lat, lon: $lon, acreageMapped: $acreageMapped, acreageApproved: $acreageApproved)';
   }
 
   @override
@@ -87,7 +87,7 @@ class Farm {
         o.farmName == farmName &&
         o.farmLocation == farmLocation &&
         o.currentLandUse == currentLandUse &&
-        o.producerAginId == producerAginId &&
+        o.landAginId == landAginId &&
         o.lat == lat &&
         o.lon == lon &&
         o.acreageMapped == acreageMapped &&
@@ -99,7 +99,7 @@ class Farm {
     return farmName.hashCode ^
         farmLocation.hashCode ^
         currentLandUse.hashCode ^
-        producerAginId.hashCode ^
+        landAginId.hashCode ^
         lat.hashCode ^
         lon.hashCode ^
         acreageMapped.hashCode ^
