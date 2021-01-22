@@ -96,7 +96,7 @@ class _$AgriviewDatabase extends AgriviewDatabase {
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `farmer` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `firstName` TEXT, `lastName` TEXT, `phoneNumber` TEXT, `userAginID` TEXT, `createdat` TEXT)');
         await database.execute(
-            'CREATE TABLE IF NOT EXISTS `product` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fileName` TEXT, `UUID` TEXT, `productName` TEXT, `quantity` INTEGER, `name` TEXT)');
+            'CREATE TABLE IF NOT EXISTS `product` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `fileName` TEXT, `uuid` TEXT, `productName` TEXT, `quantity` INTEGER)');
         await database.execute(
             'CREATE TABLE IF NOT EXISTS `unit_types` (`id` INTEGER PRIMARY KEY AUTOINCREMENT, `unitTypeID` INTEGER, `unitTypeName` TEXT)');
         await database.execute(
@@ -280,10 +280,9 @@ class _$ProductDao extends ProductDao {
             (ProduceEntity item) => <String, dynamic>{
                   'id': item.id,
                   'fileName': item.fileName,
-                  'UUID': item.UUID,
+                  'uuid': item.uuid,
                   'productName': item.productName,
-                  'quantity': item.quantity,
-                  'name': item.name
+                  'quantity': item.quantity
                 });
 
   final sqflite.DatabaseExecutor database;

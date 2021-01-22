@@ -188,12 +188,14 @@ class _RegisterFarmerPageState extends State<RegisterFarmerPage> {
       setState(() {
         isValid = false;
         firstNameError = "This input cannot be empty";
+        isLoading = false;
       });
       return;
     }
     if (lastName.text.isEmpty) {
       setState(() {
         isValid = false;
+        isLoading = false;
         lastNameError = "This input cannot be empty";
       });
       return;
@@ -201,6 +203,7 @@ class _RegisterFarmerPageState extends State<RegisterFarmerPage> {
     if (mobile.text.isEmpty) {
       setState(() {
         isValid = false;
+        isLoading = false;
         mobileNameError = "This input cannot be empty";
       });
       return;

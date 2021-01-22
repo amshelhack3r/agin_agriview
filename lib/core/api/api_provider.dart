@@ -148,18 +148,16 @@ class ApiProvider {
     }
   }
 
-  Future<Message> createFarm(Map params) async {
+  Future<bool> createFarm(Map params) async {
     try {
       final http.Response response = await http.post(
         buildUrl(CREATE_FARM),
         headers: jsonHeaders,
         body: jsonEncode(params),
       );
-      if (response.statusCode == 201) {
-        return Message.fromJson(json.decode(response.body));
-      } else {
-        throw ApiException(json.decode(response.body));
-      }
+      return (response.statusCode == 201)
+          ? true
+          : throw ApiException(json.decode(response.body));
     } on SocketException {
       throw MySocketException();
     }

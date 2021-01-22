@@ -42,7 +42,7 @@ class RouteGenerator {
       case '/AddFarmPage':
         return fadeAnimation(
           AddFarm(
-            name: args,
+            farmer: args,
           ),
         );
 

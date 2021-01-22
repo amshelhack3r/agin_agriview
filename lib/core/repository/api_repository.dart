@@ -119,4 +119,9 @@ class ApiRepository extends Repository {
       throw result.left;
     }
   }
+
+  Future<bool> addFarm(Map params) async {
+    var results = await _apiProvider.createFarm(params);
+    return results;
+  }
 }

@@ -15,6 +15,7 @@ class FarmerDashboard extends StatefulWidget {
 
 class _FarmerInfoState extends State<FarmerDashboard> {
   final _apiRepo = ApiRepository();
+  int farms = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,16 +93,16 @@ class _FarmerInfoState extends State<FarmerDashboard> {
             future: _apiRepo.fetchFarm(widget.farmer.userAginID),
             builder: (context, AsyncSnapshot<List<Farm>> snapshot) {
               if (snapshot.hasData) {
-                List<Farm> farms = snapshot.data;
-                if (farms.length == 0) {
+                List<Farm> farmsList = snapshot.data;
+                if (farmsList.length == 0) {
                   return _noFarms();
                 } else {
                   return Expanded(
                     child: ListView.separated(
-                      itemCount: farms.length,
+                      itemCount: farmsList.length,
                       separatorBuilder: (context, int) => Divider(),
                       itemBuilder: (context, index) {
-                        Farm info = farms[index];
+                        Farm info = farmsList[index];
                         return _farmListItem(info);
                       },
                     ),
@@ -124,8 +125,12 @@ class _FarmerInfoState extends State<FarmerDashboard> {
       floatingActionButton: FloatingActionButton(
           backgroundColor: Theme.of(context).primaryColor,
           child: Icon(Icons.add),
-          onPressed: () {}),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+          onPressed: () => Navigator.pushNamed(
+                context,
+                '/AddFarmPage',
+                arguments: widget.farmer,
+              )),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 
@@ -249,7 +254,7 @@ class _FarmerInfoState extends State<FarmerDashboard> {
               color: Theme.of(context).primaryColor,
               textColor: Colors.white,
               onPressed: () => Navigator.pushNamed(context, '/AddFarmPage',
-                  arguments: widget.farmer.firstName),
+                  arguments: widget.farmer),
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
