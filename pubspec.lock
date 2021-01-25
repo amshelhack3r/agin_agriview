@@ -92,20 +92,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.1.0"
-  camera:
-    dependency: "direct main"
-    description:
-      name: camera
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
-  camera_platform_interface:
-    dependency: transitive
-    description:
-      name: camera_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.0"
   characters:
     dependency: transitive
     description:
@@ -162,13 +148,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  cross_file:
-    dependency: transitive
-    description:
-      name: cross_file
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.0"
   crypto:
     dependency: transitive
     description:
@@ -581,13 +560,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.99"
-  sms_otp_auto_verify:
-    dependency: "direct main"
-    description:
-      name: sms_otp_auto_verify
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.2.2"
   source_gen:
     dependency: transitive
     description:

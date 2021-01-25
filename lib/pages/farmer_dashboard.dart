@@ -268,43 +268,57 @@ class _FarmerInfoState extends State<FarmerDashboard> {
   }
 
   _farmListItem(Farm farm) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Material(
-        elevation: 10,
-        borderRadius: BorderRadius.circular(20),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Image.asset(
-                "assets/images/farms.png",
-                width: 70,
-              ),
-              SizedBox(
-                width: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    farm.farmName,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    farm.farmLocation,
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
-                  ),
-                ],
-              ),
-              Spacer(),
-              Icon(Icons.chevron_right),
-              SizedBox(
-                width: 10,
-              ),
-            ],
+    Map<String, dynamic> params = {
+      "farm": farm,
+      "producerAginId": widget.farmer.userAginID
+    };
+
+    return GestureDetector(
+      onTap: () => Navigator.pushNamed(
+        context,
+        '/ProducePage',
+        arguments: params,
+      ),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        child: Material(
+          elevation: 10,
+          borderRadius: BorderRadius.circular(20),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/farms.png",
+                  width: 70,
+                ),
+                SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      farm.farmName,
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    ),
+                    Text(
+                      farm.farmLocation,
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+                Spacer(),
+                Icon(Icons.chevron_right),
+                SizedBox(
+                  width: 10,
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -1,11 +1,11 @@
-import 'package:AgriView/utils/transition.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+// import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../state/user_provider.dart';
+import '../utils/failure.dart';
 import '../utils/hex_color.dart';
-import 'authstate.dart';
 
 class DashboardPage extends StatefulWidget {
   DashboardPage({Key key}) : super(key: key);
@@ -138,18 +138,30 @@ class _DashboardPageState extends State<DashboardPage> {
             height: 20,
           ),
           Expanded(
-              child: Container(
-            alignment: Alignment.center,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                border: Border.all(color: Theme.of(context).primaryColor),
-                borderRadius: BorderRadius.circular(10.0)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset("assets/images/sell_input.png"),
-                Text("Sell Inputs"),
-              ],
+              child: GestureDetector(
+            onTap: () async {
+              try {
+                aMethodThatMightFail();
+              } catch (exception, stackTrace) {
+                // await Sentry.captureException(
+                //   exception,
+                //   stackTrace: stackTrace,
+                // );
+              }
+            },
+            child: Container(
+              alignment: Alignment.center,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  border: Border.all(color: Theme.of(context).primaryColor),
+                  borderRadius: BorderRadius.circular(10.0)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset("assets/images/sell_input.png"),
+                  Text("Sell Inputs"),
+                ],
+              ),
             ),
           ))
         ],
@@ -298,5 +310,9 @@ class _DashboardPageState extends State<DashboardPage> {
     if (await prefs.clear()) {
       Navigator.pushNamed(context, '/AuthPage');
     }
+  }
+
+  void aMethodThatMightFail() {
+    throw ApiException({"message": "something happened"});
   }
 }

@@ -5,6 +5,7 @@ import 'pages/authstate.dart';
 import 'pages/farmer_dashboard.dart';
 import 'pages/home.dart';
 import 'pages/market_listing.dart';
+import 'pages/produce_page.dart';
 import 'pages/product_single.dart';
 import 'pages/register_farmer.dart';
 import 'pages/splash.dart';
@@ -44,6 +45,11 @@ class RouteGenerator {
           AddFarm(
             farmer: args,
           ),
+        );
+
+      case '/ProducePage':
+        return fadeAnimation(
+          ProducePage(args),
         );
 
       default:

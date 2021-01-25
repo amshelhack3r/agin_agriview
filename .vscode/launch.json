@@ -6,6 +6,8 @@
     "configurations": [{
         "name": "agriview-flutter-repo",
         "request": "launch",
-        "type": "dart"
+        "type": "dart",
+        "console": "terminal",
+        "flutterMode": "debug",
     }]
 }
