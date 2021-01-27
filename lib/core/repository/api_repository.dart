@@ -64,6 +64,11 @@ class ApiRepository extends Repository {
     }
   }
 
+  Future<List<dynamic>> fetchLandProduce(String landAginID) async {
+    var result = await _apiProvider.fetchProduceByLandAgin(landAginID);
+    return result.map((entry) => entry['productUuid']).toList();
+  }
+
   Future<List<FarmerInfo>> fetchFarmers(String aginId) async {
     var result = await _apiProvider.fetchFarmers(aginId);
     if (result.isRight) {
@@ -113,7 +118,6 @@ class ApiRepository extends Repository {
     var result = await _apiProvider.fetchProduce();
 
     if (result.isRight) {
-      print(result.right);
       return result.right.map((product) => Product.fromMap(product)).toList();
     } else {
       throw result.left;

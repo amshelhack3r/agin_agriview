@@ -52,7 +52,6 @@ class ApiProvider {
         body: jsonEncode(params),
       );
       var body = response.body;
-      print(body);
       if (response.statusCode == 200) {
         return Right(json.decode(response.body));
       } else {
@@ -320,7 +319,7 @@ class ApiProvider {
     }
   }
 
-  Future<List<Map>> fetchProduceByLandAgin(String landAginID) async {
+  Future<List<dynamic>> fetchProduceByLandAgin(String landAginID) async {
     try {
       final response = await client.post(
         buildUrl(GET_PRODUCE),
@@ -334,6 +333,8 @@ class ApiProvider {
         // then parse the JSON.
         final items = json.decode(response.body).cast<Map<String, dynamic>>();
         return items;
+      } else if (response.statusCode == 404) {
+        return List.empty();
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.

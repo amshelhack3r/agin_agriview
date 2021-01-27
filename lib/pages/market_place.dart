@@ -32,7 +32,6 @@ class MarketPlaceList extends StatelessWidget {
             FutureBuilder(
               future: _apiRepo.fetchProduce(),
               builder: (context, AsyncSnapshot<List<Product>> snapshot) {
-                print(snapshot.data);
                 if (snapshot.hasData) {
                   return Expanded(
                     child: GridView.builder(

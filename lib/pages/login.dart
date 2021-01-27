@@ -114,7 +114,6 @@ class _LoginFormState extends State<LoginForm> {
         };
         Navigator.pushNamed(context, "/HomePage");
       }).catchError((err) {
-        print(err);
         Dialogs.messageDialog(context, true, err.message['message']);
         setState(() {
           isLoggingIn = !isLoggingIn;

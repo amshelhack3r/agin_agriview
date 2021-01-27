@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-// import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../core/repository/api_repository.dart';
@@ -23,23 +25,96 @@ class _AddFarmState extends State<AddFarm> {
   var farmLocationController = TextEditingController();
   var farmUseController = TextEditingController();
   final _apiRepository = ApiRepository();
+  LatLng _latLon;
   bool isValid = true;
   String farmNameError;
   String farmLocationError;
   String farmUseError;
+  bool isShown = true;
+  GlobalKey<ScaffoldMessengerState> _scaffoldMessangerKey = GlobalKey();
+
+  bool serviceEnabled;
+  LocationPermission permission;
+
+  Completer<GoogleMapController> _controller = Completer();
+
+  Future<Position> init() async {
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permantly denied, we cannot request permissions.');
+    }
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        return Future.error(
+            'Location permissions are denied (actual value: $permission).');
+      }
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
-      child: Container(
-        color: Colors.white70,
-        height: MediaQuery.of(context).size.height,
-        child: Center(
-            child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: _buildForm(),
-        )),
+        body: ScaffoldMessenger(
+      key: _scaffoldMessangerKey,
+      child: SafeArea(
+        child: Container(
+          color: Colors.white70,
+          height: MediaQuery.of(context).size.height,
+          child: Stack(
+            children: [
+              FutureBuilder(
+                  future: init(),
+                  builder: (context, AsyncSnapshot<Position> snapshot) {
+                    if (snapshot.hasData) {
+                      var _position = snapshot.data;
+                      return GoogleMap(
+                        mapType: MapType.hybrid,
+                        initialCameraPosition: CameraPosition(
+                          target:
+                              LatLng(_position.latitude, _position.longitude),
+                          zoom: 14,
+                        ),
+                        onMapCreated: (GoogleMapController controller) {
+                          _controller.complete(controller);
+                        },
+                        onLongPress: (LatLng pos) {
+                          setState(() {
+                            _latLon = pos;
+                            isShown = true;
+                          });
+                        },
+                      );
+                    } else if (snapshot.hasError) {
+                      print(snapshot.error.toString());
+                      return Container();
+                    } else {
+                      return Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  }),
+              isShown
+                  ? Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: _buildForm(),
+                      ),
+                    )
+                  : Container(),
+            ],
+          ),
+        ),
       ),
     )
         // MapboxMap(
@@ -91,6 +166,18 @@ class _AddFarmState extends State<AddFarm> {
                   ),
                 ),
               ),
+              (_latLon == null)
+                  ? Container()
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("lat ${_latLon.latitude.toString()}"),
+                          Text("lon ${_latLon.longitude.toString()}"),
+                        ],
+                      ),
+                    ),
               SizedBox(
                 height: 20,
               ),
@@ -122,7 +209,15 @@ class _AddFarmState extends State<AddFarm> {
                     textColor: Colors.white,
                     elevation: 10,
                     padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                    onPressed: () => {},
+                    onPressed: () {
+                      setState(() {
+                        isShown = false;
+                      });
+
+                      _scaffoldMessangerKey.currentState.showSnackBar(SnackBar(
+                        content: Text("Long Press to set location"),
+                      ));
+                    },
                     child: Text(
                       'Map',
                       style:

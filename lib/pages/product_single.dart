@@ -29,7 +29,6 @@ class _ProductInfoState extends State<ProductInfo> {
               SizedBox(height: 30),
               _buildSecondCard(),
               SizedBox(height: 30),
-              _buildThirdCard()
             ],
           ),
         ),
@@ -180,79 +179,4 @@ class _ProductInfoState extends State<ProductInfo> {
       ),
     );
   }
-
-  _buildThirdCard() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        buildCard(Icons.local_grocery_store, "Purchase", _doSth(), "Market"),
-        buildCard(
-            Icons.insert_invitation, "Book Visit", _doSth(), "Select Date"),
-      ],
-    );
-  }
-
-  buildCard(IconData data, String title, Function onTap, String btnText) {
-    var size = MediaQuery.of(context).size.width / 2;
-    return Container(
-        width: size - 50,
-        height: size - 50,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).primaryColor,
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-              offset: Offset(2.0, 2.0), // shadow direction: bottom right
-            )
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Icon(
-                  data,
-                  color: Theme.of(context).primaryColor,
-                  size: 50,
-                ),
-                Text(
-                  title,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 20,
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18.0),
-              child: GestureDetector(
-                onTap: () => onTap,
-                child: Material(
-                  borderRadius: BorderRadius.circular(20),
-                  elevation: 10,
-                  color: Theme.of(context).primaryColor,
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: double.infinity,
-                    height: 40,
-                    child: Text(
-                      btnText,
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ),
-            )
-          ],
-        ));
-  }
-
-  Function _doSth() {}
 }
