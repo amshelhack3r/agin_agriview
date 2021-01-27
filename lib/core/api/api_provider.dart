@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
+import 'package:fimber/fimber.dart';
 
 import '../../models/message.dart';
 import '../../utils/constants.dart';
@@ -24,7 +25,7 @@ class ApiProvider {
         data: jsonEncode(params),
       );
       if (response.statusCode == 201) {
-        return Right(Message.fromJson(json.decode(response.data)));
+        return Right(Message.fromJson(response.data));
       } else {
         final Map errorParams = {
           'status': response.statusCode,
@@ -38,17 +39,15 @@ class ApiProvider {
   }
 
   Future<Either<Failure, Map>> loginAggregator(Map params) async {
-    dio.options.headers = {'Content-Type': 'application/json'};
     try {
       var response = await dio.post(
         AGGREGATOR_LOGIN,
         data: jsonEncode(params),
       );
-      var data = response.data;
       if (response.statusCode == 200) {
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else {
-        return Left(ApiException(json.decode(response.data)));
+        return Left(ApiException(response.data));
       }
     } on SocketException {
       throw MySocketException();
@@ -65,7 +64,7 @@ class ApiProvider {
           'productUUID': productUUID,
         }),
       );
-      return Message.fromJson(json.decode(response.data));
+      return Message.fromJson(response.data);
     } on SocketException {
       throw MySocketException();
     }
@@ -80,7 +79,7 @@ class ApiProvider {
         }),
       );
       if (response.statusCode == 200) {
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else {
         final Map errorParams = {
           'status': response.statusCode,
@@ -104,7 +103,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(jsonDecode(response.data));
+        return Right(response.data);
       } else {
         Left(ApiException({
           'status': response.statusCode,
@@ -124,7 +123,7 @@ class ApiProvider {
       );
       return (response.statusCode == 201)
           ? true
-          : throw ApiException(json.decode(response.data));
+          : throw ApiException(response.data);
     } on SocketException {
       throw MySocketException();
     }
@@ -162,7 +161,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -182,7 +181,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -200,7 +199,7 @@ class ApiProvider {
     try {
       final response = await dio.get(PRODUCT_STATUS);
       if (response.statusCode == 200) {
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -221,7 +220,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -241,7 +240,7 @@ class ApiProvider {
         ADD_PRODUCE,
         data: jsonEncode(params),
       );
-      return Message.fromJson(json.decode(response.data));
+      return Message.fromJson(response.data);
     } on SocketException {
       throw MySocketException();
     }
@@ -260,7 +259,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -285,7 +284,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        final items = json.decode(response.data).cast<Map<String, dynamic>>();
+        final items = response.data.cast<Map<String, dynamic>>();
         return items;
       } else if (response.statusCode == 404) {
         return List.empty();
@@ -302,12 +301,13 @@ class ApiProvider {
     }
   }
 
-  Future<Either<Failure, List>> fetchCounty() async {
+  Future<Either<Failure, List<dynamic>>> fetchCounty() async {
     try {
       var response = await dio.get(COUNTY_LIST);
 
       if (response.statusCode == 200) {
-        return Right(jsonDecode(response.data));
+        Fimber.d(response.data.toString());
+        return Right(response.data);
       } else {
         return Left(ApiException({
           'status': response.statusCode,
@@ -326,12 +326,10 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else {
-        return Left(ApiException({
-          'status': response.statusCode,
-          'message': jsonDecode(response.data)
-        }));
+        return Left(ApiException(
+            {'status': response.statusCode, 'message': response.data}));
       }
     } on SocketException {
       throw MySocketException();
@@ -349,7 +347,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.data));
+        return Right(response.data);
       } else if (response.statusCode == 404) {
         return Right(List.empty());
       } else {

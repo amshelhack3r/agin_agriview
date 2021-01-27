@@ -20,7 +20,12 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
 
+  Fimber.i('setting up locators');
+
   await setupLocator();
+
+  Fimber.i('finished setting up locators');
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),

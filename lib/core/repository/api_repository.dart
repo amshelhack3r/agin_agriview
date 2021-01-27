@@ -15,11 +15,11 @@ import 'repository.dart';
 class ApiRepository extends Repository {
   @override
   String getType() => 'api';
-  ApiProvider _apiProvider;
-  ApiRepository(this._apiProvider);
+  ApiProvider api;
+  ApiRepository({this.api});
 
   Future<AggregatorLoginObject> loginUser(Map params) async {
-    var result = await _apiProvider.loginAggregator(params);
+    var result = await api.loginAggregator(params);
 
     if (result.isRight) {
       //save user to shared preferences
@@ -41,13 +41,13 @@ class ApiRepository extends Repository {
   }
 
   Future createUser(Map params) async {
-    var result = await _apiProvider.createAggregator(params);
+    var result = await api.createAggregator(params);
 
     return (result.isRight) ? "User Created Successfully" : result.left.message;
   }
 
   Future<List<County>> fetchCounty() async {
-    var result = await _apiProvider.fetchCounty();
+    var result = await api.fetchCounty();
 
     if (result.isRight) {
       return result.right.map((county) => County.fromMap(county)).toList();
@@ -57,12 +57,12 @@ class ApiRepository extends Repository {
   }
 
   Future<List<dynamic>> fetchLandProduce(String landAginID) async {
-    var result = await _apiProvider.fetchProduceByLandAgin(landAginID);
+    var result = await api.fetchProduceByLandAgin(landAginID);
     return result.map((entry) => entry['productUuid']).toList();
   }
 
   Future<List<FarmerInfo>> fetchFarmers(String aginId) async {
-    var result = await _apiProvider.fetchFarmers(aginId);
+    var result = await api.fetchFarmers(aginId);
     if (result.isRight) {
       return result.right.map((farmer) => FarmerInfo.fromMap(farmer)).toList();
     } else {
@@ -71,12 +71,12 @@ class ApiRepository extends Repository {
   }
 
   Future<bool> registerFarmer(Map params) async {
-    var result = await _apiProvider.createFarmer(params);
+    var result = await api.createFarmer(params);
     return (result == 201);
   }
 
   Future<List<CultivationMode>> fetchCultivationModes() async {
-    var result = await _apiProvider.fetchCultivationModeOptions();
+    var result = await api.fetchCultivationModeOptions();
 
     if (result.isRight) {
       return result.right.map((mode) => CultivationMode.fromMap(mode)).toList();
@@ -86,7 +86,7 @@ class ApiRepository extends Repository {
   }
 
   Future<List<UnitType>> fetchUnitTypes() async {
-    var result = await _apiProvider.fetchUnitTypeOptions();
+    var result = await api.fetchUnitTypeOptions();
     if (result.isRight) {
       return result.right
           .map((unitType) => UnitType.fromMap(unitType))
@@ -97,7 +97,7 @@ class ApiRepository extends Repository {
   }
 
   Future<List<Farm>> fetchFarm(String userAginID) async {
-    var results = await _apiProvider.fetchFarms(userAginID);
+    var results = await api.fetchFarms(userAginID);
 
     if (results.isRight) {
       return results.right.map((farm) => Farm.fromMap(farm)).toList();
@@ -107,7 +107,7 @@ class ApiRepository extends Repository {
   }
 
   Future<List<Product>> fetchProduce() async {
-    var result = await _apiProvider.fetchProduce();
+    var result = await api.fetchProduce();
 
     if (result.isRight) {
       return result.right.map((product) => Product.fromMap(product)).toList();
@@ -117,7 +117,7 @@ class ApiRepository extends Repository {
   }
 
   Future<bool> addFarm(Map params) async {
-    var results = await _apiProvider.createFarm(params);
+    var results = await api.createFarm(params);
     return results;
   }
 }

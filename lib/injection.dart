@@ -12,11 +12,11 @@ final getIt = GetIt.instance;
 Future<void> setupLocator() async {
   setupDioModule();
 
-  getIt
-      .registerSingletonWithDependencies(() => ApiProvider(), dependsOn: [Dio]);
+  getIt.registerSingletonAsync(() async => ApiProvider(dio: getIt()),
+      dependsOn: [Dio]);
 
-  getIt.registerSingleton<ApiRepository>(
-      ApiRepository(getIt.get<ApiProvider>()));
+  getIt.registerSingletonWithDependencies(() => ApiRepository(api: getIt()),
+      dependsOn: [ApiProvider]);
 
   final sharedPrefs = await SharedPreferences.getInstance();
   getIt.registerSingleton(sharedPrefs);
@@ -27,7 +27,7 @@ void setupDioModule() {
   BaseOptions options = BaseOptions(
     headers: {
       "X-AGIN-API-Key-Token": APIKEY,
-      "Content-Type": 'application/json'
+      // "Content-Type": 'application/json'
     },
     baseUrl: BASEURL,
     connectTimeout: 7000,
@@ -57,5 +57,5 @@ void setupDioModule() {
 //     }
 // ));
 
-  getIt.registerSingleton(dio);
+  getIt.registerSingletonAsync(() async => dio);
 }
