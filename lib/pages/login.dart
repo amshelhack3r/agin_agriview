@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../state/user_provider.dart';
 import 'elements/dialogs.dart';
 
@@ -106,7 +106,7 @@ class _LoginFormState extends State<LoginForm> {
         isLoggingIn = !isLoggingIn;
       });
 
-      GetIt.I.get<ApiRepository>().loginUser(params).then((value) {
+      getIt.get<ApiRepository>().loginUser(params).then((value) {
         Provider.of<UserProvider>(context, listen: false).defaultUser = {
           "fullname": value.fullName,
           "aginId": value.youthAGINID,

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 // import 'package:url_launcher/url_launcher.dart';
 
 import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../models/farmer_info.dart';
 import '../state/user_provider.dart';
 import '../utils/hex_color.dart';
@@ -30,7 +30,7 @@ class FarmersListPage extends StatelessWidget {
             _buildHeader(),
             SizedBox(height: 50),
             FutureBuilder(
-                future: GetIt.I.get<ApiRepository>().fetchFarmers(aginId),
+                future: getIt.get<ApiRepository>().fetchFarmers(aginId),
                 builder: (context, AsyncSnapshot<List<FarmerInfo>> snapshot) {
                   if (snapshot.hasData) {
                     var farmers = snapshot.data;

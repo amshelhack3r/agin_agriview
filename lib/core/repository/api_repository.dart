@@ -46,13 +46,6 @@ class ApiRepository extends Repository {
     return (result.isRight) ? "User Created Successfully" : result.left.message;
   }
 
-  Future verifyUser(Map params) async {
-    var result = await _apiProvider.verifyAccount(
-        params["phoneNumber"], params["verifyCode"]);
-
-    return result;
-  }
-
   Future<List<County>> fetchCounty() async {
     var result = await _apiProvider.fetchCounty();
 

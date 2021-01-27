@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../models/county.dart';
 import '../state/db_provider.dart';
 import '../state/user_provider.dart';
@@ -221,7 +221,7 @@ class _RegisterFarmerPageState extends State<RegisterFarmerPage> {
     };
 
     try {
-      if (await GetIt.I.get<ApiRepository>().registerFarmer(params)) {
+      if (await getIt.get<ApiRepository>().registerFarmer(params)) {
         setState(() {
           isLoading = false;
         });

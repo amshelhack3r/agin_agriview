@@ -5,5 +5,3 @@
 - Sentry to track bugs
 - Firebase analytics to show usage
 - fimber for logging
-- Change state management from provider to getx
-- 

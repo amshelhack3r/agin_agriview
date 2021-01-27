@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../state/db_provider.dart';
 import '../state/user_provider.dart';
 import '../utils/constants.dart';
@@ -15,7 +15,6 @@ class SplashWidget extends StatefulWidget {
 
 class _SplashWidgetState extends State<SplashWidget> {
   Future setup() async {
-    var getIt = GetIt.instance;
     var _repository = getIt.get<ApiRepository>();
     var prefs = getIt.get<SharedPreferences>();
 

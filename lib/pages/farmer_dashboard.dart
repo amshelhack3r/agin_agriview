@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../models/farm.dart';
 import '../models/farmer_info.dart';
 import 'elements/dialogs.dart';
@@ -90,9 +90,8 @@ class _FarmerInfoState extends State<FarmerDashboard> {
             height: 10,
           ),
           FutureBuilder(
-            future: GetIt.I
-                .get<ApiRepository>()
-                .fetchFarm(widget.farmer.userAginID),
+            future:
+                getIt.get<ApiRepository>().fetchFarm(widget.farmer.userAginID),
             builder: (context, AsyncSnapshot<List<Farm>> snapshot) {
               if (snapshot.hasData) {
                 List<Farm> farmsList = snapshot.data;

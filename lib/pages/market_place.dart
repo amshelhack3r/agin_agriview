@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../models/product.dart';
 import '../utils/hex_color.dart';
 import 'elements/dialogs.dart';
@@ -30,7 +30,7 @@ class MarketPlaceList extends StatelessWidget {
             ),
             SizedBox(height: 30),
             FutureBuilder(
-              future: GetIt.I.get<ApiRepository>().fetchProduce(),
+              future: getIt.get<ApiRepository>().fetchProduce(),
               builder: (context, AsyncSnapshot<List<Product>> snapshot) {
                 if (snapshot.hasData) {
                   return Expanded(

@@ -1,15 +1,19 @@
+import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import 'app_theme.dart';
+import 'injection.dart';
 import 'route_generator.dart';
 import 'state/db_provider.dart';
 import 'state/user_provider.dart';
-import 'service_locator.dart';
 
 void main() async {
+  //initilie my logger
+  Fimber.plantTree(DebugTree(useColors: true));
+
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,

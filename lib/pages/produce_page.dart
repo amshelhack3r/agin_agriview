@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../models/farm.dart';
 import 'elements/dialogs.dart';
 
@@ -211,7 +211,7 @@ class _ProducePageState extends State<ProducePage> {
   _buildProduce() {
     return Expanded(
       child: FutureBuilder(
-        future: GetIt.I.get<ApiRepository>().fetchLandProduce(farm.landAginId),
+        future: getIt.get<ApiRepository>().fetchLandProduce(farm.landAginId),
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {

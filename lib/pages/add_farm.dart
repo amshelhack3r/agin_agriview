@@ -3,11 +3,11 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../models/farmer_info.dart';
 import '../state/db_provider.dart';
 import 'elements/dialogs.dart';
@@ -331,7 +331,7 @@ class _AddFarmState extends State<AddFarm> {
       "lon": "36.83556"
     };
     try {
-      if (await GetIt.I.get<ApiRepository>().addFarm(params)) {
+      if (await getIt.get<ApiRepository>().addFarm(params)) {
         Navigator.pop(context);
       }
     } catch (e) {

@@ -1,38 +1,34 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:either_dart/either.dart';
-import 'package:http/http.dart' as http;
 
 import '../../models/message.dart';
 import '../../utils/constants.dart';
 import '../../utils/failure.dart';
 
 class ApiProvider {
-  final client = http.Client();
-  final headers = {"X-AGIN-API-Key-Token": APIKEY};
-  final jsonHeaders = {
-    "X-AGIN-API-Key-Token": APIKEY,
-    "Content-Type": "application/json"
-  };
+  final Dio dio;
 
-  static buildUrl(String endpoint) => Uri.parse(BASEURL + endpoint);
+  ApiProvider({
+    this.dio,
+  });
 
   //auth apis
   Future<Either<Failure, Message>> createAggregator(Map params) async {
-    headers['Content-Type'] = 'application/json';
+    dio.options.headers = {'Content-Type': 'application/json'};
     try {
-      var response = await client.post(
-        buildUrl(REGISTER_AGGREGATOR),
-        headers: headers,
-        body: jsonEncode(params),
+      var response = await dio.post(
+        REGISTER_AGGREGATOR,
+        data: jsonEncode(params),
       );
       if (response.statusCode == 201) {
-        return Right(Message.fromJson(json.decode(response.body)));
+        return Right(Message.fromJson(json.decode(response.data)));
       } else {
         final Map errorParams = {
           'status': response.statusCode,
-          'message': jsonDecode(response.body)
+          'message': jsonDecode(response.data)
         };
         return Left(ApiException(errorParams));
       }
@@ -42,37 +38,18 @@ class ApiProvider {
   }
 
   Future<Either<Failure, Map>> loginAggregator(Map params) async {
+    dio.options.headers = {'Content-Type': 'application/json'};
     try {
-      var response = await client.post(
-        buildUrl(AGGREGATOR_LOGIN),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'X-AGIN-API-Key-Token': APIKEY,
-        },
-        body: jsonEncode(params),
+      var response = await dio.post(
+        AGGREGATOR_LOGIN,
+        data: jsonEncode(params),
       );
-      var body = response.body;
+      var data = response.data;
       if (response.statusCode == 200) {
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else {
-        return Left(ApiException(json.decode(response.body)));
+        return Left(ApiException(json.decode(response.data)));
       }
-    } on SocketException {
-      throw MySocketException();
-    }
-  }
-
-  Future<Message> verifyAccount(String phoneNumber, String verifyCode) async {
-    try {
-      var response = await client.post(
-        buildUrl(AGGREGATOR_LOGIN),
-        headers: jsonHeaders,
-        body: jsonEncode(<String, String>{
-          'verifyCode': verifyCode,
-          'phoneNumber': phoneNumber,
-        }),
-      );
-      return Message.fromJson(json.decode(response.body));
     } on SocketException {
       throw MySocketException();
     }
@@ -80,37 +57,30 @@ class ApiProvider {
 
   Future<Message> createFarmProduce(
       String landAginID, String productUUID) async {
-    headers['Content-Type'] = 'application/json';
     try {
-      var response = await client.post(
-        buildUrl(CREATE_FARM_PRODUCE),
-        headers: headers,
-        body: jsonEncode(<String, String>{
+      var response = await dio.post(
+        CREATE_FARM_PRODUCE,
+        data: jsonEncode(<String, String>{
           'landAginID': landAginID,
           'productUUID': productUUID,
         }),
       );
-      return Message.fromJson(json.decode(response.body));
+      return Message.fromJson(json.decode(response.data));
     } on SocketException {
       throw MySocketException();
     }
   }
 
   Future<Either<Failure, List<dynamic>>> fetchProduce() async {
-    headers['Content-Type'] = 'application/json';
     try {
-      final response = await client.post(
-        buildUrl(PRODUCT_LIST),
-        headers: <String, String>{
-          'Content-Type': 'application/json; charset=UTF-8',
-          'X-AGIN-API-Key-Token': APIKEY,
-        },
-        body: jsonEncode(<String, String>{
+      final response = await dio.post(
+        PRODUCT_LIST,
+        data: jsonEncode(<String, String>{
           'CategoryID': "1",
         }),
       );
       if (response.statusCode == 200) {
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else {
         final Map errorParams = {
           'status': response.statusCode,
@@ -125,17 +95,16 @@ class ApiProvider {
 
   Future<Either<Failure, Map>> fetchStatistics(String aggregatorAginID) async {
     try {
-      final response = await client.post(
-        buildUrl(AGGREGATOR_STATISTICS),
-        headers: jsonHeaders,
-        body: jsonEncode(<String, String>{
+      final response = await dio.post(
+        AGGREGATOR_STATISTICS,
+        data: jsonEncode(<String, String>{
           'AginID': aggregatorAginID,
         }),
       );
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(jsonDecode(response.body));
+        return Right(jsonDecode(response.data));
       } else {
         Left(ApiException({
           'status': response.statusCode,
@@ -149,14 +118,13 @@ class ApiProvider {
 
   Future<bool> createFarm(Map params) async {
     try {
-      final http.Response response = await http.post(
-        buildUrl(CREATE_FARM),
-        headers: jsonHeaders,
-        body: jsonEncode(params),
+      final response = await dio.post(
+        CREATE_FARM,
+        data: jsonEncode(params),
       );
       return (response.statusCode == 201)
           ? true
-          : throw ApiException(json.decode(response.body));
+          : throw ApiException(json.decode(response.data));
     } on SocketException {
       throw MySocketException();
     }
@@ -164,10 +132,9 @@ class ApiProvider {
 
   Future<int> createFarmer(Map params) async {
     try {
-      final http.Response response = await client.post(
-        buildUrl(REGISTER_FARMER),
-        headers: jsonHeaders,
-        body: jsonEncode(params),
+      final response = await dio.post(
+        REGISTER_FARMER,
+        data: jsonEncode(params),
       );
       if (response.statusCode == 201) {
         return response.statusCode;
@@ -185,10 +152,9 @@ class ApiProvider {
   Future<Either<Failure, List<dynamic>>> fetchFarmers(
       String aggregatorAginID) async {
     try {
-      final response = await client.post(
-        buildUrl(FARMERS_LIST),
-        headers: jsonHeaders,
-        body: jsonEncode(<String, String>{
+      final response = await dio.post(
+        FARMERS_LIST,
+        data: jsonEncode(<String, String>{
           'AginID': aggregatorAginID,
         }),
       );
@@ -196,7 +162,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -212,14 +178,11 @@ class ApiProvider {
 
   Future<Either<Failure, List<dynamic>>> fetchCultivationModeOptions() async {
     try {
-      var response = await client.get(
-        buildUrl(CULTIVATION_MODES_OPTIONS),
-        headers: headers,
-      );
+      var response = await dio.get(CULTIVATION_MODES_OPTIONS);
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -235,12 +198,9 @@ class ApiProvider {
 
   Future<Either<Failure, List<Map>>> fetchProduceStatusOptions() async {
     try {
-      final response = await client.get(
-        buildUrl(PRODUCT_STATUS),
-        headers: headers,
-      );
+      final response = await dio.get(PRODUCT_STATUS);
       if (response.statusCode == 200) {
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -256,15 +216,12 @@ class ApiProvider {
 
   Future<Either<Failure, List<dynamic>>> fetchUnitTypeOptions() async {
     try {
-      final response = await client.get(
-        buildUrl(UNIT_TYPES),
-        headers: headers,
-      );
+      final response = await dio.get(UNIT_TYPES);
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -280,12 +237,11 @@ class ApiProvider {
 
   Future<Message> createPlacetoMarket(Map params) async {
     try {
-      var response = await client.post(
-        buildUrl(ADD_PRODUCE),
-        headers: jsonHeaders,
-        body: jsonEncode(params),
+      var response = await dio.post(
+        ADD_PRODUCE,
+        data: jsonEncode(params),
       );
-      return Message.fromJson(json.decode(response.body));
+      return Message.fromJson(json.decode(response.data));
     } on SocketException {
       throw MySocketException();
     }
@@ -294,10 +250,9 @@ class ApiProvider {
   Future<Either<Failure, List<Map>>> fetchPlaceToMarketListing(
       String aggregatorAginID) async {
     try {
-      final response = await client.post(
-        buildUrl(MARKET_PLACE_LISTING),
-        headers: jsonHeaders,
-        body: jsonEncode(<String, String>{
+      final response = await dio.post(
+        MARKET_PLACE_LISTING,
+        data: jsonEncode(<String, String>{
           'userAginID': aggregatorAginID,
         }),
       );
@@ -305,7 +260,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
@@ -321,17 +276,16 @@ class ApiProvider {
 
   Future<List<dynamic>> fetchProduceByLandAgin(String landAginID) async {
     try {
-      final response = await client.post(
-        buildUrl(GET_PRODUCE),
-        headers: jsonHeaders,
-        body: jsonEncode(<String, String>{
+      final response = await dio.post(
+        GET_PRODUCE,
+        data: jsonEncode(<String, String>{
           'AginID': landAginID,
         }),
       );
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        final items = json.decode(response.body).cast<Map<String, dynamic>>();
+        final items = json.decode(response.data).cast<Map<String, dynamic>>();
         return items;
       } else if (response.statusCode == 404) {
         return List.empty();
@@ -350,10 +304,10 @@ class ApiProvider {
 
   Future<Either<Failure, List>> fetchCounty() async {
     try {
-      var response = await client.get(buildUrl(COUNTY_LIST), headers: headers);
+      var response = await dio.get(COUNTY_LIST);
 
       if (response.statusCode == 200) {
-        return Right(jsonDecode(response.body));
+        return Right(jsonDecode(response.data));
       } else {
         return Left(ApiException({
           'status': response.statusCode,
@@ -367,17 +321,16 @@ class ApiProvider {
 
   Future<Either<Failure, List<Map>>> fetchCountries() async {
     try {
-      final response =
-          await client.get(buildUrl(FETCH_COUNTRIES), headers: headers);
+      final response = await dio.get(FETCH_COUNTRIES);
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else {
         return Left(ApiException({
           'status': response.statusCode,
-          'message': jsonDecode(response.body)
+          'message': jsonDecode(response.data)
         }));
       }
     } on SocketException {
@@ -387,17 +340,16 @@ class ApiProvider {
 
   Future<Either<Failure, List<dynamic>>> fetchFarms(String userAginID) async {
     try {
-      final response = await client.post(
-        buildUrl(FARMS),
-        headers: jsonHeaders,
-        body: jsonEncode(<String, String>{
+      final response = await dio.post(
+        FARMS,
+        data: jsonEncode(<String, String>{
           'aginID': userAginID,
         }),
       );
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
-        return Right(json.decode(response.body));
+        return Right(json.decode(response.data));
       } else if (response.statusCode == 404) {
         return Right(List.empty());
       } else {
