@@ -1,3 +1,4 @@
+import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/county.dart';
@@ -15,9 +16,7 @@ class ApiRepository extends Repository {
   @override
   String getType() => 'api';
   ApiProvider _apiProvider;
-  ApiRepository() {
-    _apiProvider = ApiProvider();
-  }
+  ApiRepository(this._apiProvider);
 
   Future<AggregatorLoginObject> loginUser(Map params) async {
     var result = await _apiProvider.loginAggregator(params);
@@ -26,7 +25,7 @@ class ApiRepository extends Repository {
       //save user to shared preferences
       var user = AggregatorLoginObject.fromMap(result.right);
 
-      var preferences = await SharedPreferences.getInstance();
+      var preferences = GetIt.I.get<SharedPreferences>();
       preferences.setString(PREF_NAME, user.fullName);
       preferences.setString(PREF_AGINID, user.youthAGINID);
       preferences.setString(PREF_MOBILE, user.phoneNumber);

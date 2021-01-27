@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../core/repository/api_repository.dart';
@@ -15,7 +16,6 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final mobileController = TextEditingController();
   final passwordController = TextEditingController();
-  final _repository = ApiRepository();
   bool isLoggingIn = false;
 
   @override
@@ -106,7 +106,7 @@ class _LoginFormState extends State<LoginForm> {
         isLoggingIn = !isLoggingIn;
       });
 
-      _repository.loginUser(params).then((value) {
+      GetIt.I.get<ApiRepository>().loginUser(params).then((value) {
         Provider.of<UserProvider>(context, listen: false).defaultUser = {
           "fullname": value.fullName,
           "aginId": value.youthAGINID,

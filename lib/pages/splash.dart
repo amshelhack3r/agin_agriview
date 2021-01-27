@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,8 +15,9 @@ class SplashWidget extends StatefulWidget {
 
 class _SplashWidgetState extends State<SplashWidget> {
   Future setup() async {
-    var prefs = await SharedPreferences.getInstance();
-    var _repository = ApiRepository();
+    var getIt = GetIt.instance;
+    var _repository = getIt.get<ApiRepository>();
+    var prefs = getIt.get<SharedPreferences>();
 
     var county = await _repository.fetchCounty();
     var modes = await _repository.fetchCultivationModes();

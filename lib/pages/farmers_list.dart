@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 // import 'package:url_launcher/url_launcher.dart';
@@ -13,7 +14,6 @@ class FarmersListPage extends StatelessWidget {
   FarmersListPage({Key key}) : super(key: key);
   var width;
   var primaryColor;
-  final _apiRepository = ApiRepository();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class FarmersListPage extends StatelessWidget {
             _buildHeader(),
             SizedBox(height: 50),
             FutureBuilder(
-                future: _apiRepository.fetchFarmers(aginId),
+                future: GetIt.I.get<ApiRepository>().fetchFarmers(aginId),
                 builder: (context, AsyncSnapshot<List<FarmerInfo>> snapshot) {
                   if (snapshot.hasData) {
                     var farmers = snapshot.data;

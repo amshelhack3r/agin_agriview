@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 
 import '../core/repository/api_repository.dart';
@@ -219,9 +220,8 @@ class _RegisterFarmerPageState extends State<RegisterFarmerPage> {
       "accountManagerAginID": aginId,
     };
 
-    var _apiRepository = ApiRepository();
     try {
-      if (await _apiRepository.registerFarmer(params)) {
+      if (await GetIt.I.get<ApiRepository>().registerFarmer(params)) {
         setState(() {
           isLoading = false;
         });

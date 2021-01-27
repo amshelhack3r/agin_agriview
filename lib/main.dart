@@ -7,14 +7,16 @@ import 'app_theme.dart';
 import 'route_generator.dart';
 import 'state/db_provider.dart';
 import 'state/user_provider.dart';
+import 'service_locator.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
 
+  await setupLocator();
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => UserProvider()),

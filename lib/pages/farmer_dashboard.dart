@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../core/repository/api_repository.dart';
 import '../models/farm.dart';
@@ -14,7 +15,6 @@ class FarmerDashboard extends StatefulWidget {
 }
 
 class _FarmerInfoState extends State<FarmerDashboard> {
-  final _apiRepo = ApiRepository();
   int farms = 0;
   @override
   Widget build(BuildContext context) {
@@ -90,7 +90,9 @@ class _FarmerInfoState extends State<FarmerDashboard> {
             height: 10,
           ),
           FutureBuilder(
-            future: _apiRepo.fetchFarm(widget.farmer.userAginID),
+            future: GetIt.I
+                .get<ApiRepository>()
+                .fetchFarm(widget.farmer.userAginID),
             builder: (context, AsyncSnapshot<List<Farm>> snapshot) {
               if (snapshot.hasData) {
                 List<Farm> farmsList = snapshot.data;

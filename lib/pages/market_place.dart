@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
 import '../core/repository/api_repository.dart';
 import '../models/product.dart';
@@ -6,7 +7,6 @@ import '../utils/hex_color.dart';
 import 'elements/dialogs.dart';
 
 class MarketPlaceList extends StatelessWidget {
-  final _apiRepo = ApiRepository();
   MarketPlaceList({Key key}) : super(key: key);
   var width;
   var primaryColor;
@@ -30,7 +30,7 @@ class MarketPlaceList extends StatelessWidget {
             ),
             SizedBox(height: 30),
             FutureBuilder(
-              future: _apiRepo.fetchProduce(),
+              future: GetIt.I.get<ApiRepository>().fetchProduce(),
               builder: (context, AsyncSnapshot<List<Product>> snapshot) {
                 if (snapshot.hasData) {
                   return Expanded(

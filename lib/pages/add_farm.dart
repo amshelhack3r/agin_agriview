@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:get_it/get_it.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -24,7 +25,6 @@ class _AddFarmState extends State<AddFarm> {
   var farmNameController = TextEditingController();
   var farmLocationController = TextEditingController();
   var farmUseController = TextEditingController();
-  final _apiRepository = ApiRepository();
   LatLng _latLon;
   bool isValid = true;
   String farmNameError;
@@ -331,7 +331,7 @@ class _AddFarmState extends State<AddFarm> {
       "lon": "36.83556"
     };
     try {
-      if (await _apiRepository.addFarm(params)) {
+      if (await GetIt.I.get<ApiRepository>().addFarm(params)) {
         Navigator.pop(context);
       }
     } catch (e) {
