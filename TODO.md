@@ -1,2 +1,9 @@
 - remove splash route from backstack
-- Show splash screen loading before app launch
+- start number with the +254 prefix
+- cache netwoek image
+- dependency injection using get_it
+- Sentry to track bugs
+- Firebase analytics to show usage
+- fimber for logging
+- Change state management from provider to getx
+- 
