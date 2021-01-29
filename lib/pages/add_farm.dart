@@ -31,7 +31,7 @@ class _AddFarmState extends State<AddFarm> {
   String farmLocationError;
   String farmUseError;
   bool isShown = true;
-  GlobalKey<ScaffoldMessengerState> _scaffoldMessangerKey = GlobalKey();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
 
   bool serviceEnabled;
   LocationPermission permission;
@@ -65,58 +65,56 @@ class _AddFarmState extends State<AddFarm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ScaffoldMessenger(
-      key: _scaffoldMessangerKey,
-      child: SafeArea(
-        child: Container(
-          color: Colors.white70,
-          height: MediaQuery.of(context).size.height,
-          child: Stack(
-            children: [
-              FutureBuilder(
-                  future: init(),
-                  builder: (context, AsyncSnapshot<Position> snapshot) {
-                    if (snapshot.hasData) {
-                      var _position = snapshot.data;
-                      return GoogleMap(
-                        mapType: MapType.hybrid,
-                        initialCameraPosition: CameraPosition(
-                          target:
-                              LatLng(_position.latitude, _position.longitude),
-                          zoom: 14,
+        key: _scaffoldKey,
+        body: SafeArea(
+          child: Container(
+            color: Colors.white70,
+            height: MediaQuery.of(context).size.height,
+            child: Stack(
+              children: [
+                FutureBuilder(
+                    future: init(),
+                    builder: (context, AsyncSnapshot<Position> snapshot) {
+                      if (snapshot.hasData) {
+                        var _position = snapshot.data;
+                        return GoogleMap(
+                          mapType: MapType.hybrid,
+                          initialCameraPosition: CameraPosition(
+                            target:
+                                LatLng(_position.latitude, _position.longitude),
+                            zoom: 14,
+                          ),
+                          onMapCreated: (GoogleMapController controller) {
+                            _controller.complete(controller);
+                          },
+                          onLongPress: (LatLng pos) {
+                            setState(() {
+                              _latLon = pos;
+                              isShown = true;
+                            });
+                          },
+                        );
+                      } else if (snapshot.hasError) {
+                        print(snapshot.error.toString());
+                        return Container();
+                      } else {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    }),
+                isShown
+                    ? Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: _buildForm(),
                         ),
-                        onMapCreated: (GoogleMapController controller) {
-                          _controller.complete(controller);
-                        },
-                        onLongPress: (LatLng pos) {
-                          setState(() {
-                            _latLon = pos;
-                            isShown = true;
-                          });
-                        },
-                      );
-                    } else if (snapshot.hasError) {
-                      print(snapshot.error.toString());
-                      return Container();
-                    } else {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  }),
-              isShown
-                  ? Center(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: _buildForm(),
-                      ),
-                    )
-                  : Container(),
-            ],
+                      )
+                    : Container(),
+              ],
+            ),
           ),
-        ),
-      ),
-    )
+        )
         // MapboxMap(
         //   accessToken: MAPBOX_TOKEN,
         //   initialCameraPosition: CameraPosition(
@@ -214,7 +212,7 @@ class _AddFarmState extends State<AddFarm> {
                         isShown = false;
                       });
 
-                      _scaffoldMessangerKey.currentState.showSnackBar(SnackBar(
+                      _scaffoldKey.currentState.showSnackBar(SnackBar(
                         content: Text("Long Press to set location"),
                       ));
                     },
