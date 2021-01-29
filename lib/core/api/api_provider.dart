@@ -324,7 +324,7 @@ class ApiProvider {
     }
   }
 
-  Future<Either<Failure, List<Map<dynamic, dynamic>>>> fetchProductListings(
+  Future<Either<Failure, List<dynamic>>> fetchProductListings(
       String productUUID) async {
     try {
       final response = await dio.post(

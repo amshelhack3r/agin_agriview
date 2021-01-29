@@ -121,8 +121,7 @@ class ApiRepository extends Repository {
     return results;
   }
 
-  Future<List<Map<dynamic, dynamic>>> getProductListing(
-      String productUUID) async {
+  Future<List<dynamic>> getProductListing(String productUUID) async {
     var result = await api.fetchProductListings(productUUID);
 
     if (result.isRight) {

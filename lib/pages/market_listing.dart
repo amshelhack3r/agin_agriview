@@ -35,7 +35,7 @@ class MarketListingPage extends StatelessWidget {
               child: FutureBuilder(
                 future:
                     getIt.get<ApiRepository>().getProductListing(product.uuid),
-                builder: (context, AsyncSnapshot<List<Map>> snapshot) {
+                builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                   if (snapshot.hasData) {
                     var products = snapshot.data;
                     if (products.length > 0) {

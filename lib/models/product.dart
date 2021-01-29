@@ -56,7 +56,7 @@ class Product {
     return 'Product(fileName: $fileName, uuid: $uuid, productName: $productName, quantity: $quantity)';
   }
 
-  String get initials => productName.substring(1, 2);
+  String get initials => productName.substring(0, 2).toUpperCase();
 
   @override
   bool operator ==(Object o) {
