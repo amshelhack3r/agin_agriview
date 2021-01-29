@@ -1,10 +1,14 @@
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 
+import '../core/repository/api_repository.dart';
+import '../injection.dart';
 import '../models/product.dart';
 import '../utils/hex_color.dart';
+import 'elements/dialogs.dart';
 
 class MarketListingPage extends StatelessWidget {
-  Product product;
+  final Product product;
   MarketListingPage(this.product, {Key key}) : super(key: key);
   var width;
   var primaryColor;
@@ -28,14 +32,38 @@ class MarketListingPage extends StatelessWidget {
             ),
             SizedBox(height: 20),
             Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 30),
-                        child: _buildListItem(context));
-                  }),
+              child: FutureBuilder(
+                future:
+                    getIt.get<ApiRepository>().getProductListing(product.uuid),
+                builder: (context, AsyncSnapshot<List<Map>> snapshot) {
+                  if (snapshot.hasData) {
+                    var products = snapshot.data;
+                    if (products.length > 0) {
+                      return ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: products.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 30),
+                                child:
+                                    _buildListItem(context, products[index]));
+                          });
+                    } else {
+                      return Center(child: Text("No listings for the product"));
+                    }
+                  } else if (snapshot.hasError) {
+                    Future.delayed(
+                        Duration(seconds: 1),
+                        () => Dialogs.messageDialog(
+                            context, true, snapshot.error.toString()));
+
+                    return Container();
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
             )
           ],
         ),
@@ -113,7 +141,8 @@ class MarketListingPage extends StatelessWidget {
     );
   }
 
-  _buildListItem(BuildContext context) {
+  _buildListItem(BuildContext context, Map map) {
+    var amount = map['unitPriceTypesObjectList'][0]['amount'];
     return GestureDetector(
       onTap: () =>
           Navigator.pushNamed(context, '/ProductInfoPage', arguments: product),
@@ -143,7 +172,7 @@ class MarketListingPage extends StatelessWidget {
                 color: primaryColor,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Text("PM",
+              child: Text(product.initials,
                   style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w900,
@@ -152,12 +181,12 @@ class MarketListingPage extends StatelessWidget {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(product.productName,
+                Text(map['BC'],
                     style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w900,
                         color: HexColor("#8E8E8E"))),
-                Text("Harvest 15 March 2020"),
+                Text(map['county']),
               ],
             ),
             Column(
@@ -168,7 +197,7 @@ class MarketListingPage extends StatelessWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.w900,
                         color: HexColor("#8E8E8E"))),
-                Text("Ksh 50/KG",
+                Text("Ksh ${amount.toString()}",
                     style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w900,

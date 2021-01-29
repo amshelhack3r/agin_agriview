@@ -27,11 +27,7 @@ class ApiProvider {
       if (response.statusCode == 201) {
         return Right(Message.fromJson(response.data));
       } else {
-        final Map errorParams = {
-          'status': response.statusCode,
-          'message': jsonDecode(response.data)
-        };
-        return Left(ApiException(errorParams));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -81,11 +77,7 @@ class ApiProvider {
       if (response.statusCode == 200) {
         return Right(response.data);
       } else {
-        final Map errorParams = {
-          'status': response.statusCode,
-          'message': 'Failed to fetch produce'
-        };
-        return Left(ApiException(errorParams));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -105,10 +97,7 @@ class ApiProvider {
         // then parse the JSON.
         return Right(response.data);
       } else {
-        Left(ApiException({
-          'status': response.statusCode,
-          'message': 'Failed to fetch Statistics'
-        }));
+        Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -138,10 +127,7 @@ class ApiProvider {
       if (response.statusCode == 201) {
         return response.statusCode;
       } else {
-        throw ApiException({
-          'status': response.statusCode,
-          'message': 'Couldn\'t create farmer'
-        });
+        throw ApiException(response.data['message']);
       }
     } on SocketException {
       throw MySocketException();
@@ -165,10 +151,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        return Left(ApiException({
-          'message': 'Failed to load farmers',
-          'status': response.statusCode
-        }));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -185,10 +168,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        return Left(ApiException({
-          'status': response.statusCode,
-          'message': 'Failed to fetch cultivation modes options'
-        }));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -203,10 +183,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        return Left(ApiException({
-          'status': response.statusCode,
-          'message': 'Failed to fetch produce status'
-        }));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -224,10 +201,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        return Left(ApiException({
-          'status': response.statusCode,
-          'message': 'Failed to fetch unit types'
-        }));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -263,10 +237,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        return Left(ApiException({
-          'status': response.statusCode,
-          'message': 'Failed to fetch produce status'
-        }));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -291,10 +262,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException({
-          'status': response.statusCode,
-          'message': 'Failed to fetch produce status'
-        });
+        throw ApiException(response.data['message']);
       }
     } on SocketException {
       throw MySocketException();
@@ -309,10 +277,7 @@ class ApiProvider {
         Fimber.d(response.data.toString());
         return Right(response.data);
       } else {
-        return Left(ApiException({
-          'status': response.statusCode,
-          'message': 'Failed to fetch county status'
-        }));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -328,8 +293,7 @@ class ApiProvider {
         // then parse the JSON.
         return Right(response.data);
       } else {
-        return Left(ApiException(
-            {'status': response.statusCode, 'message': response.data}));
+        return Left(ApiException(response.data['message']));
       }
     } on SocketException {
       throw MySocketException();
@@ -353,10 +317,32 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException({
-          'status': response.statusCode,
-          'message': 'Failed to fetch farm info'
-        });
+        throw ApiException(response.data['message']);
+      }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
+
+  Future<Either<Failure, List<Map<dynamic, dynamic>>>> fetchProductListings(
+      String productUUID) async {
+    try {
+      final response = await dio.post(
+        PRODUCT_LISTINGS,
+        data: jsonEncode(<String, String>{
+          'productUUID': productUUID,
+        }),
+      );
+      if (response.statusCode == 200) {
+        // If the server did return a 200 OK response,
+        // then parse the JSON.
+        return Right(response.data);
+      } else if (response.statusCode == 404) {
+        return Right(List.empty());
+      } else {
+        // If the server did not return a 200 OK response,
+        // then throw an exception.
+        throw ApiException(response.data['message']);
       }
     } on SocketException {
       throw MySocketException();

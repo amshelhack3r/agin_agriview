@@ -1,5 +1,5 @@
 abstract class Failure implements Exception {
-  final Map<String, dynamic> message;
+  final String message;
   Failure({this.message});
 
   bool shouldShow();
@@ -17,7 +17,7 @@ class ApiException extends Failure {
 }
 
 class MySocketException extends Failure {
-  static Map get msg => {'status': 500, 'message': 'Check Internet Connection'};
+  static String get msg => 'Check Internet Connection';
 
   MySocketException() : super(message: msg);
   @override

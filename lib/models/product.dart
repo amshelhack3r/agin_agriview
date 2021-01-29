@@ -56,6 +56,8 @@ class Product {
     return 'Product(fileName: $fileName, uuid: $uuid, productName: $productName, quantity: $quantity)';
   }
 
+  String get initials => productName.substring(1, 2);
+
   @override
   bool operator ==(Object o) {
     if (identical(this, o)) return true;

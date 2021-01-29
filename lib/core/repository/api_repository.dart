@@ -120,4 +120,15 @@ class ApiRepository extends Repository {
     var results = await api.createFarm(params);
     return results;
   }
+
+  Future<List<Map<dynamic, dynamic>>> getProductListing(
+      String productUUID) async {
+    var result = await api.fetchProductListings(productUUID);
+
+    if (result.isRight) {
+      return result.right;
+    } else {
+      throw result.left;
+    }
+  }
 }

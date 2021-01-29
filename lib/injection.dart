@@ -1,5 +1,8 @@
+import 'package:AgriView/utils/failure.dart';
 import 'package:dio/dio.dart';
+import 'package:fimber/fimber.dart';
 import 'package:get_it/get_it.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/api/api_provider.dart';
@@ -44,19 +47,23 @@ void setupDioModule() {
   //   compact: false,
   // ));
 
-//   dio.interceptors.add(InterceptorsWrapper(
-//     onRequest:(RequestOptions options) async {
-//      return options; //continue
-//      },
-//     onResponse:(Response response) async {
-//      // Do something with response data
-//      return response; // continue
-//     },
-//     onError: (DioError e) async {
-//      // Do something with response error
-//      return  e;//continue
-//     }
-// ));
+  dio.interceptors
+      .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
+    Fimber.i("REQUESTING: ${options.path}");
+    return options; //continue
+  }, onResponse: (Response response) async {
+    // Do something with response data
+    Fimber.i("RESPONSE: ${response.data}");
+    return response; // continue
+  }, onError: (DioError e) async {
+    // Do something with response error
+    if (e.type == DioErrorType.RESPONSE) {
+      await Sentry.captureException(e.message);
+      throw ApiException(e.response.statusMessage);
+    }
+
+    return e; //continue
+  }));
 
   getIt.registerSingletonAsync(() async => dio);
 }

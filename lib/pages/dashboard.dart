@@ -317,6 +317,6 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void aMethodThatMightFail() {
-    throw ApiException({"message": "something happened"});
+    throw ApiException("something happened");
   }
 }
