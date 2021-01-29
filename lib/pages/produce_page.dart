@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -221,8 +222,15 @@ class _ProducePageState extends State<ProducePage> {
                     return Container(
                       child: Column(
                         children: [
-                          Image.network(
-                            produce['fileName'],
+                          CachedNetworkImage(
+                            imageUrl: produce['fileName'],
+                            progressIndicatorBuilder:
+                                (context, url, downloadProgress) => Center(
+                              child: CircularProgressIndicator(
+                                  value: downloadProgress.progress),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                             width: 100,
                             height: 100,
                             fit: BoxFit.cover,

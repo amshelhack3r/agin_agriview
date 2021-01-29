@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/api/api_provider.dart';
@@ -35,13 +34,15 @@ void setupDioModule() {
   );
 
   Dio dio = Dio(options);
-  dio.interceptors.add(PrettyDioLogger(
-    requestHeader: true,
-    requestBody: true,
-    responseBody: true,
-    responseHeader: false,
-    compact: false,
-  ));
+
+  //track requests and responses in development
+  // dio.interceptors.add(PrettyDioLogger(
+  //   requestHeader: true,
+  //   requestBody: true,
+  //   responseBody: true,
+  //   responseHeader: false,
+  //   compact: false,
+  // ));
 
 //   dio.interceptors.add(InterceptorsWrapper(
 //     onRequest:(RequestOptions options) async {

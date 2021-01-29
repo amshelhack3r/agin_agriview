@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../core/repository/api_repository.dart';
@@ -141,8 +142,13 @@ class MarketPlaceList extends StatelessWidget {
           ),
           child: Column(
             children: [
-              Image.network(
-                product.fileName,
+              CachedNetworkImage(
+                imageUrl: product.fileName,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    Center(
+                        child: CircularProgressIndicator(
+                            value: downloadProgress.progress)),
+                errorWidget: (context, url, error) => Icon(Icons.error),
                 width: 100,
               ),
               Expanded(

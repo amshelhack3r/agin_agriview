@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../models/product.dart';
@@ -55,8 +56,11 @@ class _ProductInfoState extends State<ProductInfo> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Image.network(
-                widget.product.fileName,
+              CachedNetworkImage(
+                imageUrl: widget.product.fileName,
+                progressIndicatorBuilder: (context, url, downloadProgress) =>
+                    CircularProgressIndicator(value: downloadProgress.progress),
+                errorWidget: (context, url, error) => Icon(Icons.error),
                 width: 100,
               ),
               Text(
