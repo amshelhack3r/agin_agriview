@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import 'app_theme.dart';
 import 'injection.dart';
@@ -26,13 +27,20 @@ void main() async {
 
   Fimber.i('finished setting up locators');
 
-  runApp(MultiProvider(
-    providers: [
-      ChangeNotifierProvider(create: (_) => UserProvider()),
-      ChangeNotifierProvider(create: (_) => DatabaseProvider()),
-    ],
-    child: MyApp(),
-  ));
+  //setup Sentry for bug issues
+  await Sentry.init(
+    (options) {
+      options.dsn =
+          'https://c2e6ad1ae6d040428d5c11dfebd9c70d@o509370.ingest.sentry.io/5603735';
+    },
+    appRunner: () => runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => DatabaseProvider()),
+      ],
+      child: MyApp(),
+    )),
+  );
 }
 
 class MyApp extends StatelessWidget {

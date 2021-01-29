@@ -1,7 +1,5 @@
 - remove splash route from backstack
 - start number with the +254 prefix
 - cache netwoek image
-- dependency injection using get_it
 - Sentry to track bugs
 - Firebase analytics to show usage
-- fimber for logging

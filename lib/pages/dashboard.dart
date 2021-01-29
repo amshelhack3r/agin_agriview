@@ -1,5 +1,7 @@
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 // import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -139,16 +141,7 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           Expanded(
               child: GestureDetector(
-            onTap: () async {
-              try {
-                aMethodThatMightFail();
-              } catch (exception, stackTrace) {
-                // await Sentry.captureException(
-                //   exception,
-                //   stackTrace: stackTrace,
-                // );
-              }
-            },
+            onTap: () {},
             child: Container(
               alignment: Alignment.center,
               width: double.infinity,
@@ -217,7 +210,18 @@ class _DashboardPageState extends State<DashboardPage> {
                     color: Colors.white,
                     size: 30,
                   ),
-                  onPressed: () {},
+                  onPressed: () async {
+                    try {
+                      aMethodThatMightFail();
+                    } catch (exception, stackTrace) {
+                      await Sentry.captureException(
+                        exception,
+                        stackTrace: stackTrace,
+                      );
+
+                      Fimber.d(exception.toString());
+                    }
+                  },
                 ),
                 IconButton(
                   icon: Icon(
