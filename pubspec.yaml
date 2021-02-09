@@ -20,8 +20,10 @@ dependencies:
   geolocator: ^6.1.14
   get_it: ^5.0.6
   google_maps_flutter: ^1.1.1
+  gpx: ^1.1.1
   image_picker: ^0.6.7+4
   mapbox_gl: ^0.9.0
+  path_provider: ^1.6.27
   pretty_dio_logger: ^1.1.1
   provider: ^4.3.2+3
   retry: ^3.0.1
