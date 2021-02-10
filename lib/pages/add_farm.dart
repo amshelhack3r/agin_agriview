@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:AgriView/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:provider/provider.dart';
 
 import '../core/repository/api_repository.dart';
@@ -36,7 +37,11 @@ class _AddFarmState extends State<AddFarm> {
   bool serviceEnabled;
   LocationPermission permission;
 
-  Completer<GoogleMapController> _controller = Completer();
+  MapboxMapController mapController;
+
+  void _onMapCreated(MapboxMapController controller) {
+    mapController = controller;
+  }
 
   Future<Position> init() async {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -77,22 +82,11 @@ class _AddFarmState extends State<AddFarm> {
                     builder: (context, AsyncSnapshot<Position> snapshot) {
                       if (snapshot.hasData) {
                         var _position = snapshot.data;
-                        return GoogleMap(
-                          mapType: MapType.hybrid,
-                          initialCameraPosition: CameraPosition(
-                            target:
-                                LatLng(_position.latitude, _position.longitude),
-                            zoom: 14,
-                          ),
-                          onMapCreated: (GoogleMapController controller) {
-                            _controller.complete(controller);
-                          },
-                          onLongPress: (LatLng pos) {
-                            setState(() {
-                              _latLon = pos;
-                              isShown = true;
-                            });
-                          },
+                        return MapboxMap(
+                          accessToken: MAPBOX_TOKEN,
+                          onMapCreated: _onMapCreated,
+                          initialCameraPosition:
+                              const CameraPosition(target: LatLng(0.0, 0.0)),
                         );
                       } else if (snapshot.hasError) {
                         print(snapshot.error.toString());
@@ -114,15 +108,7 @@ class _AddFarmState extends State<AddFarm> {
               ],
             ),
           ),
-        )
-        // MapboxMap(
-        //   accessToken: MAPBOX_TOKEN,
-        //   initialCameraPosition: CameraPosition(
-        //     zoom: 15.0,
-        //     target: LatLng(14.508, 46.048),
-        //   ),
-        // ),
-        );
+        ));
   }
 
   _buildForm() {

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:path/path.dart' as path;
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class AppUtil {
   static Future<String> getFileNameWithExtension(File file) async {
@@ -37,5 +38,21 @@ class AppUtil {
       print('error -- ${e.toString()}');
     }
     return null;
+  }
+
+  static formatMobileNumber(String number) {
+    var mobile = '254';
+    //check if it begins with 254
+    if (number.startsWith('254')) {
+      return num;
+    } else if (number.startsWith('+254')) {
+      return number.substring(1);
+    } else if (number.startsWith('0')) {
+      mobile += number.substring(1);
+      return mobile;
+    } else {
+      Sentry.captureException("Wrong number format $number");
+      throw FormatException("Wrong number format $number");
+    }
   }
 }

@@ -1,12 +1,8 @@
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-// import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../state/user_provider.dart';
-import '../utils/failure.dart';
 import '../utils/hex_color.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -49,6 +45,83 @@ class _DashboardPageState extends State<DashboardPage> {
     ));
   }
 
+  _buildHeader() {
+    var oneThird = MediaQuery.of(context).size.width / 3;
+    return Container(
+      width: double.infinity,
+      height: MediaQuery.of(context).size.width / 3,
+      child: Stack(
+        clipBehavior: Clip.none,
+        children: [
+          Image.asset(
+            "assets/images/dashboard_mask.png",
+            width: double.infinity,
+            fit: BoxFit.cover,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  context.watch<UserProvider>().fullname,
+                  style: Theme.of(context).textTheme.headline5.copyWith(
+                      color: Colors.white, fontWeight: FontWeight.w700),
+                ),
+                Spacer(),
+                IconButton(
+                  icon: Icon(
+                    Icons.notifications,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                  onPressed: () {},
+                ),
+                IconButton(
+                  icon: Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                    size: 22,
+                  ),
+                  onPressed: () => _logout(),
+                )
+              ],
+            ),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Text(
+              "Thursday, January 07",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600),
+            ),
+          ),
+          // Positioned(
+          //   bottom: -40,
+          //   left: oneThird / 3,
+          //   right: oneThird / 3,
+          //   child: SizedBox(
+          //     width: oneThird * 2,
+          //     child: TextField(
+          //       // style: TextStyle(color: Colors.amber),
+          //       decoration: InputDecoration(
+          //           suffixIcon: Icon(Icons.search),
+          //           fillColor: Colors.white,
+          //           filled: true,
+          //           border: OutlineInputBorder(
+          //               borderRadius: BorderRadius.circular(40)),
+          //           hintText: "Search",
+          //           hintStyle: TextStyle(color: Colors.black)),
+          //     ),
+          //   ),
+          // )
+        ],
+      ),
+    );
+  }
+
   _buildLeftContainer() {
     var width = MediaQuery.of(context).size.width;
     return Container(
@@ -77,7 +150,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.asset("assets/images/income.png"),
-                    Text("Total \n Income")
+                    Text(
+                      "Total \n Income",
+                      style: Theme.of(context).textTheme.headline6,
+                    )
                   ],
                 ),
                 Container(
@@ -97,7 +173,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       )
                     ],
                   ),
-                  child: Text("Ksh 100.00"),
+                  child: Text(
+                    "Ksh 100.00",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ),
               ],
             ),
@@ -111,7 +190,10 @@ class _DashboardPageState extends State<DashboardPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Image.asset("assets/images/income.png"),
-                    Text("Total \n Income")
+                    Text(
+                      "Total \n Income",
+                      style: Theme.of(context).textTheme.headline6,
+                    )
                   ],
                 ),
                 Container(
@@ -151,8 +233,14 @@ class _DashboardPageState extends State<DashboardPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset("assets/images/sell_input.png"),
-                  Text("Sell Inputs"),
+                  Image.asset(
+                    "assets/images/sell_input.png",
+                    width: 50,
+                  ),
+                  Text(
+                    "Sell Inputs",
+                    style: Theme.of(context).textTheme.headline6,
+                  ),
                 ],
               ),
             ),
@@ -173,96 +261,6 @@ class _DashboardPageState extends State<DashboardPage> {
           buildCard("assets/images/place_market.png", "Place to \n Market"),
           buildCard(
               "assets/images/register_produce.png", "Register \n Produce"),
-        ],
-      ),
-    );
-  }
-
-  _buildHeader() {
-    var oneThird = MediaQuery.of(context).size.width / 3;
-    return Container(
-      width: double.infinity,
-      height: MediaQuery.of(context).size.width / 3,
-      child: Stack(
-        clipBehavior: Clip.none,
-        children: [
-          Image.asset(
-            "assets/images/dashboard_mask.png",
-            width: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  context.watch<UserProvider>().fullname,
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w800),
-                ),
-                Spacer(),
-                IconButton(
-                  icon: Icon(
-                    Icons.notifications,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                  onPressed: () async {
-                    try {
-                      aMethodThatMightFail();
-                    } catch (exception, stackTrace) {
-                      await Sentry.captureException(
-                        exception,
-                        stackTrace: stackTrace,
-                      );
-
-                      Fimber.d(exception.toString());
-                    }
-                  },
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.logout,
-                    color: Colors.white,
-                    size: 30,
-                  ),
-                  onPressed: () => _logout(),
-                )
-              ],
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: Text(
-              "Thursday, January 07",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600),
-            ),
-          ),
-          Positioned(
-            bottom: -40,
-            left: oneThird / 3,
-            right: oneThird / 3,
-            child: SizedBox(
-              width: oneThird * 2,
-              child: TextField(
-                // style: TextStyle(color: Colors.amber),
-                decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.search),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    hintText: "Search",
-                    hintStyle: TextStyle(color: Colors.black)),
-              ),
-            ),
-          )
         ],
       ),
     );
@@ -300,7 +298,7 @@ class _DashboardPageState extends State<DashboardPage> {
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: HexColor("#707070"),
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.w500),
             )
           ],
@@ -314,9 +312,5 @@ class _DashboardPageState extends State<DashboardPage> {
     if (await prefs.clear()) {
       Navigator.pushNamed(context, '/AuthPage');
     }
-  }
-
-  void aMethodThatMightFail() {
-    throw ApiException("something happened");
   }
 }

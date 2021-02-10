@@ -25,6 +25,7 @@ const MARKET_PLACE_LISTING = '/market/list/by/aggregator';
 const GET_PRODUCE = '/production/farm/produce/list/landaginid';
 const COUNTY_LIST = '/county/list';
 const PRODUCT_LISTINGS = '/product/list/bc/location/product/prices';
+const UPLOAD_GPX = '/production/farm/upload';
 
 const PREF_NAME = "name";
 const PREF_AGINID = "aginId";

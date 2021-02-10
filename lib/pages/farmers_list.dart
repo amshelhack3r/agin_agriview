@@ -45,7 +45,10 @@ class FarmersListPage extends StatelessWidget {
                                   backgroundColor: primaryColor,
                                   label: Text(
                                     "${snapshot.data.length.toString()} Farmers",
-                                    style: TextStyle(color: Colors.white),
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                    ),
                                   ),
                                   onPressed: () {}),
                               Row(
@@ -145,8 +148,8 @@ class FarmersListPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  width: 80,
-                  height: 80,
+                  width: 50,
+                  height: 50,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: primaryColor,
@@ -154,7 +157,7 @@ class FarmersListPage extends StatelessWidget {
                   ),
                   child: Text(farmer.initials,
                       style: TextStyle(
-                          fontSize: 20,
+                          fontSize: 14,
                           fontWeight: FontWeight.w900,
                           color: Colors.white)),
                 ),
@@ -166,10 +169,13 @@ class FarmersListPage extends StatelessWidget {
                   children: [
                     Text(farmer.fullname,
                         style: TextStyle(
-                            fontSize: 20,
+                            fontSize: 12,
                             fontWeight: FontWeight.w900,
                             color: HexColor("#8E8E8E"))),
-                    Text(farmer.phoneNumber),
+                    Text(
+                      farmer.phoneNumber,
+                      style: TextStyle(fontSize: 10),
+                    ),
                   ],
                 ),
                 Spacer(),

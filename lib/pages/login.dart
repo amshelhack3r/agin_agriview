@@ -1,3 +1,4 @@
+import 'package:AgriView/utils/AppUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,7 +34,7 @@ class _LoginFormState extends State<LoginForm> {
             controller: mobileController,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
-              hintText: "Phone Number",
+              hintText: "7XX XXX XXX",
             ),
           ),
           SizedBox(
@@ -110,9 +111,10 @@ class _LoginFormState extends State<LoginForm> {
         Provider.of<UserProvider>(context, listen: false).defaultUser = {
           "fullname": value.fullName,
           "aginId": value.youthAGINID,
-          "mobile": value.phoneNumber
+          "mobile": AppUtil.formatMobileNumber(value.phoneNumber)
         };
-        Navigator.pushNamed(context, "/HomePage");
+        Navigator.pushNamedAndRemoveUntil(
+            context, "/HomePage", (route) => false);
       }).catchError((err) {
         Dialogs.messageDialog(context, true, err.message['message']);
         setState(() {

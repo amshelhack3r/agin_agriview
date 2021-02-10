@@ -1,5 +1,8 @@
 - remove splash route from backstack
 - start number with the +254 prefix
-- cache netwoek image
-- Sentry to track bugs
-- Firebase analytics to show usage
+-  create a gpx file after selecting from map
+-  send gpx file via rest
+-  add produce to farm
+-  place produce to market api
+-  catch DIO errors and display appropriate message
+-  work on signup page 

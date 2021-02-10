@@ -21,17 +21,8 @@ ThemeData getThemeData() {
           fontWeight: FontWeight.w500, color: Colors.black, fontSize: 18),
       headline5: TextStyle(
           fontWeight: FontWeight.w500, color: Colors.black, fontSize: 16),
-      headline6: TextStyle(
-          fontWeight: FontWeight.w500, color: Colors.black, fontSize: 14),
+      headline6: TextStyle(color: Colors.black, fontSize: 14),
       subtitle1: TextStyle(color: Colors.grey),
     ),
   );
 }
-
-// ThemeData(
-//           hintColor: new Color(0xff0ad7cb),
-//           primaryColor: new Color(0xff12a89f),
-//           primaryColorDark: Color(0xff1d8a84),
-//           primaryColorLight: Color(0xff0ad7cb),
-//           fontFamily: "Montserrat",
-//           canvasColor: Colors.white)

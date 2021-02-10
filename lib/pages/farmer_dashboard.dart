@@ -35,24 +35,6 @@ class _FarmerInfoState extends State<FarmerDashboard> {
                   width: MediaQuery.of(context).size.width,
                   fit: BoxFit.cover,
                 ),
-                Positioned(
-                  bottom: -20,
-                  left: 0,
-                  right: 0,
-                  child: ActionChip(
-                    elevation: 10,
-                    backgroundColor: Theme.of(context).primaryColor,
-                    label: Text(
-                      "EDIT",
-                      style: TextStyle(color: Colors.white),
-                    ),
-                    avatar: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Icon(Icons.edit),
-                    ),
-                    onPressed: () {},
-                  ),
-                ),
                 Align(
                     alignment: Alignment.center,
                     child: Padding(
@@ -64,7 +46,7 @@ class _FarmerInfoState extends State<FarmerDashboard> {
                             "FARMER DETAILS",
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 26,
+                              fontSize: 14,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -84,7 +66,7 @@ class _FarmerInfoState extends State<FarmerDashboard> {
           Text(
             "FARMS",
             style:
-                TextStyle(fontSize: 24, decoration: TextDecoration.underline),
+                TextStyle(fontSize: 12, decoration: TextDecoration.underline),
           ),
           SizedBox(
             height: 10,
@@ -139,7 +121,7 @@ class _FarmerInfoState extends State<FarmerDashboard> {
     FarmerInfo fm = widget.farmer;
     TextStyle subText = TextStyle(
       color: Colors.black,
-      fontSize: 18,
+      fontSize: 10,
       fontWeight: FontWeight.w700,
     );
     return Padding(
@@ -166,22 +148,20 @@ class _FarmerInfoState extends State<FarmerDashboard> {
                 Container(
                     margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     alignment: Alignment.center,
-                    width: 50,
-                    height: 50,
+                    width: 30,
+                    height: 30,
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                       borderRadius: BorderRadius.circular(40),
                     ),
                     child: Text(
-                      "SM",
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
+                      widget.farmer.initials,
+                      style: TextStyle(color: Colors.white, fontSize: 10),
                     )),
                 Text(
                   fm.fullname,
                   style: TextStyle(
-                    fontSize: 26,
+                    fontSize: 16,
                     color: Colors.grey,
                     fontWeight: FontWeight.w600,
                   ),
@@ -293,7 +273,7 @@ class _FarmerInfoState extends State<FarmerDashboard> {
               children: [
                 Image.asset(
                   "assets/images/farms.png",
-                  width: 70,
+                  width: 40,
                 ),
                 SizedBox(
                   width: 20,
@@ -304,12 +284,12 @@ class _FarmerInfoState extends State<FarmerDashboard> {
                     Text(
                       farm.farmName,
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       farm.farmLocation,
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w400),
+                          TextStyle(fontSize: 10, fontWeight: FontWeight.w400),
                     ),
                   ],
                 ),

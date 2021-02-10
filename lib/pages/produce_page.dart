@@ -31,6 +31,9 @@ class _ProducePageState extends State<ProducePage> {
       body: Container(
         child: Column(
           children: [
+            SizedBox(
+              height: 10,
+            ),
             _buildFirstCard(),
             SizedBox(
               height: 10,
@@ -49,7 +52,7 @@ class _ProducePageState extends State<ProducePage> {
   _buildFirstCard() {
     TextStyle subText = TextStyle(
       color: Colors.black,
-      fontSize: 18,
+      fontSize: 12,
       fontWeight: FontWeight.w700,
     );
     return Padding(
@@ -72,7 +75,7 @@ class _ProducePageState extends State<ProducePage> {
             Text(
               farm.farmName,
               style: TextStyle(
-                fontSize: 26,
+                fontSize: 14,
                 color: Colors.grey,
                 fontWeight: FontWeight.w600,
               ),
@@ -80,7 +83,7 @@ class _ProducePageState extends State<ProducePage> {
             Text(
               farm.farmLocation,
               style: TextStyle(
-                fontSize: 22,
+                fontSize: 12,
                 color: Colors.grey,
                 fontWeight: FontWeight.w400,
               ),
@@ -154,7 +157,7 @@ class _ProducePageState extends State<ProducePage> {
               child: Text(
                 "Actions",
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 12,
                   color: Colors.grey,
                   fontWeight: FontWeight.w600,
                 ),
@@ -172,31 +175,31 @@ class _ProducePageState extends State<ProducePage> {
                 children: [
                   Column(
                     children: [
-                      Image.asset("assets/images/visit.png", width: 50),
+                      Image.asset("assets/images/visit.png", width: 40),
                       Text(
                         "Scout Land",
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20),
+                            fontWeight: FontWeight.w700, fontSize: 12),
                       ),
                     ],
                   ),
                   Column(
                     children: [
-                      Image.asset("assets/images/report.png", width: 50),
+                      Image.asset("assets/images/report.png", width: 40),
                       Text(
                         "Advise",
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20),
+                            fontWeight: FontWeight.w700, fontSize: 12),
                       ),
                     ],
                   ),
                   Column(
                     children: [
-                      Image.asset("assets/images/market.png", width: 50),
+                      Image.asset("assets/images/market.png", width: 40),
                       Text(
                         "Add Produce",
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 20),
+                            fontWeight: FontWeight.w700, fontSize: 12),
                       ),
                     ],
                   ),
@@ -231,8 +234,8 @@ class _ProducePageState extends State<ProducePage> {
                             ),
                             errorWidget: (context, url, error) =>
                                 Icon(Icons.error),
-                            width: 100,
-                            height: 100,
+                            width: 70,
+                            height: 70,
                             fit: BoxFit.cover,
                           ),
                           SizedBox(
