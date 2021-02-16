@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../injection.dart';
 import '../state/user_provider.dart';
 import '../utils/hex_color.dart';
 
@@ -308,7 +309,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _logout() async {
-    var prefs = await SharedPreferences.getInstance();
+    var prefs = getIt.get<SharedPreferences>();
     if (await prefs.clear()) {
       Navigator.pushNamed(context, '/AuthPage');
     }

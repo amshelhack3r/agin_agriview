@@ -34,7 +34,7 @@ class _LoginFormState extends State<LoginForm> {
             controller: mobileController,
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
-              hintText: "7XX XXX XXX",
+              hintText: "07XX XXX XXX",
             ),
           ),
           SizedBox(
@@ -99,7 +99,7 @@ class _LoginFormState extends State<LoginForm> {
     if (mobileController.text.isNotEmpty &&
         passwordController.text.isNotEmpty) {
       var params = {
-        "phoneNumber": mobileController.text,
+        "phoneNumber": AppUtil.formatMobileNumber(mobileController.text),
         "password": passwordController.text
       };
 
@@ -114,9 +114,9 @@ class _LoginFormState extends State<LoginForm> {
           "mobile": AppUtil.formatMobileNumber(value.phoneNumber)
         };
         Navigator.pushNamedAndRemoveUntil(
-            context, "/HomePage", (route) => false);
+            context, "/HomePage", (route) => true);
       }).catchError((err) {
-        Dialogs.messageDialog(context, true, err.message['message']);
+        Dialogs.messageDialog(context, true, err.message['message'].toString());
         setState(() {
           isLoggingIn = !isLoggingIn;
         });

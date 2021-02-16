@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../injection.dart';
 import '../../models/county.dart';
 import '../../models/cultivation_mode.dart';
 import '../../models/farm.dart';
@@ -25,7 +26,7 @@ class ApiRepository extends Repository {
       //save user to shared preferences
       var user = AggregatorLoginObject.fromMap(result.right);
 
-      var preferences = GetIt.I.get<SharedPreferences>();
+      var preferences = getIt.get()<SharedPreferences>();
       preferences.setString(PREF_NAME, user.fullName);
       preferences.setString(PREF_AGINID, user.youthAGINID);
       preferences.setString(PREF_MOBILE, user.phoneNumber);

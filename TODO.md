@@ -6,3 +6,7 @@
 -  place produce to market api
 -  catch DIO errors and display appropriate message
 -  work on signup page 
+-  check why there are multiple api calls esp on login api
+-  click on map and get coordinates
+-  default to the current location
+-  
