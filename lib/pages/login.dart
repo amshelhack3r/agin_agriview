@@ -1,4 +1,5 @@
 import 'package:AgriView/utils/AppUtil.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -116,7 +117,8 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.pushNamedAndRemoveUntil(
             context, "/HomePage", (route) => true);
       }).catchError((err) {
-        Dialogs.messageDialog(context, true, err.message['message'].toString());
+        Fimber.e(err.toString());
+        // Dialogs.messageDialog(context, true, err.message['message'].toString());
         setState(() {
           isLoggingIn = !isLoggingIn;
         });

@@ -274,7 +274,6 @@ class ApiProvider {
       var response = await dio.get(COUNTY_LIST);
 
       if (response.statusCode == 200) {
-        Fimber.d(response.data.toString());
         return Right(response.data);
       } else {
         return Left(ApiException(response.data['message']));
@@ -343,6 +342,39 @@ class ApiProvider {
         // If the server did not return a 200 OK response,
         // then throw an exception.
         throw ApiException(response.data['message']);
+      }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
+
+  //upload gpx file
+  Future<Either<Failure, Map>> uploadGpxFile(Map items) async {
+    var formData = FormData();
+    try {
+      formData.fields
+        ..add(MapEntry("farmerAginId", items['farmerAginID']))
+        ..add(MapEntry("farmAginId", items['farmAginID']))
+        ..add(MapEntry("fileType", 'gpx'));
+
+      formData.files.add(MapEntry(
+          'file',
+          await MultipartFile.fromFile(items['path'],
+              filename: items['fileName'])));
+
+      var response = await dio.post('/production/farm/upload',
+          data: await formData, onSendProgress: (received, total) {
+        if (total != -1) {
+          Fimber.i((received / total * 100).toStringAsFixed(0) + "%");
+        }
+      });
+
+      if (response.statusCode == 201) {
+        return Right({"message": "gpx file uploaded"});
+      } else if (response.statusCode == 409) {
+        return Right({"message": "File was already uploaded"});
+      } else {
+        return Left(ApiException(response.statusMessage));
       }
     } on SocketException {
       throw MySocketException();

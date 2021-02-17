@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:AgriView/utils/gpx_util.dart';
+import 'package:fimber/fimber.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -26,7 +30,7 @@ class ApiRepository extends Repository {
       //save user to shared preferences
       var user = AggregatorLoginObject.fromMap(result.right);
 
-      var preferences = getIt.get()<SharedPreferences>();
+      var preferences = await SharedPreferences.getInstance();
       preferences.setString(PREF_NAME, user.fullName);
       preferences.setString(PREF_AGINID, user.youthAGINID);
       preferences.setString(PREF_MOBILE, user.phoneNumber);
@@ -36,9 +40,6 @@ class ApiRepository extends Repository {
     } else {
       throw result.left;
     }
-    return (result.isRight)
-        ? AggregatorLoginObject.fromMap(result.right)
-        : throw result.left;
   }
 
   Future createUser(Map params) async {
@@ -128,6 +129,32 @@ class ApiRepository extends Repository {
     if (result.isRight) {
       return result.right;
     } else {
+      throw result.left;
+    }
+  }
+
+  Future<String> uploadGpxData(Map data) async {
+    var gpxUtil = GpxUtil(
+        lat: data['lat'],
+        lon: data['lon'],
+        name: data['name'],
+        desc: data['desc']);
+
+    File file = await gpxUtil.writeToFile();
+
+    var items = {
+      "farmerAginId": data["farmerAginId"],
+      "farmAginId": data["farmAginId"],
+      "path": file.path,
+      "fileName": data['name']
+    };
+
+    var result = await api.uploadGpxFile(items);
+
+    if (result.isRight) {
+      return result.right['message'];
+    } else {
+      Fimber.i(result.left.message);
       throw result.left;
     }
   }

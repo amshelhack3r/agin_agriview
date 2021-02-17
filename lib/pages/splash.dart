@@ -18,9 +18,9 @@ class _SplashWidgetState extends State<SplashWidget> {
     var _repository = getIt.get<ApiRepository>();
     var prefs = getIt.get<SharedPreferences>();
 
-    var county = await _repository.fetchCounty();
     var modes = await _repository.fetchCultivationModes();
     var types = await _repository.fetchUnitTypes();
+    var county = await _repository.fetchCounty();
 
     context.read<DatabaseProvider>().county = county;
     context.read<DatabaseProvider>().modes = modes;
@@ -36,7 +36,7 @@ class _SplashWidgetState extends State<SplashWidget> {
         "aginId": aginID,
         "mobile": mobile
       };
-      Future.delayed(Duration(seconds: 3));
+      // Future.delayed(Duration(seconds: 3));
       return Navigator.pushNamed(context, '/HomePage');
     } else {
       return Navigator.pushNamed(context, '/AuthPage');
@@ -46,7 +46,7 @@ class _SplashWidgetState extends State<SplashWidget> {
   @override
   void initState() {
     super.initState();
-    setup();
+    WidgetsBinding.instance.addPostFrameCallback((_) => setup());
   }
 
   @override

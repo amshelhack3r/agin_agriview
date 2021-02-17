@@ -33,8 +33,8 @@ void setupDioModule() {
       // "Content-Type": 'application/json'
     },
     baseUrl: BASEURL,
-    connectTimeout: 7000,
-    receiveTimeout: 3000,
+    connectTimeout: 10000,
+    receiveTimeout: 5000,
   );
 
   Dio dio = Dio(options);

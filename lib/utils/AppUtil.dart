@@ -44,7 +44,7 @@ class AppUtil {
     var mobile = '254';
     //check if it begins with 254
     if (number.startsWith('254')) {
-      return num;
+      return number;
     } else if (number.startsWith('+254')) {
       return number.substring(1);
     } else if (number.startsWith('0')) {
