@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:math';
 
-import 'package:AgriView/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:mapbox_gl/mapbox_gl.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../core/repository/api_repository.dart';
@@ -37,10 +36,10 @@ class _AddFarmState extends State<AddFarm> {
   bool serviceEnabled;
   LocationPermission permission;
 
-  MapboxMapController mapController;
+  Completer<GoogleMapController> _controller = Completer();
 
-  void _onMapCreated(MapboxMapController controller) {
-    mapController = controller;
+  void _onMapCreated(GoogleMapController controller) {
+    _controller.complete(controller);
   }
 
   Future<Position> init() async {
@@ -82,14 +81,18 @@ class _AddFarmState extends State<AddFarm> {
                     builder: (context, AsyncSnapshot<Position> snapshot) {
                       if (snapshot.hasData) {
                         var _position = snapshot.data;
-                        return MapboxMap(
-                          accessToken: MAPBOX_TOKEN,
+                        return GoogleMap(
                           onMapCreated: _onMapCreated,
-                          initialCameraPosition:
-                              const CameraPosition(target: LatLng(0.0, 0.0)),
+                          initialCameraPosition: CameraPosition(
+                              target: LatLng(
+                                  _position.latitude, _position.longitude),
+                              zoom: 14),
                         );
                       } else if (snapshot.hasError) {
-                        print(snapshot.error.toString());
+                        Future.delayed(
+                            Duration(milliseconds: 1),
+                            () => Dialogs.messageDialog(
+                                context, true, snapshot.error.toString()));
                         return Container();
                       } else {
                         return Center(

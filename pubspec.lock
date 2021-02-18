@@ -338,6 +338,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  google_maps_flutter:
+    dependency: "direct main"
+    description:
+      name: google_maps_flutter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
+  google_maps_flutter_platform_interface:
+    dependency: transitive
+    description:
+      name: google_maps_flutter_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.2.0"
   gpx:
     dependency: "direct main"
     description:
@@ -429,34 +443,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.11.4"
-  mapbox_gl:
-    dependency: "direct main"
-    description:
-      name: mapbox_gl
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.0"
-  mapbox_gl_dart:
-    dependency: transitive
-    description:
-      name: mapbox_gl_dart
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.5"
-  mapbox_gl_platform_interface:
-    dependency: transitive
-    description:
-      name: mapbox_gl_platform_interface
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.0"
-  mapbox_gl_web:
-    dependency: transitive
-    description:
-      name: mapbox_gl_web
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.0"
   matcher:
     dependency: transitive
     description:
