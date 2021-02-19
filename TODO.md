@@ -1,12 +1,11 @@
 - remove splash route from backstack
-- start number with the +254 prefix
 -  create a gpx file after selecting from map
 -  send gpx file via rest
 -  add produce to farm
 -  place produce to market api
 -  catch DIO errors and display appropriate message
 -  work on signup page 
--  check why there are multiple api calls esp on login api
+-  check why there are multiple api calls esp on login api / Use futurebuilder instead of a stateful widget
 -  click on map and get coordinates
 -  default to the current location
 -  

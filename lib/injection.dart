@@ -1,4 +1,3 @@
-import 'package:AgriView/utils/failure.dart';
 import 'package:dio/dio.dart';
 import 'package:fimber/fimber.dart';
 import 'package:get_it/get_it.dart';
@@ -9,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/api/api_provider.dart';
 import 'core/repository/api_repository.dart';
 import 'utils/constants.dart';
+import 'utils/failure.dart';
 
 final getIt = GetIt.instance;
 
@@ -58,12 +58,17 @@ void setupDioModule() {
     return response; // continue
   }, onError: (DioError e) async {
     // Do something with response error
-    if (e.type == DioErrorType.RESPONSE) {
-      await Sentry.captureException(e.message);
-      throw ApiException(e.response.statusMessage);
+    switch (e.type) {
+      case DioErrorType.RESPONSE:
+        return e.response.data['message'];
+      case DioErrorType.CANCEL:
+        return "You cancelled the request";
+      case DioErrorType.RECEIVE_TIMEOUT:
+        return "Please try again";
+      default:
+        await Sentry.captureException(e.message);
+        throw ApiException(e.response.statusMessage);
     }
-
-    return e; //continue
   }));
 
   getIt.registerSingletonAsync(() async => dio);

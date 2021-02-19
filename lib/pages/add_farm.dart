@@ -83,6 +83,12 @@ class _AddFarmState extends State<AddFarm> {
                         var _position = snapshot.data;
                         return GoogleMap(
                           onMapCreated: _onMapCreated,
+                          onLongPress: (latLong) {
+                            setState(() {
+                              _latLon = latLong;
+                              isShown = true;
+                            });
+                          },
                           initialCameraPosition: CameraPosition(
                               target: LatLng(
                                   _position.latitude, _position.longitude),
@@ -160,8 +166,18 @@ class _AddFarmState extends State<AddFarm> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("lat ${_latLon.latitude.toString()}"),
-                          Text("lon ${_latLon.longitude.toString()}"),
+                          Text(
+                              "lat ${double.parse(_latLon.latitude.toStringAsFixed(3))}",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).primaryColor)),
+                          Text(
+                              "lon ${double.parse(_latLon.longitude.toStringAsFixed(3))}",
+                              style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  color: Theme.of(context).primaryColor)),
                         ],
                       ),
                     ),

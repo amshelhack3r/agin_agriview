@@ -14,7 +14,7 @@ class SplashWidget extends StatefulWidget {
 }
 
 class _SplashWidgetState extends State<SplashWidget> {
-  Future setup() async {
+  Future<bool> setup() async {
     var _repository = getIt.get<ApiRepository>();
     var prefs = getIt.get<SharedPreferences>();
 
@@ -36,45 +36,88 @@ class _SplashWidgetState extends State<SplashWidget> {
         "aginId": aginID,
         "mobile": mobile
       };
-      // Future.delayed(Duration(seconds: 3));
-      return Navigator.pushNamed(context, '/HomePage');
+      return true;
     } else {
-      return Navigator.pushNamed(context, '/AuthPage');
+      return false;
     }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => setup());
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Container(
-        height: double.infinity,
-        child: Stack(children: [
-          Image.asset(
-            "assets/images/splash.png",
-            height: double.infinity,
-            fit: BoxFit.cover,
-          ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Image.asset(
-              "assets/images/agriview_logo.jpg",
-              // height: 200,
-              width: MediaQuery.of(context).size.width,
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.white,
-            ),
-          ),
-        ]),
+      child: Scaffold(
+        body: FutureBuilder(
+          future: setup(),
+          builder: (context, AsyncSnapshot<bool> snapshot) {
+            if (snapshot.hasData) {
+              var hasLoggedIn = snapshot.data;
+              if (hasLoggedIn) {
+                Future.delayed(Duration(milliseconds: 1),
+                    () => Navigator.pushNamed(context, '/HomePage'));
+              } else {
+                Future.delayed(Duration(milliseconds: 1),
+                    () => Navigator.pushNamed(context, '/Auth'));
+              }
+              return Container();
+            } else if (snapshot.hasError) {
+              return Container(
+                height: double.infinity,
+                alignment: Alignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      "assets/images/wifi_off.png",
+                      // width: 200,
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "No Internet, \n Switch to internet and retry",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    ElevatedButton.icon(
+                        onPressed: () => Navigator.pushReplacementNamed(
+                            context, '/SplashPage'),
+                        icon: Icon(Icons.refresh),
+                        label: Text("RETRY"))
+                  ],
+                ),
+              );
+            } else {
+              return Container(
+                height: double.infinity,
+                child: Stack(children: [
+                  Image.asset(
+                    "assets/images/splash.png",
+                    height: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Image.asset(
+                      "assets/images/agriview_logo.jpg",
+                      // height: 200,
+                      width: MediaQuery.of(context).size.width,
+                    ),
+                  ),
+                  Align(
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                    ),
+                  ),
+                ]),
+              );
+            }
+          },
+        ),
       ),
     );
   }

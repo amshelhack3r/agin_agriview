@@ -92,8 +92,10 @@ class _FarmerInfoState extends State<FarmerDashboard> {
                   );
                 }
               } else if (snapshot.hasError) {
-                print(snapshot.error);
-                Dialogs.messageDialog(context, true, snapshot.error.toString());
+                Future.delayed(
+                    Duration(milliseconds: 1),
+                    () => Dialogs.messageDialog(
+                        context, true, snapshot.error.toString()));
                 return Container();
               } else {
                 return Expanded(
