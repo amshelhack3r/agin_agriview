@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:either_dart/either.dart';
 import 'package:fimber/fimber.dart';
 
@@ -73,6 +74,7 @@ class ApiProvider {
         data: jsonEncode(<String, String>{
           'CategoryID': "1",
         }),
+        options: buildCacheOptions(Duration(days: 7)),
       );
       if (response.statusCode == 200) {
         return Right(response.data);
@@ -142,6 +144,7 @@ class ApiProvider {
         data: jsonEncode(<String, String>{
           'AginID': aggregatorAginID,
         }),
+        options: buildCacheOptions(Duration(days: 1)),
       );
 
       if (response.statusCode == 200) {
@@ -160,7 +163,10 @@ class ApiProvider {
 
   Future<Either<Failure, List<dynamic>>> fetchCultivationModeOptions() async {
     try {
-      var response = await dio.get(CULTIVATION_MODES_OPTIONS);
+      var response = await dio.get(
+        CULTIVATION_MODES_OPTIONS,
+        options: buildCacheOptions(Duration(days: 14)),
+      );
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
@@ -177,7 +183,10 @@ class ApiProvider {
 
   Future<Either<Failure, List<Map>>> fetchProduceStatusOptions() async {
     try {
-      final response = await dio.get(PRODUCT_STATUS);
+      final response = await dio.get(
+        PRODUCT_STATUS,
+        options: buildCacheOptions(Duration(days: 14)),
+      );
       if (response.statusCode == 200) {
         return Right(response.data);
       } else {
@@ -192,7 +201,10 @@ class ApiProvider {
 
   Future<Either<Failure, List<dynamic>>> fetchUnitTypeOptions() async {
     try {
-      final response = await dio.get(UNIT_TYPES);
+      final response = await dio.get(
+        UNIT_TYPES,
+        options: buildCacheOptions(Duration(days: 14)),
+      );
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
@@ -228,6 +240,7 @@ class ApiProvider {
         data: jsonEncode(<String, String>{
           'userAginID': aggregatorAginID,
         }),
+        options: buildCacheOptions(Duration(days: 1)),
       );
 
       if (response.statusCode == 200) {
@@ -251,6 +264,7 @@ class ApiProvider {
         data: jsonEncode(<String, String>{
           'AginID': landAginID,
         }),
+        options: buildCacheOptions(Duration(days: 7)),
       );
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
@@ -271,7 +285,10 @@ class ApiProvider {
 
   Future<Either<Failure, List<dynamic>>> fetchCounty() async {
     try {
-      var response = await dio.get(COUNTY_LIST);
+      var response = await dio.get(
+        COUNTY_LIST,
+        options: buildCacheOptions(Duration(days: 14)),
+      );
 
       if (response.statusCode == 200) {
         return Right(response.data);
@@ -285,7 +302,10 @@ class ApiProvider {
 
   Future<Either<Failure, List<Map>>> fetchCountries() async {
     try {
-      final response = await dio.get(FETCH_COUNTRIES);
+      final response = await dio.get(
+        FETCH_COUNTRIES,
+        options: buildCacheOptions(Duration(days: 14)),
+      );
 
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,

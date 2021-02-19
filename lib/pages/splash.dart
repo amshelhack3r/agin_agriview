@@ -53,10 +53,10 @@ class _SplashWidgetState extends State<SplashWidget> {
               var hasLoggedIn = snapshot.data;
               if (hasLoggedIn) {
                 Future.delayed(Duration(milliseconds: 1),
-                    () => Navigator.pushNamed(context, '/HomePage'));
+                    () => Navigator.pushReplacementNamed(context, '/HomePage'));
               } else {
                 Future.delayed(Duration(milliseconds: 1),
-                    () => Navigator.pushNamed(context, '/Auth'));
+                    () => Navigator.pushReplacementNamed(context, '/AuthPage'));
               }
               return Container();
             } else if (snapshot.hasError) {
@@ -82,11 +82,11 @@ class _SplashWidgetState extends State<SplashWidget> {
                     SizedBox(
                       height: 10,
                     ),
-                    ElevatedButton.icon(
-                        onPressed: () => Navigator.pushReplacementNamed(
-                            context, '/SplashPage'),
-                        icon: Icon(Icons.refresh),
-                        label: Text("RETRY"))
+                    // ElevatedButton.icon(
+                    //     onPressed: () => Navigator.pushReplacementNamed(
+                    //         context, '/SplashPage'),
+                    //     icon: Icon(Icons.refresh),
+                    //     label: Text("RETRY"))
                   ],
                 ),
               );

@@ -348,8 +348,8 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
               )
             : Image.file(
                 _image,
-                width: 150,
-                height: 150,
+                width: 100,
+                height: 100,
               ),
         TextField(
           keyboardType: TextInputType.number,

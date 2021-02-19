@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fimber/fimber.dart';
 import 'package:get_it/get_it.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
@@ -33,8 +34,6 @@ void setupDioModule() {
       // "Content-Type": 'application/json'
     },
     baseUrl: BASEURL,
-    connectTimeout: 10000,
-    receiveTimeout: 5000,
   );
 
   Dio dio = Dio(options);
@@ -48,9 +47,14 @@ void setupDioModule() {
     compact: false,
   ));
 
+  //cache all requests. this is to minimise frequent api calls
+  dio.interceptors
+      .add(DioCacheManager(CacheConfig(baseUrl: BASEURL)).interceptor);
+
   dio.interceptors
       .add(InterceptorsWrapper(onRequest: (RequestOptions options) async {
     Fimber.i("REQUESTING: ${options.path}");
+
     return options; //continue
   }, onResponse: (Response response) async {
     // Do something with response data

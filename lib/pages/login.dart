@@ -114,8 +114,7 @@ class _LoginFormState extends State<LoginForm> {
           "aginId": value.youthAGINID,
           "mobile": AppUtil.formatMobileNumber(value.phoneNumber)
         };
-        Navigator.pushNamedAndRemoveUntil(
-            context, "/HomePage", (route) => true);
+        Navigator.pushReplacementNamed(context, "/HomePage");
       }).catchError((err) {
         Fimber.e(err.toString());
         // Dialogs.messageDialog(context, true, err.message['message'].toString());
