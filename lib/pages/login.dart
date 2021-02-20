@@ -1,4 +1,3 @@
-import 'package:AgriView/utils/AppUtil.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -6,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../core/repository/api_repository.dart';
 import '../injection.dart';
 import '../state/user_provider.dart';
-import 'elements/dialogs.dart';
+import '../utils/AppUtil.dart';
 
 class LoginForm extends StatefulWidget {
   LoginForm({Key key}) : super(key: key);

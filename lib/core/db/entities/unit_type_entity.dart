@@ -1,5 +1,6 @@
-import 'package:AgriView/models/unit_type.dart';
 import 'package:floor/floor.dart';
+
+import '../../../models/unit_type.dart';
 
 @Entity(tableName: 'unit_types')
 class UnitTypeEntity extends UnitType {

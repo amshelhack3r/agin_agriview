@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 
 import '../core/repository/api_repository.dart';
 import '../injection.dart';
+import '../models/dropdownform.dart';
 import '../models/farm.dart';
 import 'elements/dialogs.dart';
 
@@ -308,6 +309,42 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
   File _image;
   final picker = ImagePicker();
   bool onFirst = true;
+  bool _hasErrors = false;
+  String _selectedDate,
+      _grade,
+      _growingStatus,
+      _location,
+      _status,
+      _quantityError,
+      _dateError;
+  int quantity;
+  final _quantityController = TextEditingController();
+  final _dateController = TextEditingController();
+
+  final grade = [
+    FieldName("grade 1"),
+    FieldName("grade 2"),
+    FieldName("grade 3"),
+    FieldName("mixed")
+  ];
+
+  final growingStatus = [
+    FieldName("Open Field"),
+    FieldName("Green House"),
+    FieldName("Shadenet")
+  ];
+
+  final productLocation = [FieldName("Farm"), FieldName("Bundling Center")];
+
+  final productStatus = [
+    FieldName("Ready for Harvest"),
+    FieldName("Harvested")
+  ];
+
+  FieldName _selectedGrade,
+      _selectedGrowingStatus,
+      _selectedProduceLocation,
+      _selectedProductStatus;
 
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -352,16 +389,20 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
                 height: 100,
               ),
         TextField(
+          controller: _quantityController,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            labelText: "Quantity",
-          ),
+              labelText: "Quantity",
+              errorText: (_quantityError != null) ? _quantityError : null),
         ),
         SizedBox(
           height: 10,
         ),
         TextField(
+          enabled: false,
+          controller: _dateController,
           decoration: InputDecoration(
+            errorText: (_dateError != null) ? _dateError : null,
             labelText: "date ready",
           ),
           onTap: () {
@@ -382,7 +423,7 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
             icon: Icon(Icons.chevron_right),
             onPressed: () {
               setState(() {
-                onFirst = false;
+                onFirst = !onFirst;
               });
             })
       ],
@@ -396,109 +437,167 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
         children: [
           Container(
             width: MediaQuery.of(context).size.width,
-            child: DropdownButton(
-                hint: Text("Grade"),
-                onChanged: (int value) {},
-                items: [
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Grade 1"),
-                    value: 1,
-                  ),
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Grade 2"),
-                    value: 2,
-                  ),
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Grade 3"),
-                    value: 3,
-                  ),
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("mixed"),
-                    value: 4,
-                  ),
-                ]),
+            child: DropdownButton<FieldName>(
+              hint: Text("Grade"),
+              value: _selectedGrade,
+              onChanged: (FieldName newValue) {
+                setState(() {
+                  _selectedGrade = newValue;
+                });
+              },
+              items: grade
+                  .map(
+                    (FieldName fName) => DropdownMenuItem<FieldName>(
+                      child: Text(fName.name),
+                      value: fName,
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
           SizedBox(
             height: 10,
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            child: DropdownButton(
-                hint: Text("Growing Status"),
-                onChanged: (int value) {},
-                items: [
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Open Field"),
-                    value: 1,
-                  ),
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Green house"),
-                    value: 2,
-                  ),
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("SHadenet"),
-                    value: 3,
-                  ),
-                ]),
+            child: DropdownButton<FieldName>(
+              hint: Text("Growing Status"),
+              value: _selectedGrowingStatus,
+              onChanged: (FieldName newValue) {
+                setState(() {
+                  _selectedGrowingStatus = newValue;
+                });
+              },
+              items: growingStatus
+                  .map(
+                    (FieldName fName) => DropdownMenuItem<FieldName>(
+                      child: Text(fName.name),
+                      value: fName,
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
           SizedBox(
             height: 10,
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            child: DropdownButton(
-                hint: Text("Location"),
-                onChanged: (int value) {},
-                items: [
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Farmer"),
-                    value: 1,
-                  ),
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Bundling Center"),
-                    value: 2,
-                  ),
-                ]),
+            child: DropdownButton<FieldName>(
+              hint: Text("Location"),
+              value: _selectedProduceLocation,
+              onChanged: (FieldName newValue) {
+                setState(() {
+                  _selectedProduceLocation = newValue;
+                });
+              },
+              items: productLocation
+                  .map(
+                    (FieldName fName) => DropdownMenuItem<FieldName>(
+                      child: Text(fName.name),
+                      value: fName,
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
           SizedBox(
             height: 10,
           ),
           Container(
             width: MediaQuery.of(context).size.width,
-            child: DropdownButton(
-                hint: Text("Status"),
-                onChanged: (int value) {},
-                items: [
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Ready for harvest"),
-                    value: 1,
-                  ),
-                  DropdownMenuItem(
-                    onTap: () {},
-                    child: Text("Harvested"),
-                    value: 2,
-                  ),
-                ]),
+            child: DropdownButton<FieldName>(
+              hint: Text("Status"),
+              value: _selectedGrowingStatus,
+              onChanged: (FieldName newValue) {
+                setState(() {
+                  _selectedGrowingStatus = newValue;
+                });
+              },
+              items: growingStatus
+                  .map(
+                    (FieldName fName) => DropdownMenuItem<FieldName>(
+                      child: Text(fName.name),
+                      value: fName,
+                    ),
+                  )
+                  .toList(),
+            ),
           ),
           SizedBox(
             height: 10,
           ),
-          RaisedButton(
-            color: Theme.of(context).primaryColor,
-            textColor: Colors.white,
-            onPressed: () {},
-            child: Text('submit'),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                  icon: Icon(Icons.chevron_left),
+                  onPressed: () {
+                    setState(() {
+                      onFirst = !onFirst;
+                    });
+                  }),
+              RaisedButton(
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                onPressed: () => _submitForm(),
+                child: Text('submit'),
+              ),
+            ],
           ),
         ]);
+  }
+
+  _submitForm() {
+    //validate forms
+    if (_image == null) {}
+
+    //validate quantity
+    if (_quantityController.text.isEmpty) {
+      setState(() {
+        _quantityError = "quantity is required";
+        _hasErrors = true;
+      });
+    }
+
+    if (int.parse(_quantityController.text) < 1) {
+      setState(() {
+        _quantityError = "quantity cannot be zero";
+        _hasErrors = true;
+      });
+    }
+
+    if (_dateController.text.isEmpty) {
+      setState(() {
+        _dateError = "date is required";
+        _hasErrors = true;
+      });
+    }
+
+    //compare dates
+  }
+
+  Widget _generateDropdown(
+      String hint, FieldName _selectedField, List<FieldName> fields) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      child: DropdownButton<FieldName>(
+        hint: Text(hint),
+        value: _selectedField,
+        onChanged: (FieldName newValue) {
+          setState(() {
+            _selectedField = newValue;
+          });
+        },
+        items: fields
+            .map(
+              (FieldName fName) => DropdownMenuItem<FieldName>(
+                child: Text(fName.name),
+                value: fName,
+              ),
+            )
+            .toList(),
+      ),
+    );
   }
 }

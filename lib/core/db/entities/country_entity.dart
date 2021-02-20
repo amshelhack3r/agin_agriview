@@ -1,5 +1,6 @@
-import 'package:AgriView/models/country.dart';
 import 'package:floor/floor.dart';
+
+import '../../../models/country.dart';
 
 @Entity(tableName: 'country')
 class CountryEntity extends Country {

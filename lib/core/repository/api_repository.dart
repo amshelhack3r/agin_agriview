@@ -1,11 +1,8 @@
 import 'dart:io';
 
-import 'package:AgriView/utils/gpx_util.dart';
 import 'package:fimber/fimber.dart';
-import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../injection.dart';
 import '../../models/county.dart';
 import '../../models/cultivation_mode.dart';
 import '../../models/farm.dart';
@@ -14,6 +11,7 @@ import '../../models/login_object.dart';
 import '../../models/product.dart';
 import '../../models/unit_type.dart';
 import '../../utils/constants.dart';
+import '../../utils/gpx_util.dart';
 import '../api/api_provider.dart';
 import 'repository.dart';
 

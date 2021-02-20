@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'package:sqflite/sqflite.dart' as sqflite;
+
 import 'package:floor/floor.dart';
+import 'package:sqflite/sqflite.dart' as sqflite;
 
 import 'dao/counties_dao.dart';
 import 'dao/countries_dao.dart';

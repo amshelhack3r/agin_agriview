@@ -1,5 +1,6 @@
-import 'package:AgriView/models/farm.dart';
 import 'package:floor/floor.dart';
+
+import '../../../models/farm.dart';
 
 @Entity(tableName: 'farm')
 class FarmEntity extends Farm {

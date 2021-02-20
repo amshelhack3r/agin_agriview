@@ -1,5 +1,6 @@
-import 'package:AgriView/utils/hex_color.dart';
 import 'package:flutter/material.dart';
+
+import '../utils/hex_color.dart';
 
 class WalletPage extends StatelessWidget {
   const WalletPage({Key key}) : super(key: key);
