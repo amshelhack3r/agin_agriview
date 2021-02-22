@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:AgriView/models/produce_status.dart';
 import 'package:fimber/fimber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,6 +19,7 @@ import 'repository.dart';
 class ApiRepository extends Repository {
   @override
   String getType() => 'api';
+
   ApiProvider api;
   ApiRepository({this.api});
 
@@ -153,6 +155,30 @@ class ApiRepository extends Repository {
       return result.right['message'];
     } else {
       Fimber.i(result.left.message);
+      throw result.left;
+    }
+  }
+
+  Future<Map<String, List<Object>>> getPlaceToMarketDetails() async {
+    var result = await api.getPlaceToMarketDetails();
+
+    if (result.isRight) {
+      var data = result.right;
+      Map<String, List> map = data[0];
+
+      List<CultivationMode> modes = map['cultivationModes']
+          .map((mode) => CultivationMode.fromMap(mode))
+          .toList();
+
+      List<ProduceStatus> produceStatus = map['produceStatuses']
+          .map((status) => ProduceStatus.fromMap(status))
+          .toList();
+
+      List<UnitType> types =
+          map['unitTypes'].map((type) => UnitType.fromMap(type)).toList();
+
+      return {"cultivation": modes, "status": produceStatus, "type": types};
+    } else {
       throw result.left;
     }
   }

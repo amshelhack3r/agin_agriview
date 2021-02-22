@@ -400,4 +400,18 @@ class ApiProvider {
       throw MySocketException();
     }
   }
+
+  Future<Either<Failure, List<dynamic>>> getPlaceToMarketDetails() async {
+    try {
+      Response response = await Dio().get(BASEURL + '/market/dropdowns/list');
+
+      if (response.statusCode == 200) {
+        return Right(response.data);
+      } else {
+        return Left(response.data);
+      }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
 }
