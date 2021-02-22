@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+
+import '../core/repository/api_repository.dart';
+import '../injection.dart';
+import '../models/county.dart';
+import '../utils/AppUtil.dart';
+import '../utils/constants.dart';
+import 'elements/dialogs.dart';
 
 class RegisterForm extends StatefulWidget {
   RegisterForm({Key key}) : super(key: key);
@@ -9,6 +17,21 @@ class RegisterForm extends StatefulWidget {
 
 class _RegisterFormState extends State<RegisterForm> {
   bool isFirst = true;
+  bool isValid = true;
+  var _dateController = TextEditingController();
+  var _firstNameController = TextEditingController();
+  var _lastNameController = TextEditingController();
+  var _mobileController = TextEditingController();
+  var _passwordController = TextEditingController();
+  var _emailController = TextEditingController();
+  County _selectedCounty;
+
+  String _dateError,
+      _firstNameError,
+      _lastNameError,
+      _mobileError,
+      _passwordError,
+      _emailError;
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +50,10 @@ class _RegisterFormState extends State<RegisterForm> {
           height: 10,
         ),
         TextField(
+          controller: _firstNameController,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
+            errorText: (_firstNameError != null) ? _firstNameError : null,
             hintText: "First Name",
           ),
         ),
@@ -36,20 +61,21 @@ class _RegisterFormState extends State<RegisterForm> {
           height: 10,
         ),
         TextField(
+          controller: _lastNameController,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
+            errorText: (_lastNameError != null) ? _lastNameError : null,
             hintText: "Last Name",
           ),
         ),
         SizedBox(
           height: 10,
         ),
-        SizedBox(
-          height: 10,
-        ),
         TextField(
+          controller: _mobileController,
           keyboardType: TextInputType.phone,
           decoration: InputDecoration(
+            errorText: (_mobileError != null) ? _mobileError : null,
             hintText: "Phone Number",
           ),
         ),
@@ -57,13 +83,22 @@ class _RegisterFormState extends State<RegisterForm> {
           height: 10,
         ),
         TextField(
-          keyboardType: TextInputType.number,
+          // enabled: false,
+          controller: _dateController,
           decoration: InputDecoration(
-            hintText: "Organization code",
+            errorText: (_dateError != null) ? _dateError : null,
+            labelText: "Date ready",
           ),
-        ),
-        SizedBox(
-          height: 10,
+          onTap: () {
+            DatePicker.showDatePicker(context,
+                showTitleActions: true,
+                minTime: DateTime(2018, 3, 5),
+                maxTime: DateTime(2019, 6, 7), onChanged: (date) {
+              print('change $date');
+            }, onConfirm: (date) {
+              print('confirm $date');
+            }, currentTime: DateTime.now(), locale: LocaleType.en);
+          },
         ),
         SizedBox(
           height: 15,
@@ -123,9 +158,12 @@ class _RegisterFormState extends State<RegisterForm> {
           height: 10,
         ),
         TextField(
+          controller: _passwordController,
           obscureText: true,
+          maxLength: 4,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
+            errorText: (_passwordError != null) ? _passwordError : null,
             hintText: "Password",
           ),
         ),
@@ -142,8 +180,10 @@ class _RegisterFormState extends State<RegisterForm> {
           height: 10,
         ),
         TextField(
+          controller: _emailController,
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
+            errorText: (_emailError != null) ? _emailError : null,
             hintText: "Email Address",
           ),
         ),
@@ -214,5 +254,75 @@ class _RegisterFormState extends State<RegisterForm> {
     );
   }
 
-  _register() {}
+  _register() {
+    if (_firstNameController.text.isEmpty) {
+      setState(() {
+        _firstNameError = "First name is required";
+        isValid = false;
+      });
+      return;
+    }
+    if (_lastNameController.text.isEmpty) {
+      setState(() {
+        _lastNameError = "Last name is required";
+        isValid = false;
+      });
+      return;
+    }
+    if (_mobileController.text.isEmpty) {
+      setState(() {
+        _mobileError = "Phone number is required";
+        isValid = false;
+      });
+      return;
+    }
+    if (_dateController.text.isEmpty) {
+      setState(() {
+        _dateError = "Date is required";
+        isValid = false;
+      });
+      return;
+    }
+    if (_passwordController.text.isEmpty) {
+      setState(() {
+        _passwordError = "Password is required";
+        isValid = false;
+      });
+      return;
+    }
+    if (_passwordController.text.length < 4) {
+      setState(() {
+        _passwordError = "Password should be atleast 4characters";
+        isValid = false;
+      });
+      return;
+    }
+    if (_emailController.text.isEmpty) {
+      setState(() {
+        _emailError = "Email is required";
+        isValid = false;
+      });
+      return;
+    }
+
+    var params = {
+      "status": 0,
+      "password": _passwordController.text,
+      "countyID": _selectedCounty.countyID,
+      "phoneNumber": AppUtil.formatMobileNumber(_mobileController.text),
+      "emailAddress": _emailController.text,
+      "firstName": _firstNameController.text,
+      "lastName": _lastNameController.text,
+      "countryID": 1,
+      "organizationCode": ORGANIZATION_ID,
+      "dateBirth": _dateController.text
+    };
+
+    var repo = getIt.get<ApiRepository>();
+
+    repo.createUser(params).then((value) => launchVerify()).catchError(
+        (err) => Dialogs.messageDialog(context, true, err.toString()));
+  }
+
+  launchVerify() {}
 }

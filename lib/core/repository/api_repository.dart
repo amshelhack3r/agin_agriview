@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:AgriView/models/produce_status.dart';
 import 'package:fimber/fimber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,6 +8,7 @@ import '../../models/cultivation_mode.dart';
 import '../../models/farm.dart';
 import '../../models/farmer_info.dart';
 import '../../models/login_object.dart';
+import '../../models/produce_status.dart';
 import '../../models/product.dart';
 import '../../models/unit_type.dart';
 import '../../utils/constants.dart';

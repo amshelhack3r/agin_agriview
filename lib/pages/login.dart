@@ -83,8 +83,11 @@ class _LoginFormState extends State<LoginForm> {
           GestureDetector(
             onTap: () {},
             child: Text(
-              'Forgot Password?',
-              style: TextStyle(fontSize: 16),
+              'VERIFY ACCOUNT',
+              style: TextStyle(
+                  fontSize: 16,
+                  decoration: TextDecoration.underline,
+                  color: Colors.blueAccent),
             ),
           ),
           SizedBox(
