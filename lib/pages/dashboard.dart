@@ -37,7 +37,6 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   _buildHeader() {
-    var oneThird = MediaQuery.of(context).size.width / 3;
     return Container(
       width: double.infinity,
       height: MediaQuery.of(context).size.width / 3,
