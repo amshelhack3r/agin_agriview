@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
+import 'package:dio/src/response.dart' as Res;
 import 'package:dio_http_cache/dio_http_cache.dart';
 import 'package:fimber/fimber.dart';
+import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +27,21 @@ Future<void> setupLocator() async {
 
   final sharedPrefs = await SharedPreferences.getInstance();
   getIt.registerSingleton(sharedPrefs);
+
+  //graphQl config
+  await initHiveForFlutter();
+
+  getIt.registerSingletonAsync(() async => HttpLink(GRAPHQL_URL));
+
+  // final Link link = authLink.concat(httpLink);
+  getIt.registerSingletonWithDependencies<ValueNotifier<GraphQLClient>>(
+      () => ValueNotifier(
+            GraphQLClient(
+              link: getIt<HttpLink>(),
+              cache: GraphQLCache(store: HiveStore()),
+            ),
+          ),
+      dependsOn: [HttpLink]);
 }
 
 void setupDioModule() {
@@ -39,13 +57,13 @@ void setupDioModule() {
   Dio dio = Dio(options);
 
   //track requests and responses in development
-  dio.interceptors.add(PrettyDioLogger(
-    requestHeader: true,
-    requestBody: true,
-    responseBody: true,
-    responseHeader: false,
-    compact: false,
-  ));
+  // dio.interceptors.add(PrettyDioLogger(
+  //   requestHeader: true,
+  //   requestBody: true,
+  //   responseBody: true,
+  //   responseHeader: false,
+  //   compact: false,
+  // ));
 
   //cache all requests. this is to minimise frequent api calls
   dio.interceptors
@@ -56,7 +74,7 @@ void setupDioModule() {
     Fimber.i("REQUESTING: ${options.path}");
 
     return options; //continue
-  }, onResponse: (Response response) async {
+  }, onResponse: (Res.Response response) async {
     // Do something with response data
     Fimber.i("RESPONSE: ${response.data}");
     return response; // continue
