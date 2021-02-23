@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as path;
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:intl/intl.dart';
 
 class AppUtil {
   static Future<String> getFileNameWithExtension(File file) async {

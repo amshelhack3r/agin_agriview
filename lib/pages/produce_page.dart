@@ -1,7 +1,5 @@
 import 'dart:io';
 
-import 'package:AgriView/models/product.dart';
-import 'package:AgriView/utils/AppUtil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +10,8 @@ import '../core/repository/api_repository.dart';
 import '../injection.dart';
 import '../models/dropdownform.dart';
 import '../models/farm.dart';
+import '../models/product.dart';
+import '../utils/AppUtil.dart';
 import 'elements/dialogs.dart';
 
 class ProducePage extends StatefulWidget {

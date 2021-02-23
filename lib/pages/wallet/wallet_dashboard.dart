@@ -1,7 +1,7 @@
-import 'package:AgriView/pages/elements/dialogs.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/api/payment_provider.dart';
+import '../elements/dialogs.dart';
 import 'deactivate.dart';
 import 'topup.dart';
 

@@ -1,4 +1,3 @@
-import 'package:AgriView/pages/wallet/wallet_dashboard.dart';
 import 'package:flutter/material.dart';
 
 import 'pages/add_farm.dart';
@@ -10,6 +9,7 @@ import 'pages/produce_page.dart';
 import 'pages/product_single.dart';
 import 'pages/register_farmer.dart';
 import 'pages/splash.dart';
+import 'pages/wallet/wallet_dashboard.dart';
 import 'utils/transition.dart';
 
 class RouteGenerator {

@@ -1,10 +1,10 @@
-import 'package:AgriView/pages/wallet/wallet_login.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/hex_color.dart';
 import 'dashboard.dart';
 import 'farmers_list.dart';
 import 'market_place.dart';
+import 'wallet/wallet_login.dart';
 
 class HomePage extends StatefulWidget {
   final int index;

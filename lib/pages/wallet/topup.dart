@@ -1,10 +1,8 @@
-import '../../core/api/payment_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../app_theme.dart';
-import '../../core/repository/api_repository.dart';
-import '../../injection.dart';
+import '../../core/api/payment_provider.dart';
 import '../../state/user_provider.dart';
 import '../elements/dialogs.dart';
 

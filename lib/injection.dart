@@ -5,7 +5,6 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

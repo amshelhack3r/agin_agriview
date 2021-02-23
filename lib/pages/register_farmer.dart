@@ -1,4 +1,3 @@
-import 'package:AgriView/utils/AppUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -7,6 +6,7 @@ import '../injection.dart';
 import '../models/county.dart';
 import '../state/db_provider.dart';
 import '../state/user_provider.dart';
+import '../utils/AppUtil.dart';
 import 'elements/dialogs.dart';
 import 'elements/rounded_container.dart';
 
