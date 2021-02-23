@@ -19,7 +19,7 @@ class PaymentProvider {
     // or new Dio with a BaseOptions instance.
     BaseOptions options = BaseOptions(
       headers: {
-        "X-AGIN-API-Key-Token": APIKEY,
+        "X-AGIN-API-Key-Token": "e9567a76cc5f4da191a97945ba37b63a",
         // "Content-Type": 'application/json'
       },
       baseUrl: PAYMENT_BASEURL,
@@ -69,9 +69,7 @@ class PaymentProvider {
       var response = await dio.get(BEARER_TOKEN);
       if (response.statusCode == 200) {
         var headers = response.headers.map;
-
-        print(response.headers);
-        return "367457632547625647";
+        return headers['authorization'][0];
       }
       return Future.error("ERROR");
     } on SocketException {
@@ -84,10 +82,11 @@ class PaymentProvider {
     try {
       var token = await this.getBearer();
 
-      dio.options.headers = {"authorization": token};
+      // dio.options.headers = {"Authorization": token};
       if (token is String) {
         var response = await dio.post(WALLET_BALANCE,
-            data: jsonEncode({"mpesaAccountNumber": number}));
+            data: jsonEncode({"mpesaAccountNumber": number}),
+            options: Options(headers: {'Authorization': token}));
 
         if (response.statusCode == 200) {
           return Right(response.data);
@@ -146,9 +145,11 @@ class PaymentProvider {
 
   Future<Either<Failure, Map<String, dynamic>>> pushStkMpesa(Map params) async {
     var bearer = await getBearer();
-    dio.options.headers = {'Authorization': bearer};
+    // dio.options.headers = {'Authorization': bearer};
     try {
-      var response = await dio.post(MPESA_PUSH_STK, data: jsonEncode(params));
+      var response = await dio.post(MPESA_PUSH_STK,
+          data: jsonEncode(params),
+          options: Options(headers: {'Authorization': bearer}));
 
       if (response.statusCode == 200) {
         return Right(response.data);
