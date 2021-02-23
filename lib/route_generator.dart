@@ -1,3 +1,4 @@
+import 'package:AgriView/pages/wallet/wallet_dashboard.dart';
 import 'package:flutter/material.dart';
 
 import 'pages/add_farm.dart';
@@ -23,6 +24,11 @@ class RouteGenerator {
 
       case '/AuthPage':
         return slideAnimation(Auth());
+
+      case '/WalletDashboard':
+        return slideAnimation(WalletDashboard(
+          mobile: args,
+        ));
 // animation =
       //     CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
       case '/HomePage':
