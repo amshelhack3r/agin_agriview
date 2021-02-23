@@ -1,3 +1,4 @@
+import 'package:AgriView/utils/AppUtil.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -211,7 +212,7 @@ class _RegisterFarmerPageState extends State<RegisterFarmerPage> {
     }
 
     Map params = {
-      "phoneNumber": mobile.text,
+      "phoneNumber": AppUtil.formatMobileNumber(mobile.text),
       "emailAddress": emailVal,
       "firstName": firstName.text,
       "lastName": lastName.text,
