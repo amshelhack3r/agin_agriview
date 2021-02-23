@@ -1,10 +1,10 @@
+import 'package:AgriView/pages/wallet/wallet_login.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/hex_color.dart';
 import 'dashboard.dart';
 import 'farmers_list.dart';
 import 'market_place.dart';
-import 'wallet.dart';
 
 class HomePage extends StatefulWidget {
   final int index;
@@ -41,7 +41,7 @@ class _HomePageState extends State<HomePage> {
           DashboardPage(),
           MarketPlaceList(),
           FarmersListPage(),
-          WalletPage()
+          WalletLogin()
         ],
       ),
       floatingActionButton: FloatingActionButton(
