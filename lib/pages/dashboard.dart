@@ -30,16 +30,6 @@ class _DashboardPageState extends State<DashboardPage> {
           ),
           SizedBox(
             height: 30,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              buildCard(
-                  "assets/images/register_group.png", "Register \n Group"),
-              buildCard(
-                  "assets/images/register_farmer.png", "Register \n Farmer",
-                  routeName: "/RegisterFarmerPage"),
-            ],
           )
         ],
       ),
@@ -259,9 +249,9 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          buildCard("assets/images/place_market.png", "Place to \n Market"),
-          buildCard(
-              "assets/images/register_produce.png", "Register \n Produce"),
+          buildCard("assets/images/register_group.png", "Register \n Group"),
+          buildCard("assets/images/register_farmer.png", "Register \n Farmer",
+              routeName: "/RegisterFarmerPage"),
         ],
       ),
     );
