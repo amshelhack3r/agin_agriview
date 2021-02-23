@@ -82,11 +82,11 @@ class _SplashWidgetState extends State<SplashWidget> {
                     SizedBox(
                       height: 10,
                     ),
-                    // ElevatedButton.icon(
-                    //     onPressed: () => Navigator.pushReplacementNamed(
-                    //         context, '/SplashPage'),
-                    //     icon: Icon(Icons.refresh),
-                    //     label: Text("RETRY"))
+                    ElevatedButton.icon(
+                        onPressed: () => Navigator.pushReplacementNamed(
+                            context, '/SplashPage'),
+                        icon: Icon(Icons.refresh),
+                        label: Text("RETRY"))
                   ],
                 ),
               );
