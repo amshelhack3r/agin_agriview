@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // import 'package:url_launcher/url_launcher.dart';
 
@@ -177,7 +178,9 @@ class FarmersListPage extends StatelessWidget {
                   ],
                 ),
                 Spacer(),
-                IconButton(icon: Icon(Icons.call), onPressed: () => {})
+                IconButton(
+                    icon: Icon(Icons.call),
+                    onPressed: () => _makeCall(farmer.phoneNumber))
                 // Column()
               ],
             ),
@@ -187,13 +190,13 @@ class FarmersListPage extends StatelessWidget {
     );
   }
 
-  // _makeCall(String mobile) async {
-  //   const url = "tel:mobile";
+  _makeCall(String mobile) async {
+    var url = "tel:$mobile";
 
-  //   if (await canLaunch(url)) {
-  //     await launch(url);
-  //   } else {
-  //     throw 'Could not laounch $url';
-  //   }
-  // }
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not laounch $url';
+    }
+  }
 }
