@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:AgriView/models/product.dart';
+import 'package:AgriView/utils/AppUtil.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -21,6 +24,7 @@ class ProducePage extends StatefulWidget {
 
 class _ProducePageState extends State<ProducePage> {
   Farm farm;
+  GlobalKey _scaffoldState = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
     setState(() {
@@ -28,6 +32,7 @@ class _ProducePageState extends State<ProducePage> {
     });
 
     return Scaffold(
+      key: _scaffoldState,
       appBar: AppBar(),
       body: Container(
         child: Column(
@@ -194,15 +199,65 @@ class _ProducePageState extends State<ProducePage> {
                       ),
                     ],
                   ),
-                  Column(
-                    children: [
-                      Image.asset("assets/images/market.png", width: 40),
-                      Text(
-                        "Add Produce",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 12),
-                      ),
-                    ],
+                  GestureDetector(
+                    onTap: () {
+                      showBottomSheet(
+                        context: context,
+                        builder: (context) => Container(
+                          width: double.infinity,
+                          child: FutureBuilder(
+                            future: getIt.get<ApiRepository>().fetchProduce(),
+                            builder: (context,
+                                AsyncSnapshot<List<Product>> snapshot) {
+                              if (snapshot.hasData) {
+                                var data = snapshot.data;
+                                return Padding(
+                                  padding: const EdgeInsets.all(8),
+                                  child: ListView.builder(
+                                    itemCount: data.length,
+                                    itemBuilder: (context, index) {
+                                      Product p = data[index];
+                                      return ListTile(
+                                        leading: Image.network(
+                                          p.fileName,
+                                          width: 50,
+                                          height: 50,
+                                        ),
+                                        title: Text(p.productName),
+                                        trailing: ElevatedButton(
+                                          child: Text("add"),
+                                          onPressed: () => addProduce(p),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                );
+                              } else if (snapshot.hasError) {
+                                Future.delayed(
+                                    Duration(milliseconds: 1),
+                                    () => Dialogs.messageDialog(context, true,
+                                        snapshot.error.toString()));
+                                return Container();
+                              } else {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            },
+                          ),
+                        ),
+                      );
+                    },
+                    child: Column(
+                      children: [
+                        Image.asset("assets/images/market.png", width: 40),
+                        Text(
+                          "Add Produce",
+                          style: TextStyle(
+                              fontWeight: FontWeight.w700, fontSize: 12),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -295,12 +350,23 @@ class _ProducePageState extends State<ProducePage> {
           style: Theme.of(context).textTheme.headline2,
         ),
       ),
-      content: PlaceToMarketListing(),
+      content: PlaceToMarketListing(this.widget.detail),
     );
+  }
+
+  void addProduce(Product p) async {
+    var _repository = getIt.get<ApiRepository>();
+    Map params = {
+      "landAginID": widget.detail['farm']['landAginId'],
+      "productUUID": p.uuid
+    };
+    _repository.addProduce(params);
   }
 }
 
 class PlaceToMarketListing extends StatefulWidget {
+  final Map details;
+  const PlaceToMarketListing(this.details);
   @override
   _PlaceToMarketListingState createState() => _PlaceToMarketListingState();
 }
@@ -341,10 +407,7 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
     FieldName("Harvested")
   ];
 
-  FieldName _selectedGrade,
-      _selectedGrowingStatus,
-      _selectedProduceLocation,
-      _selectedProductStatus;
+  FieldName _selectedGrade, _selectedGrowingStatus, _selectedProduceLocation;
 
   Future getImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
@@ -360,6 +423,7 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.details);
     return Padding(
         padding: const EdgeInsets.all(8),
         child: onFirst ? _firstPage() : _secondPage());
@@ -399,7 +463,7 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
           height: 10,
         ),
         TextField(
-          enabled: false,
+          enabled: true,
           controller: _dateController,
           decoration: InputDecoration(
             errorText: (_dateError != null) ? _dateError : null,
@@ -413,6 +477,7 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
               print('change $date');
             }, onConfirm: (date) {
               print('confirm $date');
+              _dateController.text = AppUtil.formatDate(date);
             }, currentTime: DateTime.now(), locale: LocaleType.en);
           },
         ),
@@ -504,29 +569,6 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
           SizedBox(
             height: 10,
           ),
-          Container(
-            width: MediaQuery.of(context).size.width,
-            child: DropdownButton<FieldName>(
-              hint: Text("Status"),
-              value: _selectedGrowingStatus,
-              onChanged: (FieldName newValue) {
-                setState(() {
-                  _selectedGrowingStatus = newValue;
-                });
-              },
-              items: growingStatus
-                  .map(
-                    (FieldName fName) => DropdownMenuItem<FieldName>(
-                      child: Text(fName.name),
-                      value: fName,
-                    ),
-                  )
-                  .toList(),
-            ),
-          ),
-          SizedBox(
-            height: 10,
-          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -548,7 +590,7 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
         ]);
   }
 
-  _submitForm() {
+  _submitForm() async {
     //validate forms
     if (_image == null) {}
 
@@ -575,6 +617,39 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
     }
 
     //compare dates
+    Farm farm = widget.details['farm'] as Farm;
+    var producerAginID = widget.details['producerAginId'];
+    var map = {
+      "farmerAginID": producerAginID,
+      "landAginID": farm.landAginId,
+      "cultivationMode": 1,
+      "produceStatus": 1,
+      "unitType": 1,
+      "pricePerUnitType": 500,
+      "readyFromDate": "2020-03-01",
+      "agronomyAginID": "56df477d18574b67b311a0985964da6b",
+      "quantityAvailable": 20,
+      "phototext": "string",
+      "photo": [_image.path],
+      "fileExtension": "jpg",
+      "productID": 1,
+      "varietyID": 1,
+      "gradeID": 1,
+      "growingConditionID": 1
+    };
+
+    var formData = FormData();
+
+    map.forEach((key, value) {
+      formData.fields.add(MapEntry(key, value.toString()));
+    });
+
+    formData.files.add(MapEntry('file',
+        await MultipartFile.fromFile(_image.path, filename: _image.path)));
+
+    var _repository = getIt.get<ApiRepository>();
+
+    _repository.placeToMarket(formData);
   }
 
   Widget _generateDropdown(
