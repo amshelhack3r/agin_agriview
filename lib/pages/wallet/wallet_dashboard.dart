@@ -1,3 +1,4 @@
+import 'package:AgriView/pages/elements/dialogs.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/api/payment_provider.dart';
@@ -30,7 +31,8 @@ class WalletDashboard extends StatelessWidget {
         future: _paymentProvider.getWalletBalance(mobile),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
-            var data = snapshot.data;
+            var data = snapshot.data.right;
+            print(data);
             return Container(
               margin: const EdgeInsets.only(top: 20),
               child: Padding(
@@ -218,6 +220,11 @@ class WalletDashboard extends StatelessWidget {
               ),
             );
           } else if (snapshot.hasError) {
+            Future.delayed(
+                Duration(milliseconds: 1),
+                () => Dialogs.messageDialog(
+                    context, true, snapshot.error.toString()));
+            return Container();
           } else {
             return Center(
               child: CircularProgressIndicator(),
