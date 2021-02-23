@@ -2,6 +2,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -47,12 +48,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Agin Farmer',
-      debugShowCheckedModeBanner: false,
-      theme: getThemeData(),
-      onGenerateRoute: RouteGenerator.generateRoute,
-      initialRoute: '/SplashPage',
+    return GraphQLProvider(
+      client: getIt.get<ValueNotifier<GraphQLClient>>(),
+      child: MaterialApp(
+        title: 'Agin Farmer',
+        debugShowCheckedModeBanner: false,
+        theme: getThemeData(),
+        onGenerateRoute: RouteGenerator.generateRoute,
+        initialRoute: '/SplashPage',
+      ),
     );
   }
 }
