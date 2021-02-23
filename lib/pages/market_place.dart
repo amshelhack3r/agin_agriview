@@ -24,11 +24,6 @@ class MarketPlaceList extends StatelessWidget {
         child: Column(
           children: [
             _buildHeader(),
-            SizedBox(height: 50),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: _buildSelector(),
-            ),
             SizedBox(height: 30),
             FutureBuilder(
               future: getIt.get<ApiRepository>().fetchProduce(),
@@ -80,43 +75,6 @@ class MarketPlaceList extends StatelessWidget {
             width: width,
             fit: BoxFit.cover,
           ),
-          Positioned(
-            bottom: -40,
-            left: oneThird / 2,
-            right: oneThird / 2,
-            child: SizedBox(
-              width: oneThird * 2,
-              child: TextField(
-                // style: TextStyle(color: Colors.amber),
-                decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.search),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    hintText: "Search",
-                    hintStyle: TextStyle(color: Colors.black)),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  _buildSelector() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Categories",
-            style: TextStyle(color: Colors.white),
-          ),
-          Row(
-            children: [Icon(Icons.edit_location), Text("Filter")],
-          )
         ],
       ),
     );
@@ -149,7 +107,8 @@ class MarketPlaceList extends StatelessWidget {
                         child: CircularProgressIndicator(
                             value: downloadProgress.progress)),
                 errorWidget: (context, url, error) => Icon(Icons.error),
-                width: 100,
+                width: 70,
+                fit: BoxFit.cover,
               ),
               Expanded(
                   child: Text(

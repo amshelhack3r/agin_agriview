@@ -24,11 +24,6 @@ class MarketListingPage extends StatelessWidget {
         child: Column(
           children: [
             _buildHeader(),
-            SizedBox(height: 50),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: _buildSelector(),
-            ),
             SizedBox(height: 20),
             Expanded(
               child: FutureBuilder(
@@ -71,7 +66,6 @@ class MarketListingPage extends StatelessWidget {
   }
 
   _buildHeader() {
-    var oneThird = width / 6;
     return Container(
       width: width,
       height: 50,
@@ -83,58 +77,6 @@ class MarketListingPage extends StatelessWidget {
             width: width,
             fit: BoxFit.cover,
           ),
-          Positioned(
-            bottom: -40,
-            left: oneThird / 2,
-            right: oneThird / 2,
-            child: SizedBox(
-              width: oneThird * 2,
-              child: TextField(
-                // style: TextStyle(color: Colors.amber),
-                decoration: InputDecoration(
-                    suffixIcon: Icon(Icons.search),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30)),
-                    hintText: "Search",
-                    hintStyle: TextStyle(color: Colors.black)),
-              ),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-
-  _buildSelector() {
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: primaryColor,
-            blurRadius: 2.0,
-            spreadRadius: 0.0,
-            offset: Offset(2.0, 2.0), // shadow direction: bottom right
-          )
-        ],
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(product.productName),
-              Text("Machakos County 10.5 Km"),
-            ],
-          ),
-          Row(
-            children: [Icon(Icons.edit_location), Text("Edit")],
-          )
         ],
       ),
     );
@@ -164,8 +106,8 @@ class MarketListingPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              width: 80,
-              height: 80,
+              width: 40,
+              height: 40,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: primaryColor,
@@ -173,7 +115,7 @@ class MarketListingPage extends StatelessWidget {
               ),
               child: Text(product.initials,
                   style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 14,
                       fontWeight: FontWeight.w900,
                       color: Colors.white)),
             ),
@@ -182,7 +124,7 @@ class MarketListingPage extends StatelessWidget {
               children: [
                 Text(map['BC'],
                     style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 14,
                         fontWeight: FontWeight.w900,
                         color: HexColor("#8E8E8E"))),
                 Text(map['county']),
@@ -193,12 +135,12 @@ class MarketListingPage extends StatelessWidget {
               children: [
                 Text("PRICE",
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 12,
                         fontWeight: FontWeight.w900,
                         color: HexColor("#8E8E8E"))),
                 Text("Ksh ${amount.toString()}",
                     style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 10,
                         fontWeight: FontWeight.w900,
                         color: Colors.black54)),
               ],
