@@ -74,7 +74,6 @@ class ApiProvider {
         data: jsonEncode(<String, String>{
           'CategoryID': "1",
         }),
-        options: buildCacheOptions(Duration(days: 7)),
       );
       if (response.statusCode == 200) {
         return Right(response.data);
