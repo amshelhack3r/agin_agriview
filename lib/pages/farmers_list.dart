@@ -27,8 +27,6 @@ class FarmersListPage extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            _buildHeader(),
-            SizedBox(height: 50),
             FutureBuilder(
                 future: getIt.get<ApiRepository>().fetchFarmers(aginId),
                 builder: (context, AsyncSnapshot<List<FarmerInfo>> snapshot) {
