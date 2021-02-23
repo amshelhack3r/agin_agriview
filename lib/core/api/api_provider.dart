@@ -51,17 +51,17 @@ class ApiProvider {
     }
   }
 
-  Future<Message> createFarmProduce(
-      String landAginID, String productUUID) async {
+  Future<Either<Failure, Map>> createFarmProduce(Map params) async {
     try {
       var response = await dio.post(
         CREATE_FARM_PRODUCE,
-        data: jsonEncode(<String, String>{
-          'landAginID': landAginID,
-          'productUUID': productUUID,
-        }),
+        data: jsonEncode(params),
       );
-      return Message.fromJson(response.data);
+      if (response.statusCode == 201) {
+        return Right(response.data);
+      } else {
+        return Left(response.data);
+      }
     } on SocketException {
       throw MySocketException();
     }
@@ -220,11 +220,11 @@ class ApiProvider {
     }
   }
 
-  Future<Message> createPlacetoMarket(Map params) async {
+  Future<Message> createPlacetoMarket(FormData params) async {
     try {
       var response = await dio.post(
         ADD_PRODUCE,
-        data: jsonEncode(params),
+        data: await params,
       );
       return Message.fromJson(response.data);
     } on SocketException {
