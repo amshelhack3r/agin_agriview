@@ -32,27 +32,28 @@ class _ProducePageState extends State<ProducePage> {
     });
 
     return Scaffold(
-      key: _scaffoldState,
-      appBar: AppBar(),
-      body: Container(
-        child: Column(
-          children: [
-            SizedBox(
-              height: 10,
+        key: _scaffoldState,
+        appBar: AppBar(),
+        body: Builder(builder: (BuildContext ctx) {
+          return Container(
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                _buildFirstCard(),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildSecondCard(ctx),
+                SizedBox(
+                  height: 10,
+                ),
+                _buildProduce()
+              ],
             ),
-            _buildFirstCard(),
-            SizedBox(
-              height: 10,
-            ),
-            _buildSecondCard(),
-            SizedBox(
-              height: 10,
-            ),
-            _buildProduce()
-          ],
-        ),
-      ),
-    );
+          );
+        }));
   }
 
   _buildFirstCard() {
@@ -140,7 +141,7 @@ class _ProducePageState extends State<ProducePage> {
     );
   }
 
-  _buildSecondCard() {
+  _buildSecondCard(BuildContext myContext) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
@@ -201,9 +202,9 @@ class _ProducePageState extends State<ProducePage> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      showBottomSheet(
-                        context: context,
-                        builder: (context) => Container(
+                      Scaffold.of(myContext).showBottomSheet(
+                        (context) => Container(
+                          height: MediaQuery.of(context).size.width,
                           width: double.infinity,
                           child: FutureBuilder(
                             future: getIt.get<ApiRepository>().fetchProduce(),
@@ -354,13 +355,17 @@ class _ProducePageState extends State<ProducePage> {
     );
   }
 
-  void addProduce(Product p) async {
+  void addProduce(Product p) {
+    Farm f = widget.detail['farm'];
     var _repository = getIt.get<ApiRepository>();
-    Map params = {
-      "landAginID": widget.detail['farm']['landAginId'],
-      "productUUID": p.uuid
-    };
-    _repository.addProduce(params);
+    Map params = {"landAginID": f.landAginId, "productUUID": p.uuid};
+    _repository
+        .addProduce(params)
+        .then((value) => Navigator.pop(context))
+        .catchError((err) => {
+              Future.delayed(Duration(milliseconds: 1),
+                  () => Dialogs.messageDialog(context, true, err.toString()))
+            });
   }
 }
 
