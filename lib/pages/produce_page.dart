@@ -381,6 +381,7 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
   final picker = ImagePicker();
   bool onFirst = true;
   bool _hasErrors = false;
+  bool _isPlacingToMarket = false;
   String _selectedDate,
       _grade,
       _growingStatus,
@@ -584,12 +585,21 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
                       onFirst = !onFirst;
                     });
                   }),
-              RaisedButton(
-                color: Theme.of(context).primaryColor,
-                textColor: Colors.white,
-                onPressed: () => _submitForm(),
-                child: Text('submit'),
-              ),
+              (_isPlacingToMarket)
+                  ? RaisedButton(
+                      color: Colors.white,
+                      onPressed: () {},
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  : RaisedButton(
+                      color: Theme.of(context).primaryColor,
+                      textColor: Colors.white,
+                      onPressed: () => _submitForm(),
+                      child: Text('submit'),
+                    ),
             ],
           ),
         ]);
@@ -621,6 +631,9 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
       });
     }
 
+    setState(() {
+      _isPlacingToMarket = true;
+    });
     //compare dates
     Farm farm = widget.details['farm'] as Farm;
     var producerAginID = widget.details['producerAginId'];
@@ -654,7 +667,11 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
 
     var _repository = getIt.get<ApiRepository>();
 
-    _repository.placeToMarket(formData);
+    _repository
+        .placeToMarket(formData)
+        .then((value) => Navigator.pop(context))
+        .catchError((err) => Future.delayed(Duration(milliseconds: 1),
+            () => Dialogs.messageDialog(context, true, err.toString())));
   }
 
   Widget _generateDropdown(
