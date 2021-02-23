@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:path/path.dart' as path;
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:intl/intl.dart';
 
 class AppUtil {
   static Future<String> getFileNameWithExtension(File file) async {
@@ -55,5 +56,10 @@ class AppUtil {
       Sentry.captureException("Wrong number format $number");
       throw FormatException("Wrong number format $number");
     }
+  }
+
+  static String formatDate(DateTime date) {
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return formatter.format(date);
   }
 }
