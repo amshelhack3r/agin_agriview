@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:AgriView/models/message.dart';
+import 'package:dio/dio.dart';
 import 'package:fimber/fimber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -180,6 +182,21 @@ class ApiRepository extends Repository {
       return {"cultivation": modes, "status": produceStatus, "type": types};
     } else {
       throw result.left;
+    }
+  }
+
+  Future<Message> placeToMarket(FormData params) async {
+    var result = await api.createPlacetoMarket(params);
+    return result;
+  }
+
+  Future<bool> addProduce(Map params) async {
+    var result = await api.createFarmProduce(params);
+
+    if (result.isRight) {
+      return true;
+    } else {
+      throw result.isLeft;
     }
   }
 }
