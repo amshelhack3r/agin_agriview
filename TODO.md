@@ -8,4 +8,5 @@
 -  check why there are multiple api calls esp on login api / Use futurebuilder instead of a stateful widget
 -  click on map and get coordinates
 -  default to the current location
--  
+-  error with pageview
+- format dates
