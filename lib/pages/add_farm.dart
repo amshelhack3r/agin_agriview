@@ -70,6 +70,7 @@ class _AddFarmState extends State<AddFarm> {
   Widget build(BuildContext context) {
     return Scaffold(
         key: _scaffoldKey,
+        appBar: AppBar(),
         body: SafeArea(
           child: Container(
             color: Colors.white70,
