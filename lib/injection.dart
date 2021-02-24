@@ -5,6 +5,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,13 +57,13 @@ void setupDioModule() {
   Dio dio = Dio(options);
 
   //track requests and responses in development
-  // dio.interceptors.add(PrettyDioLogger(
-  //   requestHeader: true,
-  //   requestBody: true,
-  //   responseBody: true,
-  //   responseHeader: false,
-  //   compact: false,
-  // ));
+  dio.interceptors.add(PrettyDioLogger(
+    requestHeader: true,
+    requestBody: true,
+    responseBody: true,
+    responseHeader: false,
+    compact: false,
+  ));
 
   //cache all requests. this is to minimise frequent api calls
   dio.interceptors
@@ -77,19 +78,9 @@ void setupDioModule() {
     // Do something with response data
     Fimber.i("RESPONSE: ${response.data}");
     return response; // continue
-  }, onError: (DioError e) async {
-    // Do something with response error
-    switch (e.type) {
-      case DioErrorType.RESPONSE:
-        return e.response.data['message'];
-      case DioErrorType.CANCEL:
-        return "You cancelled the request";
-      case DioErrorType.RECEIVE_TIMEOUT:
-        return "Please try again";
-      default:
-        await Sentry.captureException(e.message);
-        throw ApiException(e.response.statusMessage);
-    }
+  }, onError: (DioError e) {
+    throw e.response.data['message'];
+    // return e;
   }));
 
   getIt.registerSingletonAsync(() async => dio);
