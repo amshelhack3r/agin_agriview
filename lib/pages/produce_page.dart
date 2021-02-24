@@ -647,28 +647,19 @@ class _PlaceToMarketListingState extends State<PlaceToMarketListing> {
       "readyFromDate": "2020-03-01",
       "agronomyAginID": "56df477d18574b67b311a0985964da6b",
       "quantityAvailable": 20,
-      "phototext": "string",
-      "photo": [_image.path],
-      "fileExtension": "jpg",
+      "phototext": AppUtil.getFileNameWithExtension(_image),
+      "photo": [AppUtil.getImageAsBase64(_image)],
+      "fileExtension": AppUtil.getFileExtension(_image),
       "productID": 1,
       "varietyID": 1,
       "gradeID": 1,
       "growingConditionID": 1
     };
 
-    var formData = FormData();
-
-    map.forEach((key, value) {
-      formData.fields.add(MapEntry(key, value.toString()));
-    });
-
-    formData.files.add(MapEntry('file',
-        await MultipartFile.fromFile(_image.path, filename: _image.path)));
-
     var _repository = getIt.get<ApiRepository>();
 
     _repository
-        .placeToMarket(formData)
+        .placeToMarket(map)
         .then((value) => Navigator.pop(context))
         .catchError((err) => Future.delayed(Duration(milliseconds: 1),
             () => Dialogs.messageDialog(context, true, err.toString())));
