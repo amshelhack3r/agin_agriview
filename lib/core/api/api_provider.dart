@@ -153,7 +153,8 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        return Left(ApiException(response.data['message']));
+        var error = response.data;
+        return Left(ApiException(error));
       }
     } on SocketException {
       throw MySocketException();
@@ -219,11 +220,11 @@ class ApiProvider {
     }
   }
 
-  Future<Message> createPlacetoMarket(FormData params) async {
+  Future<Message> createPlacetoMarket(Map params) async {
     try {
       var response = await dio.post(
         ADD_PRODUCE,
-        data: await params,
+        data: jsonEncode(params),
       );
       return Message.fromJson(response.data);
     } on SocketException {
