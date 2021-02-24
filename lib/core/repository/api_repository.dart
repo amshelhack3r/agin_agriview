@@ -185,7 +185,7 @@ class ApiRepository extends Repository {
     }
   }
 
-  Future<Message> placeToMarket(FormData params) async {
+  Future<Message> placeToMarket(Map params) async {
     var result = await api.createPlacetoMarket(params);
     return result;
   }
