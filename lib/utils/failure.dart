@@ -5,7 +5,7 @@ abstract class Failure implements Exception {
   bool shouldShow();
 
   @override
-  String toString() => "${this.runtimeType.toString()}: $message";
+  String toString() => this.message;
 }
 
 class ApiException extends Failure {
