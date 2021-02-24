@@ -1,3 +1,4 @@
+import 'package:AgriView/pages/elements/dialogs.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -123,6 +124,11 @@ class _LoginFormState extends State<LoginForm> {
         setState(() {
           isLoggingIn = !isLoggingIn;
         });
+
+        Future.delayed(
+            Duration(milliseconds: 1),
+            () => Dialogs.messageDialog(
+                context, true, err.response.data['message']));
       });
     }
   }
