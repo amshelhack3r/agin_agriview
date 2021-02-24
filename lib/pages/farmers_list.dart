@@ -1,3 +1,5 @@
+import 'package:dio/dio.dart';
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -70,8 +72,11 @@ class FarmersListPage extends StatelessWidget {
                       ],
                     );
                   } else if (snapshot.hasError) {
-                    Dialogs.messageDialog(
-                        context, true, snapshot.error.toString());
+                    Fimber.d(snapshot.error.toString());
+                    Future.delayed(
+                        Duration(milliseconds: 1),
+                        () => Dialogs.messageDialog(
+                            context, true, snapshot.error.toString()));
                     return Container();
                   } else {
                     return Center(child: CircularProgressIndicator());
