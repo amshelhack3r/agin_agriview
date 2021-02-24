@@ -6,13 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/api/api_provider.dart';
 import 'core/repository/api_repository.dart';
 import 'utils/constants.dart';
-import 'utils/failure.dart';
 
 final getIt = GetIt.instance;
 

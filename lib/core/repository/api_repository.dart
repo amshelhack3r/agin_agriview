@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:fimber/fimber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
