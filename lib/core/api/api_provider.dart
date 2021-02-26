@@ -220,13 +220,22 @@ class ApiProvider {
     }
   }
 
-  Future<Message> createPlacetoMarket(Map params) async {
+  Future<Either<Failure, String>> createPlacetoMarket(Map params) async {
     try {
       var response = await dio.post(
         ADD_PRODUCE,
         data: jsonEncode(params),
       );
-      return Message.fromJson(response.data);
+
+      if (response.statusCode == 201) {
+        Fimber.d(response.data.toString());
+        return Right(response.data['message']);
+      } else if (response.statusCode == 500) {
+        Fimber.e(response.data);
+        return Left(ApiException(response.data));
+      } else {
+        return Left(UserFriendlyException(response.data));
+      }
     } on SocketException {
       throw MySocketException();
     }
@@ -259,13 +268,10 @@ class ApiProvider {
 
   Future<List<dynamic>> fetchProduceByLandAgin(String landAginID) async {
     try {
-      final response = await dio.post(
-        GET_PRODUCE,
-        data: jsonEncode(<String, String>{
-          'AginID': landAginID,
-        }),
-        options: buildCacheOptions(Duration(days: 7)),
-      );
+      final response = await dio.post(GET_PRODUCE,
+          data: jsonEncode(<String, String>{
+            'AginID': landAginID,
+          }));
       if (response.statusCode == 200) {
         // If the server did return a 200 OK response,
         // then parse the JSON.
@@ -403,7 +409,7 @@ class ApiProvider {
 
   Future<Either<Failure, List<dynamic>>> getPlaceToMarketDetails() async {
     try {
-      Response response = await Dio().get(BASEURL + '/market/dropdowns/list');
+      Response response = await dio.get(MARKET_DETAILS);
 
       if (response.statusCode == 200) {
         return Right(response.data);
