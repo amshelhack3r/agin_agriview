@@ -25,18 +25,30 @@ class _AddFarmState extends State<AddFarm> {
   var farmNameController = TextEditingController();
   var farmLocationController = TextEditingController();
   var farmUseController = TextEditingController();
+  var acresMappedController = TextEditingController();
+  var acresApprovedController = TextEditingController();
   LatLng _latLon;
   bool isValid = true;
   String farmNameError;
   String farmLocationError;
   String farmUseError;
+  String acresMappedError;
+  String acresApprovedError;
+
   bool isShown = true;
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey();
+  Future<Position> _getPosition;
 
   bool serviceEnabled;
   LocationPermission permission;
 
   Completer<GoogleMapController> _controller = Completer();
+
+  @override
+  void initState() {
+    super.initState();
+    _getPosition = init();
+  }
 
   void _onMapCreated(GoogleMapController controller) {
     _controller.complete(controller);
@@ -77,36 +89,7 @@ class _AddFarmState extends State<AddFarm> {
             height: MediaQuery.of(context).size.height,
             child: Stack(
               children: [
-                FutureBuilder(
-                    future: init(),
-                    builder: (context, AsyncSnapshot<Position> snapshot) {
-                      if (snapshot.hasData) {
-                        var _position = snapshot.data;
-                        return GoogleMap(
-                          onMapCreated: _onMapCreated,
-                          onLongPress: (latLong) {
-                            setState(() {
-                              _latLon = latLong;
-                              isShown = true;
-                            });
-                          },
-                          initialCameraPosition: CameraPosition(
-                              target: LatLng(
-                                  _position.latitude, _position.longitude),
-                              zoom: 14),
-                        );
-                      } else if (snapshot.hasError) {
-                        Future.delayed(
-                            Duration(milliseconds: 1),
-                            () => Dialogs.messageDialog(
-                                context, true, snapshot.error.toString()));
-                        return Container();
-                      } else {
-                        return Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    }),
+                _showMap(),
                 isShown
                     ? Center(
                         child: Padding(
@@ -121,12 +104,13 @@ class _AddFarmState extends State<AddFarm> {
         ));
   }
 
-  _buildForm() {
+  Widget _buildForm() {
+    TextStyle _style = TextStyle(fontSize: 12);
     return Material(
       elevation: 20,
       borderRadius: BorderRadius.circular(20),
       child: Container(
-        padding: const EdgeInsets.all(18.0),
+        padding: const EdgeInsets.all(10.0),
         width: MediaQuery.of(context).size.width,
         child: Padding(
           padding: const EdgeInsets.all(18.0),
@@ -136,12 +120,12 @@ class _AddFarmState extends State<AddFarm> {
               Text(
                 "Farm Details".toUpperCase(),
                 style: TextStyle(
-                  fontSize: 22,
+                  fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               TextField(
                 onEditingComplete: () {
@@ -154,6 +138,7 @@ class _AddFarmState extends State<AddFarm> {
                 decoration: InputDecoration(
                   errorText: isValid ? null : farmNameError,
                   labelText: "Farm Name",
+                  labelStyle: _style,
                   hintText: "eg Steve Nakuru Farm",
                   hintStyle: TextStyle(
                     color: Colors.grey,
@@ -170,20 +155,20 @@ class _AddFarmState extends State<AddFarm> {
                           Text(
                               "lat ${double.parse(_latLon.latitude.toStringAsFixed(3))}",
                               style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Theme.of(context).primaryColor)),
                           Text(
                               "lon ${double.parse(_latLon.longitude.toStringAsFixed(3))}",
                               style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                   color: Theme.of(context).primaryColor)),
                         ],
                       ),
                     ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               Row(
                 children: [
@@ -200,6 +185,7 @@ class _AddFarmState extends State<AddFarm> {
                       decoration: InputDecoration(
                         errorText: isValid ? null : farmLocationError,
                         labelText: "Farm Location",
+                        labelStyle: _style,
                         hintText: "eg Nakuru",
                         hintStyle: TextStyle(
                           color: Colors.grey,
@@ -212,7 +198,8 @@ class _AddFarmState extends State<AddFarm> {
                     color: Theme.of(context).primaryColor,
                     textColor: Colors.white,
                     elevation: 10,
-                    padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15, vertical: 7.5),
                     onPressed: () {
                       setState(() {
                         isShown = false;
@@ -225,13 +212,13 @@ class _AddFarmState extends State<AddFarm> {
                     child: Text(
                       'Map',
                       style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
                     ),
                   ),
                 ],
               ),
               SizedBox(
-                height: 20,
+                height: 10,
               ),
               TextField(
                 keyboardType: TextInputType.text,
@@ -244,6 +231,7 @@ class _AddFarmState extends State<AddFarm> {
                 decoration: InputDecoration(
                   errorText: isValid ? null : farmUseError,
                   labelText: "Land Use",
+                  labelStyle: _style,
                   hintText: "eg Agricultural",
                   hintStyle: TextStyle(
                     color: Colors.grey,
@@ -251,7 +239,61 @@ class _AddFarmState extends State<AddFarm> {
                 ),
               ),
               SizedBox(
-                height: 60,
+                height: 10,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        controller: acresMappedController,
+                        onEditingComplete: () {
+                          setState(() {
+                            acresMappedError = null;
+                          });
+                        },
+                        decoration: InputDecoration(
+                            errorText: isValid ? null : acresMappedError,
+                            labelText: "Acres Mapped",
+                            labelStyle: _style,
+                            hintText: "eg 10 acres",
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            suffix: Text("acres")),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        keyboardType: TextInputType.number,
+                        controller: acresApprovedController,
+                        onEditingComplete: () {
+                          setState(() {
+                            acresApprovedError = null;
+                          });
+                        },
+                        decoration: InputDecoration(
+                            errorText: isValid ? null : acresApprovedError,
+                            labelText: "Acres Approved",
+                            labelStyle: _style,
+                            hintText: "eg 10 acres",
+                            hintStyle: TextStyle(
+                              color: Colors.grey,
+                            ),
+                            suffix: Text("acres")),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 10,
               ),
               isLoading
                   ? RaisedButton(
@@ -259,7 +301,7 @@ class _AddFarmState extends State<AddFarm> {
                       disabledColor: Colors.grey,
                       elevation: 10,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(40)),
                       child: CircularProgressIndicator(
@@ -271,14 +313,14 @@ class _AddFarmState extends State<AddFarm> {
                       textColor: Colors.white,
                       elevation: 10,
                       padding:
-                          EdgeInsets.symmetric(horizontal: 80, vertical: 15),
+                          EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30)),
                       onPressed: () => _validate(),
                       child: Text(
                         'ADD FARM',
                         style: TextStyle(
-                            fontSize: 20, fontWeight: FontWeight.w800),
+                            fontSize: 10, fontWeight: FontWeight.w800),
                       ),
                     ),
             ],
@@ -286,6 +328,38 @@ class _AddFarmState extends State<AddFarm> {
         ),
       ),
     );
+  }
+
+  Widget _showMap() {
+    return FutureBuilder(
+        future: _getPosition,
+        builder: (context, AsyncSnapshot<Position> snapshot) {
+          if (snapshot.hasData) {
+            var _position = snapshot.data;
+            return GoogleMap(
+              onMapCreated: _onMapCreated,
+              onLongPress: (latLong) {
+                setState(() {
+                  _latLon = latLong;
+                  isShown = true;
+                });
+              },
+              initialCameraPosition: CameraPosition(
+                  target: LatLng(_position.latitude, _position.longitude),
+                  zoom: 14),
+            );
+          } else if (snapshot.hasError) {
+            Future.delayed(
+                Duration(milliseconds: 1),
+                () => Dialogs.messageDialog(
+                    context, true, snapshot.error.toString()));
+            return Container();
+          } else {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        });
   }
 
   String _randomCounty() {
@@ -323,10 +397,26 @@ class _AddFarmState extends State<AddFarm> {
       });
       return;
     }
+    if (acresMappedController.text.isEmpty) {
+      setState(() {
+        isValid = false;
+        acresMappedError = "This cannot be empty!";
+        isLoading = false;
+      });
+      return;
+    }
+    if (acresApprovedController.text.isEmpty) {
+      setState(() {
+        isValid = false;
+        acresApprovedError = "This cannot be empty!";
+        isLoading = false;
+      });
+      return;
+    }
 
     Map params = {
-      "acreageMapped": 10,
-      "acreageApproved": 10,
+      "acreageMapped": int.parse(acresMappedController.text),
+      "acreageApproved": int.parse(acresApprovedController.text),
       "farmName": farmNameController.text,
       "farmLocation": farmLocationController.text,
       "currentLandUse": farmUseController.text,
@@ -336,7 +426,7 @@ class _AddFarmState extends State<AddFarm> {
     };
     try {
       if (await getIt.get<ApiRepository>().addFarm(params)) {
-        Navigator.pop(context);
+        Navigator.pushNamed(context, '/FarmerInfo', arguments: widget.farmer);
       }
     } catch (e) {
       Dialogs.messageDialog(context, true, e.toString());
