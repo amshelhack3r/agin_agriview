@@ -387,7 +387,12 @@ class _MarketFormState extends State<MarketForm> {
     _repository
         .placeToMarket(map)
         .then((value) => Navigator.pop(context, value))
-        .catchError((err) => Future.delayed(Duration(milliseconds: 1),
-            () => Dialogs.messageDialog(context, true, err.toString())));
+        .catchError((err) {
+      setState(() {
+        _isPlacingToMarket = false;
+      });
+      Future.delayed(Duration(milliseconds: 1),
+          () => Dialogs.messageDialog(context, true, err.toString()));
+    });
   }
 }
