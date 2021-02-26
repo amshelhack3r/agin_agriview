@@ -1,4 +1,3 @@
-import 'package:AgriView/utils/failure.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/src/response.dart' as Res;
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -6,12 +5,12 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/api/api_provider.dart';
 import 'core/repository/api_repository.dart';
 import 'utils/constants.dart';
+import 'utils/failure.dart';
 
 final getIt = GetIt.instance;
 

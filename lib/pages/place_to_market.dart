@@ -1,19 +1,18 @@
 import 'dart:io';
 
-import 'package:AgriView/core/repository/api_repository.dart';
-import 'package:AgriView/state/db_provider.dart';
-import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+import '../core/repository/api_repository.dart';
 import '../injection.dart';
 import '../models/cultivation_mode.dart';
 import '../models/farm.dart';
 import '../models/market_listings_meta.dart';
 import '../models/produce_status.dart';
 import '../models/unit_type.dart';
+import '../state/db_provider.dart';
 import '../utils/AppUtil.dart';
 import 'elements/dialogs.dart';
 
