@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../core/repository/api_repository.dart';
 import '../injection.dart';
@@ -6,11 +7,26 @@ import '../models/product.dart';
 import '../utils/hex_color.dart';
 import 'elements/dialogs.dart';
 
-class MarketListingPage extends StatelessWidget {
+class MarketListingPage extends StatefulWidget {
   final Product product;
   MarketListingPage(this.product, {Key key}) : super(key: key);
+
+  @override
+  _MarketListingPageState createState() => _MarketListingPageState();
+}
+
+class _MarketListingPageState extends State<MarketListingPage> {
   var width;
+
   var primaryColor;
+  Future<List<dynamic>> _getListing;
+
+  @override
+  void initState() {
+    super.initState();
+    _getListing =
+        getIt.get<ApiRepository>().getProductListing(widget.product.uuid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,8 +43,7 @@ class MarketListingPage extends StatelessWidget {
             SizedBox(height: 20),
             Expanded(
               child: FutureBuilder(
-                future:
-                    getIt.get<ApiRepository>().getProductListing(product.uuid),
+                future: _getListing,
                 builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
                   if (snapshot.hasData) {
                     var products = snapshot.data;
@@ -47,12 +62,22 @@ class MarketListingPage extends StatelessWidget {
                       return Center(child: Text("No listings for the product"));
                     }
                   } else if (snapshot.hasError) {
-                    Future.delayed(
-                        Duration(seconds: 1),
-                        () => Dialogs.messageDialog(
-                            context, true, snapshot.error.toString()));
-
-                    return Container();
+                    Sentry.captureException(snapshot.error.toString());
+                    return Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text("No listings for ${widget.product.productName}"),
+                          SizedBox(
+                            height: 10,
+                          ),
+                          ElevatedButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: Text("Go Back"))
+                        ],
+                      ),
+                    );
                   } else {
                     return Center(child: CircularProgressIndicator());
                   }
@@ -85,8 +110,8 @@ class MarketListingPage extends StatelessWidget {
   _buildListItem(BuildContext context, Map map) {
     var amount = map['unitPriceTypesObjectList'][0]['amount'];
     return GestureDetector(
-      onTap: () =>
-          Navigator.pushNamed(context, '/ProductInfoPage', arguments: product),
+      onTap: () => Navigator.pushNamed(context, '/ProductInfoPage',
+          arguments: widget.product),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 10),
         padding: const EdgeInsets.only(right: 10),
@@ -113,7 +138,7 @@ class MarketListingPage extends StatelessWidget {
                 color: primaryColor,
                 borderRadius: BorderRadius.circular(15),
               ),
-              child: Text(product.initials,
+              child: Text(widget.product.initials,
                   style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w900,
