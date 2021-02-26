@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../core/repository/api_repository.dart';
 import '../injection.dart';
@@ -19,6 +20,18 @@ class ProducePage extends StatefulWidget {
 class _ProducePageState extends State<ProducePage> {
   Farm farm;
   GlobalKey _scaffoldState = GlobalKey<ScaffoldState>();
+  Future<List<Product>> _fetchProduce;
+  Future<List<dynamic>> _fetchProduceByLand;
+
+  @override
+  void initState() {
+    super.initState();
+    farm = widget.detail['farm'];
+    _fetchProduce = getIt.get<ApiRepository>().fetchProduce();
+    _fetchProduceByLand =
+        getIt.get<ApiRepository>().fetchLandProduce(farm.landAginId);
+  }
+
   @override
   Widget build(BuildContext context) {
     setState(() {
@@ -27,7 +40,10 @@ class _ProducePageState extends State<ProducePage> {
 
     return Scaffold(
         key: _scaffoldState,
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text("Produce Page"),
+          centerTitle: true,
+        ),
         body: Builder(builder: (BuildContext ctx) {
           return Container(
             child: Column(
@@ -201,7 +217,7 @@ class _ProducePageState extends State<ProducePage> {
                           height: MediaQuery.of(context).size.width,
                           width: double.infinity,
                           child: FutureBuilder(
-                            future: getIt.get<ApiRepository>().fetchProduce(),
+                            future: _fetchProduce,
                             builder: (context,
                                 AsyncSnapshot<List<Product>> snapshot) {
                               if (snapshot.hasData) {
@@ -267,7 +283,7 @@ class _ProducePageState extends State<ProducePage> {
   _buildProduce() {
     return Expanded(
       child: FutureBuilder(
-        future: getIt.get<ApiRepository>().fetchLandProduce(farm.landAginId),
+        future: _fetchProduceByLand,
         builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
           if (snapshot.hasData) {
             if (snapshot.data.length > 0) {
@@ -304,7 +320,6 @@ class _ProducePageState extends State<ProducePage> {
                               var msg = await Navigator.pushNamed(
                                   context, '/MarketForm',
                                   arguments: this.widget.detail);
-                              Fimber.i(msg.toString());
                               Dialogs.messageDialog(
                                   context, false, msg.toString());
                             },
@@ -327,7 +342,11 @@ class _ProducePageState extends State<ProducePage> {
               );
             }
           } else if (snapshot.hasError) {
-            Dialogs.messageDialog(context, true, snapshot.error.toString());
+            Sentry.captureException(snapshot.error);
+            Future.delayed(
+                Duration(milliseconds: 1),
+                () => Dialogs.messageDialog(
+                    context, true, snapshot.error.toString()));
             return Container();
           } else {
             return Center(
@@ -345,7 +364,8 @@ class _ProducePageState extends State<ProducePage> {
     Map params = {"landAginID": f.landAginId, "productUUID": p.uuid};
     _repository
         .addProduce(params)
-        .then((value) => Navigator.pop(cx))
+        .then((value) => Navigator.pushReplacementNamed(cx, '/ProducePage',
+            arguments: widget.detail))
         .catchError((err) => {
               Future.delayed(Duration(milliseconds: 1),
                   () => Dialogs.messageDialog(context, true, err.toString()))
