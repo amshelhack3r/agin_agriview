@@ -5,6 +5,7 @@ import 'pages/authstate.dart';
 import 'pages/farmer_dashboard.dart';
 import 'pages/home.dart';
 import 'pages/market_listing.dart';
+import 'pages/place_to_market.dart';
 import 'pages/produce_page.dart';
 import 'pages/product_single.dart';
 import 'pages/register_farmer.dart';
@@ -28,6 +29,11 @@ class RouteGenerator {
       case '/WalletDashboard':
         return slideAnimation(WalletDashboard(
           mobile: args,
+        ));
+
+      case '/MarketForm':
+        return slideAnimation(MarketForm(
+          details: args,
         ));
 // animation =
       //     CurvedAnimation(parent: animation, curve: Curves.elasticInOut);
