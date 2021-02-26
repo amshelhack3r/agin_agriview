@@ -28,6 +28,7 @@ const GET_PRODUCE = '/production/farm/produce/list/landaginid';
 const COUNTY_LIST = '/county/list';
 const PRODUCT_LISTINGS = '/product/list/bc/location/product/prices';
 const UPLOAD_GPX = '/production/farm/upload';
+const MARKET_DETAILS = '/market/dropdowns/lists';
 
 //get bearer tokenum
 const BEARER_TOKEN = "/balance/mykey";
