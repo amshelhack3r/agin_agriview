@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../core/repository/api_repository.dart';
 import '../injection.dart';
@@ -22,6 +23,12 @@ class _FarmerInfoState extends State<FarmerDashboard> {
   void initState() {
     super.initState();
     _farmList = getIt.get<ApiRepository>().fetchFarm(widget.farmer.userAginID);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _farmList = null;
   }
 
   @override
@@ -197,13 +204,16 @@ class _FarmerInfoState extends State<FarmerDashboard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Image.asset("assets/images/farms.png"),
+            Image.asset(
+              "assets/images/farms.png",
+              width: 50,
+            ),
             SizedBox(
               height: 10,
             ),
             Text(
               "No Farms",
-              style: TextStyle(color: Colors.blueGrey, fontSize: 20),
+              style: TextStyle(color: Colors.blueGrey, fontSize: 12),
             ),
             SizedBox(
               height: 10,
@@ -213,11 +223,7 @@ class _FarmerInfoState extends State<FarmerDashboard> {
               textColor: Colors.white,
               onPressed: () => Navigator.pushNamed(context, '/AddFarmPage',
                   arguments: widget.farmer),
-              child: Padding(
-                padding:
-                    const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),
-                child: Text("ADD NEW"),
-              ),
+              child: Text("ADD NEW"),
             )
           ],
         ),
@@ -304,11 +310,9 @@ class _FarmerInfoState extends State<FarmerDashboard> {
             );
           }
         } else if (snapshot.hasError) {
-          Future.delayed(
-              Duration(milliseconds: 1),
-              () => Dialogs.messageDialog(
-                  context, true, snapshot.error.toString()));
-          return Container();
+          Sentry.captureException(
+              "${widget.farmer.fullname} Doesnt have anyy farms");
+          return _noFarms();
         } else {
           return Expanded(
               child: Center(
