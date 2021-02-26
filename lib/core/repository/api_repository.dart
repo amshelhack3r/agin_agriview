@@ -8,6 +8,7 @@ import '../../models/cultivation_mode.dart';
 import '../../models/farm.dart';
 import '../../models/farmer_info.dart';
 import '../../models/login_object.dart';
+import '../../models/market_listings_meta.dart';
 import '../../models/message.dart';
 import '../../models/produce_status.dart';
 import '../../models/product.dart';
@@ -23,6 +24,32 @@ class ApiRepository extends Repository {
 
   ApiProvider api;
   ApiRepository({this.api});
+
+  Future<Map> initApp() async {
+    // var county = await _repository.fetchCounty();
+
+    var result = await api.getPlaceToMarketDetails();
+
+    if (result.isRight) {
+      var data = result.right;
+      Map<String, List<Object>> map = data[0];
+
+      List<CultivationMode> modes = map['cultivationModes']
+          .map((mode) => CultivationMode.fromMap(mode))
+          .toList();
+
+      List<ProduceStatus> produceStatus = map['produceStatuses']
+          .map((status) => ProduceStatus.fromMap(status))
+          .toList();
+
+      List<UnitType> types =
+          map['unitTypes'].map((type) => UnitType.fromMap(type)).toList();
+
+      return {"cultivation": modes, "status": produceStatus, "types": types};
+    } else {
+      throw result.left;
+    }
+  }
 
   Future<AggregatorLoginObject> loginUser(Map params) async {
     var result = await api.loginAggregator(params);
@@ -165,28 +192,42 @@ class ApiRepository extends Repository {
 
     if (result.isRight) {
       var data = result.right;
-      Map<String, List> map = data[0];
+      final map = data[0];
 
-      List<CultivationMode> modes = map['cultivationModes']
-          .map((mode) => CultivationMode.fromMap(mode))
+      final modes = map['cultivationModes']
+          .map<CultivationMode>((mode) => CultivationMode.fromMap(mode))
           .toList();
 
-      List<ProduceStatus> produceStatus = map['produceStatuses']
-          .map((status) => ProduceStatus.fromMap(status))
+      final produceStatus = map['produceStatuses']
+          .map<ProduceStatus>((status) => ProduceStatus.fromMap(status))
           .toList();
 
-      List<UnitType> types =
-          map['unitTypes'].map((type) => UnitType.fromMap(type)).toList();
+      final types = map['unitTypes']
+          .map<UnitType>((type) => UnitType.fromMap(type))
+          .toList();
 
-      return {"cultivation": modes, "status": produceStatus, "type": types};
+      final grades = map['produceGrade']
+          .map<Grade>((grade) => Grade.fromMap(grade))
+          .toList();
+
+      return {
+        "cultivation": modes,
+        "status": produceStatus,
+        "type": types,
+        "grade": grades
+      };
     } else {
       throw result.left;
     }
   }
 
-  Future<Message> placeToMarket(Map params) async {
+  Future<String> placeToMarket(Map params) async {
     var result = await api.createPlacetoMarket(params);
-    return result;
+    if (result.isRight) {
+      return result.right;
+    } else {
+      throw result.left;
+    }
   }
 
   Future<bool> addProduce(Map params) async {
