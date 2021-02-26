@@ -1,3 +1,4 @@
+import 'package:AgriView/utils/failure.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/src/response.dart' as Res;
 import 'package:dio_http_cache/dio_http_cache.dart';
@@ -55,13 +56,13 @@ void setupDioModule() {
   Dio dio = Dio(options);
 
   //track requests and responses in development
-  dio.interceptors.add(PrettyDioLogger(
-    requestHeader: true,
-    requestBody: true,
-    responseBody: true,
-    responseHeader: false,
-    compact: false,
-  ));
+  // dio.interceptors.add(PrettyDioLogger(
+  //   requestHeader: true,
+  //   requestBody: false,
+  //   responseBody: false,
+  //   responseHeader: false,
+  //   compact: true,
+  // ));
 
   //cache all requests. this is to minimise frequent api calls
   dio.interceptors
@@ -74,9 +75,12 @@ void setupDioModule() {
     return options; //continue
   }, onResponse: (Res.Response response) async {
     // Do something with response data
-    Fimber.i("RESPONSE: ${response.data}");
+    // Fimber.i("RESPONSE: ${response.data}");
     return response; // continue
   }, onError: (DioError e) {
+    if (e.response.statusCode == 500) {
+      throw ApiException("SERVER ERROR");
+    }
     throw e.response.data['message'];
     // return e;
   }));
