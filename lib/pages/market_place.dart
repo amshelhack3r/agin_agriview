@@ -7,10 +7,23 @@ import '../models/product.dart';
 import '../utils/hex_color.dart';
 import 'elements/dialogs.dart';
 
-class MarketPlaceList extends StatelessWidget {
+class MarketPlaceList extends StatefulWidget {
   MarketPlaceList({Key key}) : super(key: key);
+
+  @override
+  _MarketPlaceListState createState() => _MarketPlaceListState();
+}
+
+class _MarketPlaceListState extends State<MarketPlaceList> {
   var width;
+  Future<List<Product>> _fetchCatalog;
   var primaryColor;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchCatalog = getIt.get<ApiRepository>().fetchProduce();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +39,7 @@ class MarketPlaceList extends StatelessWidget {
             _buildHeader(),
             SizedBox(height: 30),
             FutureBuilder(
-              future: getIt.get<ApiRepository>().fetchProduce(),
+              future: _fetchCatalog,
               builder: (context, AsyncSnapshot<List<Product>> snapshot) {
                 if (snapshot.hasData) {
                   return Expanded(

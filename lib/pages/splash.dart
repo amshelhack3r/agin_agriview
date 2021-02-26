@@ -14,17 +14,25 @@ class SplashWidget extends StatefulWidget {
 }
 
 class _SplashWidgetState extends State<SplashWidget> {
+  Future<bool> _setup;
+
+  @override
+  void initState() {
+    super.initState();
+    _setup = setup();
+  }
+
   Future<bool> setup() async {
     var _repository = getIt.get<ApiRepository>();
     var prefs = getIt.get<SharedPreferences>();
 
-    var modes = await _repository.fetchCultivationModes();
-    var types = await _repository.fetchUnitTypes();
     var county = await _repository.fetchCounty();
-
-    context.read<DatabaseProvider>().county = county;
-    context.read<DatabaseProvider>().modes = modes;
-    context.read<DatabaseProvider>().unitType = types;
+    var fields = await _repository.getPlaceToMarketDetails();
+    context.read<DatabaseProvider>().setCounty = county;
+    context.read<DatabaseProvider>().setModes = fields['cultivation'];
+    context.read<DatabaseProvider>().setUnitType = fields['type'];
+    context.read<DatabaseProvider>().setGrade = fields['grade'];
+    context.read<DatabaseProvider>().setProductStatus = fields['status'];
 
     if (prefs.containsKey(PREF_HAS_LOGGED_IN)) {
       var aginID = prefs.get(PREF_AGINID);
@@ -47,16 +55,16 @@ class _SplashWidgetState extends State<SplashWidget> {
     return SafeArea(
       child: Scaffold(
         body: FutureBuilder(
-          future: setup(),
+          future: _setup,
           builder: (context, AsyncSnapshot<bool> snapshot) {
             if (snapshot.hasData) {
               var hasLoggedIn = snapshot.data;
               if (hasLoggedIn) {
                 Future.delayed(Duration(milliseconds: 1),
-                    () => Navigator.pushReplacementNamed(context, '/HomePage'));
+                    () => Navigator.pushNamed(context, '/HomePage'));
               } else {
                 Future.delayed(Duration(milliseconds: 1),
-                    () => Navigator.pushReplacementNamed(context, '/AuthPage'));
+                    () => Navigator.pushNamed(context, '/AuthPage'));
               }
               return Container();
             } else if (snapshot.hasError) {

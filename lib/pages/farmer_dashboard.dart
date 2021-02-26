@@ -16,6 +16,14 @@ class FarmerDashboard extends StatefulWidget {
 
 class _FarmerInfoState extends State<FarmerDashboard> {
   int farms = 0;
+  Future<List<Farm>> _farmList;
+
+  @override
+  void initState() {
+    super.initState();
+    _farmList = getIt.get<ApiRepository>().fetchFarm(widget.farmer.userAginID);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,40 +79,7 @@ class _FarmerInfoState extends State<FarmerDashboard> {
           SizedBox(
             height: 10,
           ),
-          FutureBuilder(
-            future:
-                getIt.get<ApiRepository>().fetchFarm(widget.farmer.userAginID),
-            builder: (context, AsyncSnapshot<List<Farm>> snapshot) {
-              if (snapshot.hasData) {
-                List<Farm> farmsList = snapshot.data;
-                if (farmsList.length == 0) {
-                  return _noFarms();
-                } else {
-                  return Expanded(
-                    child: ListView.separated(
-                      itemCount: farmsList.length,
-                      separatorBuilder: (context, int) => Divider(),
-                      itemBuilder: (context, index) {
-                        Farm info = farmsList[index];
-                        return _farmListItem(info);
-                      },
-                    ),
-                  );
-                }
-              } else if (snapshot.hasError) {
-                Future.delayed(
-                    Duration(milliseconds: 1),
-                    () => Dialogs.messageDialog(
-                        context, true, snapshot.error.toString()));
-                return Container();
-              } else {
-                return Expanded(
-                    child: Center(
-                  child: CircularProgressIndicator(),
-                ));
-              }
-            },
-          )
+          _fetchFarms()
         ],
       )),
       floatingActionButton: FloatingActionButton(
@@ -305,6 +280,42 @@ class _FarmerInfoState extends State<FarmerDashboard> {
           ),
         ),
       ),
+    );
+  }
+
+  _fetchFarms() {
+    return FutureBuilder(
+      future: _farmList,
+      builder: (context, AsyncSnapshot<List<Farm>> snapshot) {
+        if (snapshot.hasData) {
+          List<Farm> farmsList = snapshot.data;
+          if (farmsList.length == 0) {
+            return _noFarms();
+          } else {
+            return Expanded(
+              child: ListView.separated(
+                itemCount: farmsList.length,
+                separatorBuilder: (context, int) => Divider(),
+                itemBuilder: (context, index) {
+                  Farm info = farmsList[index];
+                  return _farmListItem(info);
+                },
+              ),
+            );
+          }
+        } else if (snapshot.hasError) {
+          Future.delayed(
+              Duration(milliseconds: 1),
+              () => Dialogs.messageDialog(
+                  context, true, snapshot.error.toString()));
+          return Container();
+        } else {
+          return Expanded(
+              child: Center(
+            child: CircularProgressIndicator(),
+          ));
+        }
+      },
     );
   }
 }
