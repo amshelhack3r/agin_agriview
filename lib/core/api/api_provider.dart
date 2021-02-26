@@ -282,7 +282,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException(response.data['message']);
+        throw ApiException(response.data);
       }
     } on SocketException {
       throw MySocketException();
@@ -342,7 +342,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException(response.statusMessage);
+        throw ApiException(response.data);
       }
     } on SocketException {
       throw MySocketException();
@@ -367,7 +367,7 @@ class ApiProvider {
       } else {
         // If the server did not return a 200 OK response,
         // then throw an exception.
-        throw ApiException(response.data['message']);
+        throw ApiException(response.data);
       }
     } on SocketException {
       throw MySocketException();
