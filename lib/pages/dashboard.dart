@@ -220,17 +220,26 @@ class _DashboardPageState extends State<DashboardPage> {
               decoration: BoxDecoration(
                   border: Border.all(color: Theme.of(context).primaryColor),
                   borderRadius: BorderRadius.circular(10.0)),
-              child: Row(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/images/sell_input.png",
-                    width: 50,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        "assets/images/sell_input.png",
+                        width: 50,
+                      ),
+                      Text(
+                        "Sell Inputs",
+                        style: TextStyle(color: Colors.grey),
+                      ),
+                    ],
                   ),
                   Text(
-                    "Sell Inputs",
-                    style: Theme.of(context).textTheme.headline6,
-                  ),
+                    "Coming soon",
+                    style: TextStyle(color: Colors.grey),
+                  )
                 ],
               ),
             ),
@@ -248,33 +257,37 @@ class _DashboardPageState extends State<DashboardPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          buildCard("assets/images/register_group.png", "Register \n Group"),
+          buildCard("assets/images/register_group.png", "Register \n Group",
+              isActive: false),
           buildCard("assets/images/register_farmer.png", "Register \n Farmer",
-              routeName: "/RegisterFarmerPage"),
+              routeName: "/RegisterFarmerPage", isActive: true),
         ],
       ),
     );
   }
 
-  buildCard(String imageString, String title, {String routeName}) {
+  buildCard(String imageString, String title,
+      {String routeName, bool isActive}) {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, routeName),
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
         // width: double.maxFinite,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).primaryColor,
-              blurRadius: 2.0,
-              spreadRadius: 0.0,
-              offset: Offset(2.0, 2.0), // shadow direction: bottom right
-            )
-          ],
-          border: Border.all(color: Theme.of(context).primaryColor),
-          borderRadius: BorderRadius.circular(10),
-        ),
+        decoration: isActive
+            ? BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Theme.of(context).primaryColor,
+                    blurRadius: 2.0,
+                    spreadRadius: 0.0,
+                    offset: Offset(2.0, 2.0), // shadow direction: bottom right
+                  )
+                ],
+                border: Border.all(color: Theme.of(context).primaryColor),
+                borderRadius: BorderRadius.circular(10),
+              )
+            : null,
         child: Wrap(
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
@@ -287,10 +300,16 @@ class _DashboardPageState extends State<DashboardPage> {
               title,
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: HexColor("#707070"),
+                  color: isActive ? HexColor("#707070") : Colors.grey,
                   fontSize: 14,
                   fontWeight: FontWeight.w500),
-            )
+            ),
+            isActive
+                ? Container()
+                : Text(
+                    "Coming soon",
+                    style: TextStyle(color: Colors.grey),
+                  )
           ],
         ),
       ),
