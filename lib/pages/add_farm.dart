@@ -421,8 +421,8 @@ class _AddFarmState extends State<AddFarm> {
       "farmLocation": farmLocationController.text,
       "currentLandUse": farmUseController.text,
       "producerAginId": widget.farmer.userAginID,
-      "lat": "-1.17139",
-      "lon": "36.83556"
+      "lat": _latLon.latitude,
+      "lon": _latLon.longitude
     };
     try {
       if (await getIt.get<ApiRepository>().addFarm(params)) {
