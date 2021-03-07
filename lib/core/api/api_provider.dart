@@ -90,7 +90,7 @@ class ApiProvider {
       final response = await dio.post(
         AGGREGATOR_STATISTICS,
         data: jsonEncode(<String, String>{
-          'AginID': aggregatorAginID,
+          'aginID': aggregatorAginID,
         }),
       );
       if (response.statusCode == 200) {

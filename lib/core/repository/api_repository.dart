@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:AgriView/models/statistic_info.dart';
 import 'package:fimber/fimber.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -237,5 +238,13 @@ class ApiRepository extends Repository {
     } else {
       throw result.isLeft;
     }
+  }
+
+  Future<StatisticsInfo> fetchStatistics(String aggregatorAginID) async {
+    var result = await api.fetchStatistics(aggregatorAginID);
+
+    return (result.isRight)
+        ? StatisticsInfo.fromMap(result.right)
+        : throw result.left;
   }
 }
