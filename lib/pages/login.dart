@@ -117,7 +117,7 @@ class _LoginFormState extends State<LoginForm> {
           "aginId": value.youthAGINID,
           "mobile": AppUtil.formatMobileNumber(value.phoneNumber)
         };
-        Navigator.pushReplacementNamed(context, "/HomePage");
+        Navigator.pushNamed(context, "/HomePage");
       }).catchError((err) {
         Fimber.e(err.toString());
         // Dialogs.messageDialog(context, true, err.message['message'].toString());
