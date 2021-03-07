@@ -91,8 +91,8 @@ class _SplashWidgetState extends State<SplashWidget> {
                       height: 10,
                     ),
                     ElevatedButton.icon(
-                        onPressed: () => Navigator.pushReplacementNamed(
-                            context, '/SplashPage'),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, '/SplashPage'),
                         icon: Icon(Icons.refresh),
                         label: Text("RETRY"))
                   ],
