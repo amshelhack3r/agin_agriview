@@ -364,8 +364,8 @@ class _ProducePageState extends State<ProducePage> {
     Map params = {"landAginID": f.landAginId, "productUUID": p.uuid};
     _repository
         .addProduce(params)
-        .then((value) => Navigator.pushReplacementNamed(cx, '/ProducePage',
-            arguments: widget.detail))
+        .then((value) =>
+            Navigator.pushNamed(cx, '/ProducePage', arguments: widget.detail))
         .catchError((err) => {
               Future.delayed(Duration(milliseconds: 1),
                   () => Dialogs.messageDialog(context, true, err.toString()))
