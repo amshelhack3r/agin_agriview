@@ -37,11 +37,14 @@ class _MarketFormState extends State<MarketForm> {
   ProduceStatus _growingStatus;
   UnitType _selectedUnitType;
   CultivationMode _selectedCultivation;
+  String image_error = "";
 
   int quantity;
   final _quantityController = TextEditingController();
   final _dateController = TextEditingController();
   final _priceController = TextEditingController();
+  final _descriptionController = TextEditingController();
+
   List<Grade> _gradeList;
   List<ProduceStatus> _statusesList;
   List<CultivationMode> _cultivationList;
@@ -56,14 +59,27 @@ class _MarketFormState extends State<MarketForm> {
     _unitTypesList = context.read<DatabaseProvider>().unitType;
   }
 
-  Future getImage() async {
+  Future getCameraImage() async {
     final pickedFile = await picker.getImage(source: ImageSource.camera);
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+        image_error = "";
+      } else {
+        image_error = "No image selected";
+      }
+    });
+  }
+
+  Future getPhoneImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
 
     setState(() {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
+        image_error = "";
       } else {
-        print('No image selected.');
+        image_error = "No image selected";
       }
     });
   }
@@ -81,6 +97,13 @@ class _MarketFormState extends State<MarketForm> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               _imageFormWidget(),
+              SizedBox(
+                height: 5,
+              ),
+              Text(
+                image_error,
+                style: TextStyle(color: Colors.red),
+              ),
               SizedBox(
                 height: 10,
               ),
@@ -132,6 +155,19 @@ class _MarketFormState extends State<MarketForm> {
               SizedBox(
                 height: 15,
               ),
+              TextField(
+                textAlign: TextAlign.start,
+                maxLines: 10,
+                controller: _descriptionController,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  hintText: "Additional descriptions",
+                  labelText: "description",
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
               _submitButton()
             ],
           ),
@@ -143,14 +179,26 @@ class _MarketFormState extends State<MarketForm> {
   Widget _imageFormWidget() {
     return (_image == null)
         ? Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text("upload photo"),
-              RaisedButton(
+              Text("add photo"),
+              Spacer(),
+              RaisedButton.icon(
+                icon: Icon(Icons.camera_alt),
                 color: Theme.of(context).primaryColor,
                 textColor: Colors.white,
-                onPressed: () => getImage(),
-                child: Text("photo"),
+                onPressed: () => getCameraImage(),
+                label: Text("camera"),
+              ),
+              SizedBox(
+                width: 5,
+              ),
+              RaisedButton.icon(
+                icon: Icon(Icons.file_upload),
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                onPressed: () => getPhoneImage(),
+                label: Text("gallery"),
               )
             ],
           )
@@ -227,6 +275,7 @@ class _MarketFormState extends State<MarketForm> {
       child: DropdownButton<Grade>(
         hint: Text("Grade"),
         value: _selectedGrade,
+        focusColor: Colors.red,
         onChanged: (Grade newValue) {
           setState(() {
             _selectedGrade = newValue;
@@ -331,7 +380,13 @@ class _MarketFormState extends State<MarketForm> {
 
   _submitForm() async {
     //validate forms
-    if (_image == null) {}
+    if (_image == null) {
+      setState(() {
+        image_error = "IMAGE IS REQURED";
+        _hasErrors = true;
+      });
+      return;
+    }
 
     //validate quantity
     if (_quantityController.text.isEmpty) {
@@ -339,6 +394,7 @@ class _MarketFormState extends State<MarketForm> {
         _quantityError = "quantity is required";
         _hasErrors = true;
       });
+      return;
     }
 
     if (int.parse(_quantityController.text) < 1) {
@@ -346,6 +402,7 @@ class _MarketFormState extends State<MarketForm> {
         _quantityError = "quantity cannot be zero";
         _hasErrors = true;
       });
+      return;
     }
 
     if (_dateController.text.isEmpty) {
@@ -353,6 +410,7 @@ class _MarketFormState extends State<MarketForm> {
         _dateError = "date is required";
         _hasErrors = true;
       });
+      return;
     }
 
     setState(() {
