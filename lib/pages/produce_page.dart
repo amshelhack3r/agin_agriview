@@ -196,8 +196,14 @@ class _ProducePageState extends State<ProducePage> {
                       Text(
                         "Scout Land",
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 12),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            color: Colors.grey),
                       ),
+                      Text(
+                        "Coming soon",
+                        style: TextStyle(color: Colors.grey),
+                      )
                     ],
                   ),
                   Column(
@@ -206,8 +212,14 @@ class _ProducePageState extends State<ProducePage> {
                       Text(
                         "Advise",
                         style: TextStyle(
-                            fontWeight: FontWeight.w700, fontSize: 12),
+                            fontWeight: FontWeight.w700,
+                            fontSize: 12,
+                            color: Colors.grey),
                       ),
+                      Text(
+                        "Coming soon",
+                        style: TextStyle(color: Colors.grey),
+                      )
                     ],
                   ),
                   GestureDetector(

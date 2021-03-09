@@ -5,6 +5,7 @@ import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:pretty_dio_logger/pretty_dio_logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/api/api_provider.dart';
@@ -55,13 +56,13 @@ void setupDioModule() {
   Dio dio = Dio(options);
 
   //track requests and responses in development
-  // dio.interceptors.add(PrettyDioLogger(
-  //   requestHeader: true,
-  //   requestBody: false,
-  //   responseBody: false,
-  //   responseHeader: false,
-  //   compact: true,
-  // ));
+  dio.interceptors.add(PrettyDioLogger(
+    requestHeader: true,
+    requestBody: false,
+    responseBody: false,
+    responseHeader: false,
+    compact: true,
+  ));
 
   //cache all requests. this is to minimise frequent api calls
   dio.interceptors

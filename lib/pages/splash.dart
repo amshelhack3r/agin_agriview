@@ -1,3 +1,4 @@
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,6 +69,7 @@ class _SplashWidgetState extends State<SplashWidget> {
               }
               return Container();
             } else if (snapshot.hasError) {
+              Fimber.e(snapshot.error.toString());
               return Container(
                 height: double.infinity,
                 alignment: Alignment.center,

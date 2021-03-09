@@ -277,7 +277,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             Image.asset("assets/images/income.png"),
                             Text(
-                              "Total \n Income",
+                              "Total \n Sales",
                               style: Theme.of(context).textTheme.headline6,
                             )
                           ],
