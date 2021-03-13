@@ -221,6 +221,7 @@ class ApiProvider {
   }
 
   Future<Either<Failure, String>> createPlacetoMarket(Map params) async {
+    Fimber.d(params.toString());
     try {
       var response = await dio.post(
         ADD_PRODUCE,

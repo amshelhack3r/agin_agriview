@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:image_picker/image_picker.dart';
@@ -52,6 +53,7 @@ class _MarketFormState extends State<MarketForm> {
 
   @override
   void initState() {
+    Fimber.d(this.widget.details['productID'].toString());
     super.initState();
     _gradeList = context.read<DatabaseProvider>().grades;
     _statusesList = context.read<DatabaseProvider>().productStatus;
@@ -431,10 +433,9 @@ class _MarketFormState extends State<MarketForm> {
       "readyFromDate": _dateController.text,
       "agronomyAginID": "56df477d18574b67b311a0985964da6b",
       "quantityAvailable": int.parse(_quantityController.text),
-      "phototext": await AppUtil.getFileNameWithExtension(_image),
-      "photo": [await AppUtil.getImageAsBase64(_image)],
+      "phototext": [await AppUtil.getImageAsBase64(_image)],
       "fileExtension": await AppUtil.getFileExtension(_image),
-      "productID": 1,
+      "productID": this.widget.details['productID'],
       "varietyID": 1,
       "gradeID": _selectedGrade.id,
       "growingConditionID": _selectedCultivation.id

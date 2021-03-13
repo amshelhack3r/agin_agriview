@@ -302,6 +302,7 @@ class _ProducePageState extends State<ProducePage> {
               return Wrap(
                 children: [
                   ...snapshot.data.map((produce) {
+                    this.widget.detail['productID'] = produce['productID'];
                     return Container(
                       child: Column(
                         children: [
