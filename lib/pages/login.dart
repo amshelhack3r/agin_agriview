@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -82,7 +83,7 @@ class _LoginFormState extends State<LoginForm> {
             height: 20,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () => Navigator.pushNamed(context, "/VerifyPage"),
             child: Text(
               'VERIFY ACCOUNT',
               style: TextStyle(
@@ -120,15 +121,13 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.pushNamed(context, "/HomePage");
       }).catchError((err) {
         Fimber.e(err.toString());
-        Dialogs.messageDialog(context, true, err.toString());
+        if (err is DioError) {
+          Dialogs.messageDialog(context, true, err.message);
+        }
+
         setState(() {
           isLoggingIn = !isLoggingIn;
         });
-
-        Future.delayed(
-            Duration(milliseconds: 1),
-            () => Dialogs.messageDialog(
-                context, true, err.response.data['message']));
       });
     }
   }
