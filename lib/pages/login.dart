@@ -120,7 +120,7 @@ class _LoginFormState extends State<LoginForm> {
         Navigator.pushNamed(context, "/HomePage");
       }).catchError((err) {
         Fimber.e(err.toString());
-        // Dialogs.messageDialog(context, true, err.message['message'].toString());
+        Dialogs.messageDialog(context, true, err.toString());
         setState(() {
           isLoggingIn = !isLoggingIn;
         });
