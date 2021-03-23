@@ -300,6 +300,7 @@ class _FarmerInfoState extends State<FarmerDashboard> {
           } else {
             return Expanded(
               child: ListView.separated(
+                shrinkWrap: true,
                 itemCount: farmsList.length,
                 separatorBuilder: (context, int) => Divider(),
                 itemBuilder: (context, index) {
