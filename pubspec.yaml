@@ -25,6 +25,7 @@ dependencies:
   graphql_flutter: ^4.0.1
   image_picker: ^0.6.7+4
   oktoast: ^2.3.2
+  otp_text_field: ^1.0.1
   path_provider: ^1.6.27
   pretty_dio_logger: ^1.1.1
   provider: ^4.3.2+3
