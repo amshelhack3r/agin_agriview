@@ -135,14 +135,14 @@ class _AuthState extends State<Auth> {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: Image.asset(
-                  'assets/images/agriview_logo.jpg',
-                  width: 200,
-                  height: 100,
-                ),
-              )
+              // Align(
+              //   alignment: Alignment.bottomCenter,
+              //   child: Image.asset(
+              //     'assets/images/agriview_logo.jpg',
+              //     width: 200,
+              //     height: 100,
+              //   ),
+              // )
             ],
           ),
         ),
