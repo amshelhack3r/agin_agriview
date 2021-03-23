@@ -1,5 +1,10 @@
+import 'package:AgriView/state/db_provider.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:oktoast/oktoast.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
 import '../core/repository/api_repository.dart';
 import '../injection.dart';
@@ -18,6 +23,7 @@ class RegisterForm extends StatefulWidget {
 class _RegisterFormState extends State<RegisterForm> {
   bool isFirst = true;
   bool isValid = true;
+  bool isLoading = false;
   var _dateController = TextEditingController();
   var _firstNameController = TextEditingController();
   var _lastNameController = TextEditingController();
@@ -32,6 +38,13 @@ class _RegisterFormState extends State<RegisterForm> {
       _mobileError,
       _passwordError,
       _emailError;
+  List<County> _countyList;
+
+  @override
+  void initState() {
+    super.initState();
+    _countyList = context.read<DatabaseProvider>().county;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,16 +100,19 @@ class _RegisterFormState extends State<RegisterForm> {
           controller: _dateController,
           decoration: InputDecoration(
             errorText: (_dateError != null) ? _dateError : null,
-            labelText: "Date ready",
+            labelText: "Date of Birth",
           ),
           onTap: () {
             DatePicker.showDatePicker(context,
                 showTitleActions: true,
-                minTime: DateTime(2020, 1, 1),
-                maxTime: DateTime(2030, 1, 1), onChanged: (date) {
+                minTime: DateTime(1950, 1, 1),
+                maxTime: DateTime(2003, 1, 1), onChanged: (date) {
               print('change $date');
             }, onConfirm: (date) {
               print('confirm $date');
+              final DateFormat formatter = DateFormat('yyyy-MM-dd');
+              final String formatted = formatter.format(date);
+              _dateController.text = formatted;
             }, currentTime: DateTime.now(), locale: LocaleType.en);
           },
         ),
@@ -170,10 +186,25 @@ class _RegisterFormState extends State<RegisterForm> {
         SizedBox(
           height: 10,
         ),
-        TextField(
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            hintText: "County",
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: DropdownButton<County>(
+            hint: Text("County"),
+            value: _selectedCounty,
+            focusColor: Colors.red,
+            onChanged: (County newValue) {
+              setState(() {
+                _selectedCounty = newValue;
+              });
+            },
+            items: _countyList
+                .map(
+                  (County fName) => DropdownMenuItem<County>(
+                    child: Text(fName.countyName),
+                    value: fName,
+                  ),
+                )
+                .toList(),
           ),
         ),
         SizedBox(
@@ -235,19 +266,33 @@ class _RegisterFormState extends State<RegisterForm> {
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
               ),
             ),
-            RaisedButton(
-              color: Theme.of(context).primaryColor,
-              textColor: Colors.white,
-              elevation: 10,
-              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30)),
-              onPressed: () => _register(),
-              child: Text(
-                'Sign Up',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
-              ),
-            ),
+            isLoading
+                ? RaisedButton(
+                    color: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    elevation: 10,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    onPressed: () {},
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.white,
+                    ),
+                  )
+                : RaisedButton(
+                    color: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    elevation: 10,
+                    padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                    onPressed: () => _register(),
+                    child: Text(
+                      'Sign Up',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.w800),
+                    ),
+                  ),
           ],
         ),
       ],
@@ -255,11 +300,13 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   _register() {
+    var mobile;
     if (_firstNameController.text.isEmpty) {
       setState(() {
         _firstNameError = "First name is required";
         isValid = false;
       });
+      showError(_firstNameError);
       return;
     }
     if (_lastNameController.text.isEmpty) {
@@ -267,6 +314,7 @@ class _RegisterFormState extends State<RegisterForm> {
         _lastNameError = "Last name is required";
         isValid = false;
       });
+      showError(_lastNameError);
       return;
     }
     if (_mobileController.text.isEmpty) {
@@ -274,6 +322,7 @@ class _RegisterFormState extends State<RegisterForm> {
         _mobileError = "Phone number is required";
         isValid = false;
       });
+      showError(_mobileError);
       return;
     }
     if (_dateController.text.isEmpty) {
@@ -281,6 +330,7 @@ class _RegisterFormState extends State<RegisterForm> {
         _dateError = "Date is required";
         isValid = false;
       });
+      showError(_dateError);
       return;
     }
     if (_passwordController.text.isEmpty) {
@@ -288,18 +338,44 @@ class _RegisterFormState extends State<RegisterForm> {
         _passwordError = "Password is required";
         isValid = false;
       });
+      showError(_passwordError);
       return;
     }
+
     if (_passwordController.text.length < 4) {
       setState(() {
         _passwordError = "Password should be atleast 4characters";
         isValid = false;
       });
+      showError(_passwordError);
       return;
     }
+
+    if (_selectedCounty == null) {
+      setState(() {
+        isValid = false;
+      });
+      showError("Please select a county");
+      return;
+    }
+
     if (_emailController.text.isEmpty) {
       setState(() {
         _emailError = "Email is required";
+        isValid = false;
+      });
+      showError(_emailError);
+      return;
+    }
+    setState(() {
+      isLoading = true;
+    });
+    try {
+      mobile = AppUtil.formatMobileNumber(_mobileController.text);
+      _mobileController.text = mobile;
+    } on FormatException {
+      setState(() {
+        isLoading = false;
         isValid = false;
       });
       return;
@@ -309,7 +385,7 @@ class _RegisterFormState extends State<RegisterForm> {
       "status": 0,
       "password": _passwordController.text,
       "countyID": _selectedCounty.countyID,
-      "phoneNumber": AppUtil.formatMobileNumber(_mobileController.text),
+      "phoneNumber": mobile,
       "emailAddress": _emailController.text,
       "firstName": _firstNameController.text,
       "lastName": _lastNameController.text,
@@ -319,10 +395,27 @@ class _RegisterFormState extends State<RegisterForm> {
     };
 
     var repo = getIt.get<ApiRepository>();
-
-    repo.createUser(params).then((value) => launchVerify()).catchError(
-        (err) => Dialogs.messageDialog(context, true, err.toString()));
+    var formattedMobile = AppUtil.formatMobileNumber(_mobileController.text);
+    repo
+        .createUser(params)
+        .then((value) => Navigator.pushNamed(context, "/VerifyPage",
+            arguments: formattedMobile))
+        .catchError((err) {
+      if (err is DioError) {
+        Dialogs.messageDialog(context, true, err.message);
+      }
+      setState(() {
+        isLoading = false;
+      });
+    });
   }
 
-  launchVerify() {}
+  showError(String msg) {
+    showToast(msg,
+        position: ToastPosition.bottom,
+        duration: Duration(seconds: 2),
+        textStyle: TextStyle(color: Colors.white, fontSize: 14),
+        backgroundColor: Theme.of(context).primaryColor,
+        textPadding: EdgeInsets.symmetric(horizontal: 20, vertical: 10));
+  }
 }
