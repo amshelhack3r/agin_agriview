@@ -76,6 +76,18 @@ class ApiRepository extends Repository {
     return (result.isRight) ? "User Created Successfully" : result.left.message;
   }
 
+  Future verifyUser(String mobile) async {
+    var result = await api.verifyUser(mobile);
+
+    return (result.isRight) ? "Verification Sent" : result.left.message;
+  }
+
+  Future activateUser(Map params) async {
+    var result = await api.activateUser(params);
+
+    return (result.isRight) ? "Activated" : result.left.message;
+  }
+
   Future<List<County>> fetchCounty() async {
     var result = await api.fetchCounty();
 

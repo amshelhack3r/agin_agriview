@@ -19,7 +19,6 @@ class ApiProvider {
 
   //auth apis
   Future<Either<Failure, Message>> createAggregator(Map params) async {
-    dio.options.headers = {'Content-Type': 'application/json'};
     try {
       var response = await dio.post(
         REGISTER_AGGREGATOR,
@@ -39,6 +38,38 @@ class ApiProvider {
     try {
       var response = await dio.post(
         AGGREGATOR_LOGIN,
+        data: jsonEncode(params),
+      );
+      if (response.statusCode == 200) {
+        return Right(response.data);
+      } else {
+        return Left(ApiException(response.data));
+      }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
+
+  Future<Either<Failure, Map>> verifyUser(String mobile) async {
+    try {
+      var response = await dio.post(
+        SEND_VERIFY_CODE,
+        data: jsonEncode({"phoneNumber": mobile}),
+      );
+      if (response.statusCode == 200) {
+        return Right(response.data);
+      } else {
+        return Left(ApiException(response.data));
+      }
+    } on SocketException {
+      throw MySocketException();
+    }
+  }
+
+  Future<Either<Failure, Map>> activateUser(Map params) async {
+    try {
+      var response = await dio.post(
+        VERIFY_AGGREGATOR,
         data: jsonEncode(params),
       );
       if (response.statusCode == 200) {
