@@ -1,3 +1,4 @@
+import 'package:AgriView/pages/verify.dart';
 import 'package:flutter/material.dart';
 
 import 'pages/add_farm.dart';
@@ -25,6 +26,9 @@ class RouteGenerator {
 
       case '/AuthPage':
         return slideAnimation(Auth());
+
+      case '/VerifyPage':
+        return slideAnimation(VerifyPage(mobile: args));
 
       case '/WalletDashboard':
         return slideAnimation(WalletDashboard(
