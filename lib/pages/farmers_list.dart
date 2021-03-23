@@ -38,8 +38,10 @@ class FarmersListPage extends StatelessWidget {
                       children: [
                         Container(
                           padding: const EdgeInsets.all(20),
+                          width: MediaQuery.of(context).size.width,
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               ActionChip(
                                   backgroundColor: primaryColor,
@@ -51,11 +53,18 @@ class FarmersListPage extends StatelessWidget {
                                     ),
                                   ),
                                   onPressed: () {}),
-                              Row(
-                                children: [
-                                  Icon(Icons.edit_location),
-                                  Text("Filter")
-                                ],
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: TextField(
+                                  decoration: InputDecoration(
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      hintText: "search farmer",
+                                      labelText: "search"),
+                                ),
                               )
                             ],
                           ),
