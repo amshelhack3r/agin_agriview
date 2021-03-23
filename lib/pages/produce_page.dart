@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 import '../core/repository/api_repository.dart';
@@ -45,7 +46,7 @@ class _ProducePageState extends State<ProducePage> {
           centerTitle: true,
         ),
         body: Builder(builder: (BuildContext ctx) {
-          return Container(
+          return SingleChildScrollView(
             child: Column(
               children: [
                 SizedBox(
@@ -185,105 +186,103 @@ class _ProducePageState extends State<ProducePage> {
               indent: 20,
               endIndent: 20,
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    children: [
-                      Image.asset("assets/images/visit.png", width: 40),
-                      Text(
-                        "Scout Land",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
-                            color: Colors.grey),
-                      ),
-                      Text(
-                        "Coming soon",
-                        style: TextStyle(color: Colors.grey),
-                      )
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Image.asset("assets/images/report.png", width: 40),
-                      Text(
-                        "Advise",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
-                            color: Colors.grey),
-                      ),
-                      Text(
-                        "Coming soon",
-                        style: TextStyle(color: Colors.grey),
-                      )
-                    ],
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      Scaffold.of(myContext).showBottomSheet(
-                        (context) => Container(
-                          height: MediaQuery.of(context).size.width,
-                          width: double.infinity,
-                          child: FutureBuilder(
-                            future: _fetchProduce,
-                            builder: (context,
-                                AsyncSnapshot<List<Product>> snapshot) {
-                              if (snapshot.hasData) {
-                                var data = snapshot.data;
-                                return Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: ListView.builder(
-                                    itemCount: data.length,
-                                    itemBuilder: (context, index) {
-                                      Product p = data[index];
-                                      return ListTile(
-                                        leading: Image.network(
-                                          p.fileName,
-                                          width: 50,
-                                          height: 50,
-                                        ),
-                                        title: Text(p.productName),
-                                        trailing: ElevatedButton(
-                                          child: Text("add"),
-                                          onPressed: () =>
-                                              addProduce(p, myContext),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                );
-                              } else if (snapshot.hasError) {
-                                Future.delayed(
-                                    Duration(milliseconds: 1),
-                                    () => Dialogs.messageDialog(context, true,
-                                        snapshot.error.toString()));
-                                return Container();
-                              } else {
-                                return Center(
-                                  child: CircularProgressIndicator(),
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                    child: Column(
+            GestureDetector(
+              onTap: () => showToast("Coming Soon"),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
                       children: [
-                        Image.asset("assets/images/market.png", width: 40),
+                        Image.asset("assets/images/visit.png", width: 40),
                         Text(
-                          "Add Produce",
+                          "Scout Land",
                           style: TextStyle(
-                              fontWeight: FontWeight.w700, fontSize: 12),
+                              fontWeight: FontWeight.w700,
+                              fontSize: 12,
+                              color: Colors.grey),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    GestureDetector(
+                      onTap: () => showToast("COMING SOON"),
+                      child: Column(
+                        children: [
+                          Image.asset("assets/images/report.png", width: 40),
+                          Text(
+                            "Advise",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Scaffold.of(myContext).showBottomSheet(
+                          (context) => Container(
+                            height: MediaQuery.of(context).size.width,
+                            width: double.infinity,
+                            child: FutureBuilder(
+                              future: _fetchProduce,
+                              builder: (context,
+                                  AsyncSnapshot<List<Product>> snapshot) {
+                                if (snapshot.hasData) {
+                                  var data = snapshot.data;
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: ListView.builder(
+                                      itemCount: data.length,
+                                      itemBuilder: (context, index) {
+                                        Product p = data[index];
+                                        return ListTile(
+                                          leading: Image.network(
+                                            p.fileName,
+                                            width: 50,
+                                            height: 50,
+                                          ),
+                                          title: Text(p.productName),
+                                          trailing: ElevatedButton(
+                                            child: Text("add"),
+                                            onPressed: () =>
+                                                addProduce(p, myContext),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                } else if (snapshot.hasError) {
+                                  Future.delayed(
+                                      Duration(milliseconds: 1),
+                                      () => Dialogs.messageDialog(context, true,
+                                          snapshot.error.toString()));
+                                  return Container();
+                                } else {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                      child: Column(
+                        children: [
+                          Image.asset("assets/images/market.png", width: 40),
+                          Text(
+                            "Add Produce",
+                            style: TextStyle(
+                                fontWeight: FontWeight.w700, fontSize: 12),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             )
           ],
@@ -293,81 +292,79 @@ class _ProducePageState extends State<ProducePage> {
   }
 
   _buildProduce() {
-    return Expanded(
-      child: FutureBuilder(
-        future: _fetchProduceByLand,
-        builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data.length > 0) {
-              return Wrap(
-                children: [
-                  ...snapshot.data.map((produce) {
-                    this.widget.detail['productID'] = produce['productID'];
-                    return Container(
-                      child: Column(
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl: produce['fileName'],
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => Center(
-                              child: CircularProgressIndicator(
-                                  value: downloadProgress.progress),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                            width: 70,
-                            height: 70,
-                            fit: BoxFit.cover,
+    return FutureBuilder(
+      future: _fetchProduceByLand,
+      builder: (context, AsyncSnapshot<List<dynamic>> snapshot) {
+        if (snapshot.hasData) {
+          if (snapshot.data.length > 0) {
+            return Wrap(
+              children: [
+                ...snapshot.data.map((produce) {
+                  this.widget.detail['productID'] = produce['productID'];
+                  return Container(
+                    child: Column(
+                      children: [
+                        CachedNetworkImage(
+                          imageUrl: produce['fileName'],
+                          progressIndicatorBuilder:
+                              (context, url, downloadProgress) => Center(
+                            child: CircularProgressIndicator(
+                                value: downloadProgress.progress),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(produce['name']),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          RaisedButton(
-                            color: Theme.of(context).primaryColor,
-                            textColor: Colors.white,
-                            onPressed: () async {
-                              var msg = await Navigator.pushNamed(
-                                  context, '/MarketForm',
-                                  arguments: this.widget.detail);
-                              Dialogs.messageDialog(
-                                  context, false, msg.toString());
-                            },
-                            child: Text('market'),
-                          )
-                        ],
-                      ),
-                    );
-                  })
-                ],
-              );
-            } else {
-              return Center(
-                child: RaisedButton(
-                  color: Theme.of(context).primaryColor,
-                  textColor: Colors.white,
-                  onPressed: () => {},
-                  child: Text("ADD PRODUCE"),
-                ),
-              );
-            }
-          } else if (snapshot.hasError) {
-            Sentry.captureException(snapshot.error);
-            Future.delayed(
-                Duration(milliseconds: 1),
-                () => Dialogs.messageDialog(
-                    context, true, snapshot.error.toString()));
-            return Container();
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                          width: 70,
+                          height: 70,
+                          fit: BoxFit.cover,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(produce['name']),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        RaisedButton(
+                          color: Theme.of(context).primaryColor,
+                          textColor: Colors.white,
+                          onPressed: () async {
+                            var msg = await Navigator.pushNamed(
+                                context, '/MarketForm',
+                                arguments: this.widget.detail);
+                            Dialogs.messageDialog(
+                                context, false, msg.toString());
+                          },
+                          child: Text('market'),
+                        )
+                      ],
+                    ),
+                  );
+                })
+              ],
+            );
           } else {
             return Center(
-              child: CircularProgressIndicator(),
+              child: RaisedButton(
+                color: Theme.of(context).primaryColor,
+                textColor: Colors.white,
+                onPressed: () => {},
+                child: Text("ADD PRODUCE"),
+              ),
             );
           }
-        },
-      ),
+        } else if (snapshot.hasError) {
+          Sentry.captureException(snapshot.error);
+          Future.delayed(
+              Duration(milliseconds: 1),
+              () => Dialogs.messageDialog(
+                  context, true, snapshot.error.toString()));
+          return Container();
+        } else {
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
