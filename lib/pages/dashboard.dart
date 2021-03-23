@@ -3,6 +3,7 @@ import 'package:AgriView/core/repository/repository.dart';
 import 'package:AgriView/models/statistic_info.dart';
 import 'package:AgriView/pages/elements/dialogs.dart';
 import 'package:flutter/material.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -343,7 +344,11 @@ class _DashboardPageState extends State<DashboardPage> {
   buildCard(String imageString, String title,
       {String routeName, bool isActive}) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, routeName),
+      onTap: () => {
+        isActive
+            ? Navigator.pushNamed(context, routeName)
+            : showToast("COMING SOON")
+      },
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
         // width: double.maxFinite,
@@ -378,12 +383,6 @@ class _DashboardPageState extends State<DashboardPage> {
                   fontSize: 14,
                   fontWeight: FontWeight.w500),
             ),
-            isActive
-                ? Container()
-                : Text(
-                    "Coming soon",
-                    style: TextStyle(color: Colors.grey),
-                  )
           ],
         ),
       ),
