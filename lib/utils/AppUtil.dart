@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:intl/intl.dart';
+import 'package:oktoast/oktoast.dart';
 import 'package:path/path.dart' as path;
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -54,6 +55,7 @@ class AppUtil {
       return mobile;
     } else {
       Sentry.captureException("Wrong number format $number");
+      showToast("Wrong number format $number");
       throw FormatException("Wrong number format $number");
     }
   }
