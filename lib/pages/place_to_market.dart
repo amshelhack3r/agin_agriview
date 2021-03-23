@@ -91,7 +91,10 @@ class _MarketFormState extends State<MarketForm> {
     // Fimber.d(this.widget.details.toString());
     return SafeArea(
         child: Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("POST TO MARKET"),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
