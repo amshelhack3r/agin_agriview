@@ -19,6 +19,7 @@ const CREATE_FARM = '/production/farm/register';
 const FARMS = '/producer/farms';
 const AGGREGATOR_LOGIN = '/aggregator/login';
 const VERIFY_AGGREGATOR = '/aggregator/account/verify';
+const SEND_VERIFY_CODE = '/aggregator/resend/verify/code';
 const CULTIVATION_MODES_OPTIONS = '/market/cultivationmodes/list';
 const PRODUCT_STATUS = '/market/producestatus/list';
 const UNIT_TYPES = '/market/unittypes/list';
