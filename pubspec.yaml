@@ -1,6 +1,6 @@
 name: AgriView
 description: Agronomy application.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+2
 
 environment:
@@ -24,6 +24,7 @@ dependencies:
   gpx: ^1.1.1
   graphql_flutter: ^4.0.1
   image_picker: ^0.6.7+4
+  oktoast: ^2.3.2
   path_provider: ^1.6.27
   pretty_dio_logger: ^1.1.1
   provider: ^4.3.2+3
