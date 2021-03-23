@@ -81,8 +81,12 @@ void setupDioModule() {
     if (e.response.statusCode == 500) {
       throw ApiException("SERVER ERROR");
     }
-    throw e.response.data['message'];
-    // return e;
+    var errorMessage = e.response.data['message'];
+    if (errorMessage is String) {
+      return errorMessage;
+    } else {
+      return e;
+    }
   }));
 
   getIt.registerSingletonAsync(() async => dio);
