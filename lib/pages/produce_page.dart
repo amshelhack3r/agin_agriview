@@ -387,7 +387,7 @@ class _ProducePageState extends State<ProducePage> {
               if (err is DioError)
                 {
                   Future.delayed(Duration(milliseconds: 1),
-                      () => Dialogs.messageDialog(context, true, err.messages))
+                      () => Dialogs.messageDialog(context, true, err.message))
                 }
             });
   }
