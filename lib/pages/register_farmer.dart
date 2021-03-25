@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -229,7 +230,9 @@ class _RegisterFarmerPageState extends State<RegisterFarmerPage> {
         Navigator.pushNamed(context, '/HomePage', arguments: 2);
       }
     } catch (e) {
-      Dialogs.messageDialog(context, true, e.toString());
+      if (e is DioError) {
+        Dialogs.messageDialog(context, true, e.message);
+      }
     }
   }
 }

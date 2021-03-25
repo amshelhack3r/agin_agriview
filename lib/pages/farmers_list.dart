@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -81,10 +82,13 @@ class FarmersListPage extends StatelessWidget {
                     );
                   } else if (snapshot.hasError) {
                     Fimber.d(snapshot.error.toString());
-                    Future.delayed(
-                        Duration(milliseconds: 1),
-                        () => Dialogs.messageDialog(
-                            context, true, snapshot.error.toString()));
+                    var err = snapshot.error;
+                    if (err is DioError) {
+                      Future.delayed(
+                          Duration(milliseconds: 1),
+                          () => Dialogs.messageDialog(
+                              context, true, err.message));
+                    }
                     return Container();
                   } else {
                     return Center(child: CircularProgressIndicator());

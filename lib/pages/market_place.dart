@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../core/repository/api_repository.dart';
@@ -57,8 +58,10 @@ class _MarketPlaceListState extends State<MarketPlaceList> {
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  Dialogs.messageDialog(
-                      context, true, snapshot.error.toString());
+                  var err = snapshot.error;
+                  if (err is DioError) {
+                    Dialogs.messageDialog(context, true, err.message);
+                  }
                   return Container();
                 } else {
                   return Expanded(

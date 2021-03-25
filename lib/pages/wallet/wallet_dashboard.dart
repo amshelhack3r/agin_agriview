@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import '../../core/api/payment_provider.dart';
@@ -220,10 +221,12 @@ class WalletDashboard extends StatelessWidget {
               ),
             );
           } else if (snapshot.hasError) {
-            Future.delayed(
-                Duration(milliseconds: 1),
-                () => Dialogs.messageDialog(
-                    context, true, snapshot.error.toString()));
+            var err = snapshot.error;
+
+            if (err is DioError) {
+              Future.delayed(Duration(milliseconds: 1),
+                  () => Dialogs.messageDialog(context, true, err.message));
+            }
             return Container();
           } else {
             return Center(

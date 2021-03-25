@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -453,8 +454,10 @@ class _MarketFormState extends State<MarketForm> {
       setState(() {
         _isPlacingToMarket = false;
       });
-      Future.delayed(Duration(milliseconds: 1),
-          () => Dialogs.messageDialog(context, true, err.toString()));
+      if (err is DioError) {
+        Future.delayed(Duration(milliseconds: 1),
+            () => Dialogs.messageDialog(context, true, err.message));
+      }
     });
   }
 }

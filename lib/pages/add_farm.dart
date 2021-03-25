@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -349,10 +350,11 @@ class _AddFarmState extends State<AddFarm> {
                   zoom: 14),
             );
           } else if (snapshot.hasError) {
-            Future.delayed(
-                Duration(milliseconds: 1),
-                () => Dialogs.messageDialog(
-                    context, true, snapshot.error.toString()));
+            var err = snapshot.error;
+            if (err is DioError) {
+              Future.delayed(Duration(milliseconds: 1),
+                  () => Dialogs.messageDialog(context, true, err.message));
+            }
             return Container();
           } else {
             return Center(
@@ -429,7 +431,9 @@ class _AddFarmState extends State<AddFarm> {
         Navigator.pushNamed(context, '/FarmerInfo', arguments: widget.farmer);
       }
     } catch (e) {
-      Dialogs.messageDialog(context, true, e.toString());
+      if (e is DioError) {
+        Dialogs.messageDialog(context, true, e.message);
+      }
     }
   }
 }

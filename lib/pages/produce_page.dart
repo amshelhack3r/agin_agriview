@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:fimber/fimber.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
@@ -255,10 +256,13 @@ class _ProducePageState extends State<ProducePage> {
                                     ),
                                   );
                                 } else if (snapshot.hasError) {
-                                  Future.delayed(
-                                      Duration(milliseconds: 1),
-                                      () => Dialogs.messageDialog(context, true,
-                                          snapshot.error.toString()));
+                                  var err = snapshot.error;
+                                  if (err is DioError) {
+                                    Future.delayed(
+                                        Duration(milliseconds: 1),
+                                        () => Dialogs.messageDialog(
+                                            context, true, err.message));
+                                  }
                                   return Container();
                                 } else {
                                   return Center(
@@ -331,8 +335,10 @@ class _ProducePageState extends State<ProducePage> {
                             var msg = await Navigator.pushNamed(
                                 context, '/MarketForm',
                                 arguments: this.widget.detail);
-                            Dialogs.messageDialog(
-                                context, false, msg.toString());
+                            if (msg != null) {
+                              Dialogs.messageDialog(
+                                  context, false, msg.toString());
+                            }
                           },
                           child: Text('market'),
                         )
@@ -354,10 +360,11 @@ class _ProducePageState extends State<ProducePage> {
           }
         } else if (snapshot.hasError) {
           Sentry.captureException(snapshot.error);
-          Future.delayed(
-              Duration(milliseconds: 1),
-              () => Dialogs.messageDialog(
-                  context, true, snapshot.error.toString()));
+          var err = snapshot.error;
+          if (err is DioError) {
+            Future.delayed(Duration(milliseconds: 1),
+                () => Dialogs.messageDialog(context, true, err.message));
+          }
           return Container();
         } else {
           return Center(
@@ -377,8 +384,11 @@ class _ProducePageState extends State<ProducePage> {
         .then((value) =>
             Navigator.pushNamed(cx, '/ProducePage', arguments: widget.detail))
         .catchError((err) => {
-              Future.delayed(Duration(milliseconds: 1),
-                  () => Dialogs.messageDialog(context, true, err.toString()))
+              if (err is DioError)
+                {
+                  Future.delayed(Duration(milliseconds: 1),
+                      () => Dialogs.messageDialog(context, true, err.messages))
+                }
             });
   }
 }

@@ -2,6 +2,7 @@ import 'package:AgriView/core/repository/api_repository.dart';
 import 'package:AgriView/core/repository/repository.dart';
 import 'package:AgriView/models/statistic_info.dart';
 import 'package:AgriView/pages/elements/dialogs.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:oktoast/oktoast.dart';
 import 'package:provider/provider.dart';
@@ -311,8 +312,12 @@ class _DashboardPageState extends State<DashboardPage> {
                 ],
               );
             } else if (snapshot.hasError) {
-              Future.delayed(Duration(seconds: 90),
-                  () => Dialogs.messageDialog(context, true, snapshot.error));
+              var err = snapshot.error;
+
+              if (err is DioError) {
+                Future.delayed(Duration(seconds: 90),
+                    () => Dialogs.messageDialog(context, true, err.message));
+              }
               return Container();
             } else {
               return Center(
