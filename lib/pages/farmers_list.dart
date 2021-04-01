@@ -28,73 +28,75 @@ class FarmersListPage extends StatelessWidget {
         title: Text("Farmers List"),
       ),
       body: SafeArea(
-        child: Column(
-          children: [
-            FutureBuilder(
-                future: getIt.get<ApiRepository>().fetchFarmers(aginId),
-                builder: (context, AsyncSnapshot<List<FarmerInfo>> snapshot) {
-                  if (snapshot.hasData) {
-                    var farmers = snapshot.data;
-                    return Column(
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(20),
-                          width: MediaQuery.of(context).size.width,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ActionChip(
-                                  backgroundColor: primaryColor,
-                                  label: Text(
-                                    "${snapshot.data.length.toString()} Farmers",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              FutureBuilder(
+                  future: getIt.get<ApiRepository>().fetchFarmers(aginId),
+                  builder: (context, AsyncSnapshot<List<FarmerInfo>> snapshot) {
+                    if (snapshot.hasData) {
+                      var farmers = snapshot.data;
+                      return Column(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(20),
+                            width: MediaQuery.of(context).size.width,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ActionChip(
+                                    backgroundColor: primaryColor,
+                                    label: Text(
+                                      "${snapshot.data.length.toString()} Farmers",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 10,
+                                      ),
                                     ),
-                                  ),
-                                  onPressed: () {}),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Expanded(
-                                child: TextField(
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      hintText: "search farmer",
-                                      labelText: "search"),
+                                    onPressed: () {}),
+                                SizedBox(
+                                  width: 10,
                                 ),
-                              )
-                            ],
+                                Expanded(
+                                  child: TextField(
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        hintText: "search farmer",
+                                        labelText: "search"),
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: farmers.length,
-                          itemBuilder: (context, index) {
-                            FarmerInfo farmer = farmers[index];
-                            return _buildListItem(context, farmer);
-                          },
-                        ),
-                      ],
-                    );
-                  } else if (snapshot.hasError) {
-                    Fimber.d(snapshot.error.toString());
-                    var err = snapshot.error;
-                    if (err is DioError) {
-                      Future.delayed(
-                          Duration(milliseconds: 1),
-                          () => Dialogs.messageDialog(
-                              context, true, err.message));
+                          ListView.builder(
+                            shrinkWrap: true,
+                            itemCount: farmers.length,
+                            itemBuilder: (context, index) {
+                              FarmerInfo farmer = farmers[index];
+                              return _buildListItem(context, farmer);
+                            },
+                          ),
+                        ],
+                      );
+                    } else if (snapshot.hasError) {
+                      Fimber.d(snapshot.error.toString());
+                      var err = snapshot.error;
+                      if (err is DioError) {
+                        Future.delayed(
+                            Duration(milliseconds: 1),
+                            () => Dialogs.messageDialog(
+                                context, true, err.message));
+                      }
+                      return Container();
+                    } else {
+                      return Center(child: CircularProgressIndicator());
                     }
-                    return Container();
-                  } else {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                }),
-          ],
+                  }),
+            ],
+          ),
         ),
       ),
     );
