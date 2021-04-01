@@ -174,7 +174,6 @@ class ApiProvider {
         data: jsonEncode(<String, String>{
           'AginID': aggregatorAginID,
         }),
-        options: buildCacheOptions(Duration(days: 1)),
       );
 
       if (response.statusCode == 200) {
@@ -325,7 +324,7 @@ class ApiProvider {
     try {
       var response = await dio.get(
         COUNTY_LIST,
-        options: buildCacheOptions(Duration(days: 14)),
+        options: buildCacheOptions(Duration(days: 1)),
       );
 
       if (response.statusCode == 200) {
@@ -342,7 +341,7 @@ class ApiProvider {
     try {
       final response = await dio.get(
         FETCH_COUNTRIES,
-        options: buildCacheOptions(Duration(days: 14)),
+        options: buildCacheOptions(Duration(days: 1)),
       );
 
       if (response.statusCode == 200) {
