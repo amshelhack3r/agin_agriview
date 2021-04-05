@@ -427,6 +427,8 @@ class _MarketFormState extends State<MarketForm> {
 
     var producerAginID = widget.details['producerAginId'];
 
+    var photoText = await AppUtil.getImageAsBase64(_image);
+    var photoExtension = await AppUtil.getFileExtension(_image);
     var map = {
       "farmerAginID": producerAginID,
       "landAginID": farm.landAginId,
@@ -437,8 +439,8 @@ class _MarketFormState extends State<MarketForm> {
       "readyFromDate": _dateController.text,
       "agronomyAginID": "56df477d18574b67b311a0985964da6b",
       "quantityAvailable": int.parse(_quantityController.text),
-      "phototext": [await AppUtil.getImageAsBase64(_image)],
-      "fileExtension": await AppUtil.getFileExtension(_image),
+      "phototext": [photoText],
+      "fileExtension": photoExtension,
       "productID": this.widget.details['productID'],
       "varietyID": 1,
       "gradeID": _selectedGrade.id,
