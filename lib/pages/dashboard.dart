@@ -164,8 +164,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             Image.asset(
                               "assets/images/register_farmer.png",
-                              width: 50,
-                              height: 50,
+                              width: 30,
+                              height: 30,
+                              fit: BoxFit.cover,
                             ),
                             Text(
                               "Farmers",
@@ -201,8 +202,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           children: [
                             Image.asset(
                               "assets/images/farms.png",
-                              width: 50,
-                              height: 50,
+                              width: 30,
+                              height: 30,
+                              fit: BoxFit.cover,
                             ),
                             Text(
                               "Acerage",
@@ -236,7 +238,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset("assets/images/income.png"),
+                            Image.asset(
+                              "assets/images/income.png",
+                              width: 30,
+                            ),
                             Text(
                               "Total \n Income",
                               style: Theme.of(context).textTheme.headline6,
@@ -277,7 +282,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Image.asset("assets/images/income.png"),
+                            Image.asset(
+                              "assets/images/income.png",
+                              width: 30,
+                            ),
                             Text(
                               "Total \n Sales",
                               style: Theme.of(context).textTheme.headline6,
