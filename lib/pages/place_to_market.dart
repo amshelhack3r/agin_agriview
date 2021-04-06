@@ -40,6 +40,8 @@ class _MarketFormState extends State<MarketForm> {
   UnitType _selectedUnitType;
   CultivationMode _selectedCultivation;
   String image_error = "";
+  var photoText;
+  var photoExtension;
 
   int quantity;
   final _quantityController = TextEditingController();
@@ -72,6 +74,8 @@ class _MarketFormState extends State<MarketForm> {
         image_error = "No image selected";
       }
     });
+    photoText = await AppUtil.getImageAsBase64(_image);
+    photoExtension = await AppUtil.getFileExtension(_image);
   }
 
   Future getPhoneImage() async {
@@ -85,6 +89,8 @@ class _MarketFormState extends State<MarketForm> {
         image_error = "No image selected";
       }
     });
+    photoText = await AppUtil.getImageAsBase64(_image);
+    photoExtension = await AppUtil.getFileExtension(_image);
   }
 
   @override
@@ -427,8 +433,7 @@ class _MarketFormState extends State<MarketForm> {
 
     var producerAginID = widget.details['producerAginId'];
 
-    var photoText = await AppUtil.getImageAsBase64(_image);
-    var photoExtension = await AppUtil.getFileExtension(_image);
+
     var map = {
       "farmerAginID": producerAginID,
       "landAginID": farm.landAginId,
